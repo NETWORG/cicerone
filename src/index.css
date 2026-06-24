@@ -1,0 +1,140 @@
+@import "tailwindcss";
+
+@theme {
+  /* ── Paper / motor racing palette ── */
+  /* Backgrounds: light → warm white → card white */
+  --color-asphalt-950: #ffffff;
+  --color-asphalt-900: #f4f3ef;
+  --color-asphalt-800: #ffffff;
+  /* Borders */
+  --color-asphalt-700: #d8d4ce;
+  --color-asphalt-600: #b4b0aa;
+  /* Text scale (reads dark on light bg) */
+  --color-asphalt-500: #8a8784;
+  --color-asphalt-400: #5c5a57;
+  --color-asphalt-300: #2d2c2a;
+  --color-asphalt-200: #181716;
+  --color-asphalt-100: #0a0909;
+  --color-asphalt-50:  #080807;
+
+  /* ── Racing red (replaces amber) ── */
+  --color-rally-500: #c8102e;
+  --color-rally-400: #e01530;
+  --color-rally-600: #9e0c24;
+  --color-rally-300: #f44358;
+
+  /* ── Dark ink for footer ── */
+  --color-ink-950: #0a0909;
+  --color-ink-800: #1a1716;
+  --color-ink-500: #6b6864;
+  --color-ink-300: #a8a5a2;
+
+  --color-accent-red:  #c8102e;
+  --color-accent-blue: #1d4ed8;
+
+  --font-display: 'Bebas Neue', 'Impact', ui-sans-serif, system-ui, sans-serif;
+  --font-sans:    'Inter', ui-sans-serif, system-ui, sans-serif;
+
+  --spacing-section: 5rem;
+}
+
+/* ── Base ── */
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 4rem;
+}
+
+body {
+  @apply bg-asphalt-950 text-asphalt-300 font-sans antialiased;
+  font-family: var(--font-sans);
+}
+
+/* ── Scrollbar ── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--color-asphalt-900); }
+::-webkit-scrollbar-thumb { background: var(--color-asphalt-700); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--color-rally-500); }
+
+/* ── Display headings ── */
+.font-display {
+  font-family: var(--font-display);
+  letter-spacing: 0.04em;
+}
+
+/* ── Section rhythm ── */
+.section-pad {
+  @apply py-20 px-4 md:px-8 lg:px-16;
+}
+
+/* ── Card — white, shadow lifts it off any background ── */
+.card {
+  @apply bg-white border border-asphalt-700 shadow-sm rounded overflow-hidden;
+}
+
+/* ── Button — red primary, black outline ── */
+.btn-primary {
+  @apply inline-flex items-center gap-2 rounded font-semibold transition-all duration-150 cursor-pointer select-none bg-rally-500 text-white px-6 py-3 hover:bg-rally-600 active:scale-95;
+}
+.btn-outline {
+  @apply inline-flex items-center gap-2 rounded font-semibold transition-all duration-150 cursor-pointer select-none border-2 border-asphalt-100 text-asphalt-100 px-6 py-3 hover:bg-asphalt-100 hover:text-white active:scale-95;
+}
+
+/* ── Category badge ── */
+.category-badge {
+  @apply inline-flex items-center gap-1.5 text-xs font-medium px-2 py-0.5 rounded;
+}
+
+/* ── Map container ── */
+#route-map {
+  @apply w-full rounded overflow-hidden;
+  height: 480px;
+}
+
+@media (min-width: 768px) {
+  #route-map { height: 600px; }
+}
+
+/* ── Hero gradient (dark overlay over photo, uniform top/bottom) ── */
+.hero-gradient {
+  background: linear-gradient(
+    180deg,
+    rgba(8,7,7,0.75) 0%,
+    rgba(8,7,7,0.45) 35%,
+    rgba(8,7,7,0.55) 65%,
+    rgba(8,7,7,0.92) 100%
+  );
+}
+
+/* ── Photo gallery ── */
+.gallery-img {
+  @apply w-full h-full object-cover transition-transform duration-500 hover:scale-105;
+}
+
+/* ── Stop card accent line ── */
+.stop-accent {
+  width: 3px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+/* ── Google Maps InfoWindow chrome reset ── */
+.gm-style .gm-style-iw-c {
+  background: transparent !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
+  max-width: none !important;
+}
+.gm-style .gm-style-iw-d {
+  overflow: visible !important;
+  max-height: none !important;
+}
+.gm-style .gm-style-iw-t::after {
+  display: none !important;
+}
+.gm-style button.gm-ui-hover-effect {
+  display: none !important;
+}
+.gm-style .gm-style-iw-tc {
+  display: none !important;
+}
