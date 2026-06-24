@@ -14,12 +14,10 @@ export default function FollowSection() {
         <div className="card p-10 border-dashed border-asphalt-600">
           <Radio size={40} strokeWidth={1} className="text-asphalt-500 mx-auto mb-6" />
           <p className="text-asphalt-200 text-lg font-medium mb-3">
-            Live map &amp; stories — coming July 2026
+            Live map and stories - coming July 2026
           </p>
           <p className="text-asphalt-400 text-sm leading-relaxed max-w-md mx-auto">
-            During the rallye we'll share our live location so you can follow the route in real time.
-            Photos, stories, and breakdowns will be posted as they happen.
-            Check back here once we're on the road.
+            We'll share live location during the trip. Photos and updates as things happen. Check back in July.
           </p>
         </div>
       </div>

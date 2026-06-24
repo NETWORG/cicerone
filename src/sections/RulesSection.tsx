@@ -4,43 +4,43 @@ const RULES = [
   {
     Icon: Banknote,
     title: 'Cheap or old (or both)',
-    body: 'We prefer cars that are interesting. The gold standard is something very cheap, very old, or very questionable. A Ferrari is welcome but would be painfully embarrassing next to a 1997 Accord.',
+    body: 'We like interesting cars. Cheap, old, questionable - any of these works. A Ferrari is allowed but would feel awkward next to someone\'s 200k km Accord.',
   },
   {
     Icon: Wrench,
-    title: 'Breakdowns are the lore',
-    body: "Our car broke down twice on a previous trip. Both times we fixed it roadside. Both times it was the most memorable moment of the day. If your car is reliable, bring a toolkit anyway.",
+    title: 'Breakdowns happen',
+    body: "The car broke down twice last year. Fixed it both times ourselves on the road. Bring more tools than you think you need and know roughly how your car works.",
   },
   {
     Icon: Map,
     title: 'No mandatory stops',
-    body: "The itinerary is a plan, not a contract. Every stop is optional. Groups can split, diverge, and rejoin at any point. We share live location so everyone knows where everyone is.",
+    body: "The itinerary is a plan, not a contract. Every stop is optional. Groups can split, skip things, add their own. We share location so everyone can find each other.",
   },
   {
     Icon: Users,
     title: 'Groups are independent',
-    body: "You don't have to follow us. You don't have to stay with us. Multiple crews travel loosely together, meet at planned stops, and share experiences after.",
+    body: "You don't have to follow us or stay with us. Multiple crews travel loosely together, meet at planned stops, compare notes at dinner.",
   },
   {
     Icon: MapPin,
     title: 'Share your location',
-    body: 'We use live location sharing so anyone can follow the trip online and crews can find each other without coordination overhead.',
+    body: 'We use live location sharing. Makes coordination easy and lets people follow the trip from home.',
   },
   {
     Icon: Camera,
     title: 'Document everything',
-    body: 'Photos, stories, breakdowns, food, views — post it all. The community of followers is part of the rallye even if they\'re not on the road.',
+    body: 'Photos, stories, breakdowns, food - post all of it. People following from home are part of the rallye too.',
   },
 ];
 
 const WHAT_TO_BRING = [
   'Valid documents for every country on the route',
   'European breakdown kit (warning triangle, vest, first-aid)',
-  'Vignettes for Austria, Switzerland (mandatory)',
-  'Basic tools + spare fluids for your specific car',
-  'Cash — some alpine passes don\'t take cards',
-  'A dashcam (you\'ll want the footage)',
-  'Sense of humour (mandatory)',
+  'Vignettes for Austria and Switzerland - mandatory',
+  'Basic tools and spare fluids for your specific car',
+  'Cash - some alpine passes and toll booths don\'t take cards',
+  'A dashcam (you will want the footage)',
+  'Sense of humour',
 ];
 
 export default function RulesSection() {
@@ -55,7 +55,7 @@ export default function RulesSection() {
             THE CARS &amp; THE RULES
           </h2>
           <p className="text-asphalt-400 text-sm mt-4 max-w-xl mx-auto">
-            There aren't many. But what there are, they matter.
+            Not many rules. But the ones we have, we take seriously.
           </p>
         </div>
 

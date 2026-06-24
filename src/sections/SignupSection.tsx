@@ -24,23 +24,23 @@ const MAILTO_HREF = `mailto:${SIGNUP_EMAIL}?subject=${MAILTO_SUBJECT}&body=${MAI
 const FAQ = [
   {
     q: 'Do I need to do the full route?',
-    a: 'Absolutely not. Join for a day, a leg, or the whole week. The itinerary is open.',
+    a: 'No. Join for a day, a leg, or the whole week. The itinerary is open.',
   },
   {
     q: 'What car should I bring?',
-    a: 'Something interesting. The spirit is cheap, old, or characterful. A normal car is fine but boring. A truly questionable car is peak.',
+    a: 'Something interesting. Cheap, old, or just characterful. A completely standard car is fine but boring. A truly questionable car is perfect.',
   },
   {
     q: 'What if my car breaks down?',
-    a: 'Ideal. We strongly recommend bringing basic tools and knowing roughly how your car works. Breakdowns are features, not bugs.',
+    a: "Good. Bring tools and know roughly how your car works. It's part of the trip.",
   },
   {
     q: 'Is it expensive?',
-    a: 'That\'s up to you. Costs are accommodation, fuel, food, entry fees. We don\'t run a shared budget — everyone handles their own finances.',
+    a: "That's up to you. Costs are accommodation, fuel, food, entry fees. We don't run a shared budget - everyone handles their own.",
   },
   {
     q: 'Can I bring friends or family?',
-    a: 'Yes. Crews of any size or composition are welcome.',
+    a: 'Yes. Crews of any size are welcome.',
   },
 ];
 
@@ -56,8 +56,7 @@ export default function SignupSection() {
             JOIN THE RALLYE
           </h2>
           <p className="text-asphalt-300 text-base max-w-xl mx-auto">
-            Send us an email with your details. We'll get back to you with anything you need to know
-            before departure.
+            Send us an email with your crew details. We'll reply with what you need to know.
           </p>
         </div>
 
@@ -68,7 +67,7 @@ export default function SignupSection() {
             <div>
               <p className="text-white font-semibold text-lg mb-2">Drop us a line</p>
               <p className="text-asphalt-400 text-sm mb-6">
-                Tell us your crew name, car, and which dates you plan to join. We'll handle the rest.
+                Tell us about your crew and car. We'll get back to you.
               </p>
               <a href={MAILTO_HREF} className="btn-primary text-base w-full justify-center">
                 Sign up by email

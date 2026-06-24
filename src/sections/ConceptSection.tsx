@@ -15,23 +15,22 @@ export default function ConceptSection() {
               <span className="text-rally-500">REAL PLACES.</span>
             </h2>
             <p className="text-asphalt-300 text-base leading-relaxed mb-4">
-              <strong className="text-white">Cicerone</strong> — an old word for a knowledgeable guide who leads travellers through places of
-              interest and explains what makes them remarkable. The word goes back to Cicero: the idea that travel should illuminate, not just cover ground.
+              <strong className="text-white">Cicerone</strong> - a guide who walks you through places worth seeing and explains why they matter. The name goes back to Cicero. The idea is that travel should teach you something, not just cover distance.
             </p>
             <p className="text-asphalt-300 text-base leading-relaxed mb-4">
-              That's the spirit here. Every stop on the route is chosen for a reason — a factory floor worth seeing, a mountain road worth driving, a museum that earns its detour.
+              Every stop on the route is there for a reason. A factory floor. A mountain pass. A museum that earns the detour. We think about this quite a bit.
             </p>
             <p className="text-asphalt-300 text-base leading-relaxed">
-              The promise is straightforward: <em className="text-rally-400">a vacation where you see interesting things and learn something.</em> What makes each edition unique is the itinerary.
+              Different route every year. Same spirit. This year it's the Alps, Northern Italy, Monaco, Southern France, Switzerland, and Germany.
             </p>
           </div>
 
           <div className="flex flex-col gap-4">
             {[
-              { Icon: Wrench,  title: 'Machines',     body: 'Factories, circuits, alpine passes, and museum halls full of things with engines.' },
-              { Icon: Wine,    title: 'Food & Drink',  body: 'Wine cellars, aged cheese, post-track pasta. Fuel for crew and car alike.' },
-              { Icon: Atom,    title: 'Science',       body: "CERN's Large Hadron Collider. The Concorde on a rooftop. Because the universe is interesting." },
-              { Icon: Mountain, title: 'Scenery',      body: 'Alpine passes that make grown adults press their face to the glass.' },
+              { Icon: Wrench,  title: 'Machines',     body: 'Factories, circuits, alpine passes. Rooms full of things with engines. This is the main thread.' },
+              { Icon: Wine,    title: 'Food & Drink',  body: 'Wine cellars, aged cheese, post-track pasta. We take food seriously.' },
+              { Icon: Atom,    title: 'Science',       body: 'CERN. A Concorde on a museum rooftop. The universe is interesting and we keep proving it.' },
+              { Icon: Mountain, title: 'Scenery',      body: 'Alpine passes that make you stop the car and just stand there for a while.' },
             ].map(({ Icon, title, body }) => (
               <div key={title} className="card p-5 flex items-start gap-4">
                 <Icon size={22} strokeWidth={1.25} className="text-rally-500 flex-shrink-0 mt-0.5" />
@@ -58,32 +57,32 @@ export default function ConceptSection() {
               {
                 Icon: CalendarDays,
                 title: 'One week',
-                body: "Seven days, mid-July. Crews join for all or part of the route — there's no obligation to do the full thing.",
+               body: "Seven days, mid-July. Join for the full route or just part of it. No obligation.",
               },
               {
                 Icon: Map,
                 title: 'Shared plan, your pace',
-                body: "There's an itinerary, but it's not a race. Groups can diverge, skip stops, or add their own. We share live location so we always know where everyone is.",
+               body: "There's an itinerary but it's not binding. Groups can split, take detours, meet at stops. We share live location so we know where everyone is.",
               },
               {
                 Icon: MapPin,
                 title: 'Live tracking',
-                body: 'Anyone can follow the trip online — live map, photos, and stories posted as they happen.',
+               body: 'Anyone can follow online - live map, photos and updates as they happen.',
               },
               {
                 Icon: Wrench,
                 title: 'Breakdowns welcome',
-                body: "Our car broke down twice on a previous trip. Both times we fixed it roadside. Both times it was the highlight of the day. We're not joking.",
+               body: "The car broke down twice last year. Both times we fixed it on the road. Both times it was the best part of the day.",
               },
               {
                 Icon: Users,
                 title: 'Cars. Beer. Computers.',
-                body: "The Venn diagram of our interests is basically a circle. This trip is what happens when you combine all of them into a vacation.",
+               body: "The three interests overlap almost completely. This trip is what happens when you lean into that.",
               },
               {
                 Icon: Camera,
-                title: 'Annual & evolving',
-                body: 'Every year, a different route. Every edition, a different theme. The spirit stays the same.',
+               title: 'Annual',
+               body: 'Different route every year. Same spirit. We want to keep doing this for a long time.',
               },
             ].map(({ Icon, title, body }) => (
               <div key={title} className="card p-6">
