@@ -2,11 +2,11 @@ import { useState, useEffect } from 'react';
 import { Menu, X } from 'lucide-react';
 
 const NAV_ITEMS = [
+  { href: '#last-year', label: 'Last Year' },
   { href: '#concept', label: 'The Idea' },
   { href: '#route', label: 'Route' },
   { href: '#itinerary', label: 'Itinerary' },
   { href: '#rules', label: 'Rules' },
-  { href: '#last-year', label: 'Last Year' },
   { href: '#crews', label: 'Crews' },
   { href: '#join', label: 'Join' },
 ];

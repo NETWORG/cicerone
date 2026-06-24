@@ -1,36 +1,36 @@
-import { Wrench, Wine, Atom, Mountain, CalendarDays, Map, MapPin, Camera, Users } from 'lucide-react';
+import { Wrench, Mountain, CalendarDays, Map, MapPin, Users, Banknote } from 'lucide-react';
 
 export default function ConceptSection() {
   return (
     <section id="concept" className="section-pad bg-asphalt-950">
       <div className="max-w-7xl mx-auto">
-        {/* The Name */}
+        {/* The Idea */}
         <div className="grid md:grid-cols-2 gap-12 mb-24">
           <div>
             <p className="text-rally-500 text-sm font-semibold uppercase tracking-widest mb-3">
-              The Name
+              The Idea
             </p>
             <h2 className="font-display text-5xl md:text-6xl text-asphalt-100 mb-6 leading-none tracking-wide">
-              CURATED ROUTES.<br />
-              <span className="text-rally-500">REAL PLACES.</span>
+              NOT YOUR USUAL<br />
+              <span className="text-rally-500">VACATION.</span>
             </h2>
             <p className="text-asphalt-300 text-base leading-relaxed mb-4">
-              <strong>Cicerone</strong> - a guide who walks you through places worth seeing and explains why they matter. The name goes back to Cicero. The idea is that travel should teach you something, not just cover distance.
+              <strong>Cicerone Rallye</strong> is a week on the road in fun, old, unreliable cars with a decent chance something will need fixing.
             </p>
             <p className="text-asphalt-300 text-base leading-relaxed mb-4">
-              Factory floors, mountain passes, museums worth the detour. The route earns each stop.
+              We drive thousands of kilometers and stop at interesting places along the way. Going by car lets us experience a lot in one week without turning it into a polished tour.
             </p>
             <p className="text-asphalt-300 text-base leading-relaxed">
-              Different route every year. This year it's the Alps, Northern Italy, Monaco, Southern France, Switzerland, and Germany.
+              We travel in multiple crews because it is more fun, keep the costs sensible, and keep the plan easy.
             </p>
           </div>
 
           <div className="flex flex-col gap-4">
             {[
-              { Icon: Wrench,  title: 'Machines',     body: 'Factories, circuits, alpine passes. Rooms full of things with engines.' },
-              { Icon: Wine,    title: 'Food & Drink',  body: 'Wine cellars, aged cheese, post-track pasta. We take food seriously.' },
-              { Icon: Atom,    title: 'Science',       body: 'CERN. A Concorde on a museum rooftop. We like this stuff.' },
-              { Icon: Mountain, title: 'Scenery',      body: 'Alpine passes that make you stop the car and just stand there for a while.' },
+              { Icon: Wrench,   title: 'Questionable cars', body: 'Cheap, old, interesting, slightly broken, or all of the above.' },
+              { Icon: Mountain, title: 'A lot in a week',   body: 'Alpine roads, small towns, museums, factories, food stops, and whatever looks worth pulling over for.' },
+              { Icon: Users,    title: 'Multiple crews',    body: 'More cars means more stories, more help when something fails, and better evenings.' },
+              { Icon: Banknote, title: 'Low-cost by design', body: 'No luxury package. Keep it simple, split what makes sense, and spend money where it is worth it.' },
             ].map(({ Icon, title, body }) => (
               <div key={title} className="card p-5 flex items-start gap-4">
                 <Icon size={22} strokeWidth={1.25} className="text-rally-500 flex-shrink-0 mt-0.5" />
@@ -57,12 +57,12 @@ export default function ConceptSection() {
               {
                 Icon: CalendarDays,
                 title: 'One week',
-               body: "Seven days, mid-July. Join for the full route or just part of it. No obligation.",
+               body: "A week in July. Long enough to cover real distance, short enough to fit around normal life.",
               },
               {
                 Icon: Map,
                 title: 'Shared plan, your pace',
-               body: "There's an itinerary but it's not binding. Groups can split, take detours, meet at stops. We share live location so we know where everyone is.",
+               body: "There's a rough itinerary, but it is not binding. Groups can split, take detours, meet at stops, or skip things.",
               },
               {
                 Icon: MapPin,
@@ -76,13 +76,13 @@ export default function ConceptSection() {
               },
               {
                 Icon: Users,
-                title: 'Cars. Beer. Computers.',
-               body: "Cars, beer, computers. Turns out combining all three into a vacation works.",
+               title: 'More crews, more fun',
+               body: 'We travel loosely together. Enough coordination to help each other, enough freedom that it still feels like a vacation.',
               },
               {
-                Icon: Camera,
-               title: 'Annual',
-               body: 'Different route every year. This is the second one.',
+               Icon: Banknote,
+               title: 'Keep it easy',
+               body: 'No big entry fee, no strict program, no overthinking. Fuel, food, rooms, tools, and the road.',
               },
             ].map(({ Icon, title, body }) => (
               <div key={title} className="card p-6">

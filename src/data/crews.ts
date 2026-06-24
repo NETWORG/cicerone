@@ -5,7 +5,6 @@ export interface Crew {
   car: string;
   carYear?: number;
   carNote?: string;
-  joining: string;
   confirmed: boolean;
 }
 
@@ -15,7 +14,6 @@ export const CREWS: Crew[] = [
     name: 'Team Polaris',
     members: 'Tomas & Antonin',
     car: 'BMW E30',
-    joining: 'Full route',
     confirmed: true,
   },
   {
@@ -23,7 +21,6 @@ export const CREWS: Crew[] = [
     name: 'Team Touring',
     members: 'Adam & Zdenek',
     car: 'BMW E30 Touring',
-    joining: 'Full route',
     confirmed: true,
   },
   {
@@ -31,7 +28,6 @@ export const CREWS: Crew[] = [
     name: 'Team RS',
     members: 'Sam & Lukas',
     car: 'Skoda Octavia 2 RS',
-    joining: 'Full route',
     confirmed: true,
   },
   {
@@ -39,7 +35,6 @@ export const CREWS: Crew[] = [
     name: 'Team Astra',
     members: 'Ondrej & Jan',
     car: 'Opel Astra Cabrio',
-    joining: 'Full route',
     confirmed: true,
   },
   {
@@ -47,7 +42,6 @@ export const CREWS: Crew[] = [
     name: 'Team VW',
     members: 'Vladimir & Adam',
     car: 'Cabrio',
-    joining: 'Full route',
     confirmed: true,
   },
 ];

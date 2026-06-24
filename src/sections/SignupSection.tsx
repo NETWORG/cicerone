@@ -1,4 +1,4 @@
-import { Mail, Tag, Users, Car, CalendarDays, HelpCircle } from 'lucide-react';
+import { Mail, Tag, Users, Car, HelpCircle } from 'lucide-react';
 
 const SIGNUP_EMAIL = 'adam.prokop@networg.com';
 
@@ -12,7 +12,6 @@ Crew name:
 Members: 
 Car (make, model, year): 
 Car note (anything interesting / relevant):
-Dates joining: [Full route / From ___ / To ___]
 Questions: 
 
 See you on the road!
@@ -84,7 +83,6 @@ export default function SignupSection() {
               { Icon: Tag,          label: 'Crew name',  desc: 'Something memorable. Or your surname. Up to you.' },
               { Icon: Users,        label: 'Members',    desc: "First names, or full names if you'd like to be on the crew list." },
               { Icon: Car,          label: 'Car',        desc: "Make, model, year — and any relevant notes (condition, modifications, risk level)." },
-              { Icon: CalendarDays, label: 'Dates',      desc: 'Full route, or which legs you plan to join.' },
               { Icon: HelpCircle,   label: 'Questions',  desc: "Anything you're unsure about." },
             ].map(({ Icon, label, desc }) => (
               <div key={label} className="flex items-start gap-3">

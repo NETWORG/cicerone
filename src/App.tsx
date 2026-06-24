@@ -16,11 +16,11 @@ export default function App() {
       <Nav />
       <main>
         <Hero />
+        <LastYearSection />
         <ConceptSection />
         <RouteSection />
         <ItinerarySection />
         <RulesSection />
-        <LastYearSection />
         <CrewsSection />
         <FollowSection />
         <SignupSection />

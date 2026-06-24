@@ -22,14 +22,14 @@ export const EDITIONS: Edition[] = [
       'The second Cicerone Rallye takes the Grand Tour across the Alps, through the Italian automotive heartland, along the Riviera, and back north through Geneva and Stuttgart.',
   },
   {
-    id: 'baltica-2025',
+    id: 'gumbalkan-2025',
     year: 2025,
-    title: 'Baltica Edition',
-    subtitle: 'Prague → Poland → Lithuania → Latvia → Prague',
+    title: 'Gumbalkan 2025',
+    subtitle: 'Poland → Lithuania → Latvia',
     dates: 'Jul 2025',
     active: false,
-    countries: ['CZ', 'PL', 'LT', 'LV'],
+    countries: ['PL', 'LT', 'LV'],
     summary:
-      'The inaugural run. Prague to the Baltic and back. Two breakdowns, zero regrets. Proof that shitbox rallies work.',
+      'The road trip rally organized by Gumbalkan that inspired us to do something smaller on our own terms.',
   },
 ];
