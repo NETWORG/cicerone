@@ -23,10 +23,10 @@ export default function LastYearSection() {
             The car broke down twice. Once in Poland, once in Lithuania.
           </p>
           <p className="text-asphalt-300 text-sm leading-relaxed mb-3">
-            Both times we fixed it ourselves. No tow truck. Just tools, some YouTube, and a lot of patience. The second repair took the better part of an afternoon.
+            Both times we fixed it ourselves. No tow truck. Just tools, spare parts, and determination.
           </p>
           <p className="text-asphalt-300 text-sm leading-relaxed">
-            It was the best part of the trip. We're not entirely sure what that says about us.
+            It was the part we like to remember.
           </p>
         </div>
       </div>
