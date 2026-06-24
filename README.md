@@ -1,6 +1,6 @@
-# Cicerone Rallye — Transalpine Edition 2026
+# Cicerone Rallye
 
-Website for the Cicerone Rallye, a modern Grand Tour road trip. Built with Vite + React + TypeScript + Tailwind CSS v4, deployed to GitHub Pages.
+Website for the Cicerone Rallye, a summer road trip.
 
 ## Live site
 `https://networg.github.io/cicerone/`
