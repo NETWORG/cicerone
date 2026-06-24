@@ -1,5 +1,5 @@
 import { ChevronDown, Flag } from 'lucide-react';
-import photo1 from '../assets/photos/rally-2025-1.jpg';
+import photo1 from '../assets/photos/2025/2025-16.jpg';
 
 export default function Hero() {
   return (
