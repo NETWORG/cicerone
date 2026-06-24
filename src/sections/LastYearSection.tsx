@@ -19,9 +19,6 @@ export default function LastYearSection() {
         <PhotoCarousel />
 
         <div className="card p-8 max-w-3xl mx-auto mt-10 border-rally-500/30">
-          <p className="text-rally-500 text-sm font-semibold uppercase tracking-widest mb-3">
-            The Breakdown Chronicles
-          </p>
           <p className="text-asphalt-200 text-base leading-relaxed mb-4">
             The car broke down twice. Once in Poland, once in Lithuania.
           </p>

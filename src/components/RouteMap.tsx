@@ -27,7 +27,7 @@ function RoutePolyline() {
     new g.maps.Polyline({
       path: PATH_COORDS,
       geodesic: true,
-      strokeColor: '#f59e0b',
+      strokeColor: '#c8102e',
       strokeOpacity: 0.7,
       strokeWeight: 3,
       map,

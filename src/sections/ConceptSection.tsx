@@ -15,10 +15,10 @@ export default function ConceptSection() {
               <span className="text-rally-500">REAL PLACES.</span>
             </h2>
             <p className="text-asphalt-300 text-base leading-relaxed mb-4">
-              <strong className="text-white">Cicerone</strong> - a guide who walks you through places worth seeing and explains why they matter. The name goes back to Cicero. The idea is that travel should teach you something, not just cover distance.
+              <strong>Cicerone</strong> - a guide who walks you through places worth seeing and explains why they matter. The name goes back to Cicero. The idea is that travel should teach you something, not just cover distance.
             </p>
             <p className="text-asphalt-300 text-base leading-relaxed mb-4">
-              Every stop on the route is there for a reason. A factory floor. A mountain pass. A museum that earns the detour.
+              Factory floors, mountain passes, museums worth the detour. The route earns each stop.
             </p>
             <p className="text-asphalt-300 text-base leading-relaxed">
               Different route every year. This year it's the Alps, Northern Italy, Monaco, Southern France, Switzerland, and Germany.
@@ -27,9 +27,9 @@ export default function ConceptSection() {
 
           <div className="flex flex-col gap-4">
             {[
-              { Icon: Wrench,  title: 'Machines',     body: 'Factories, circuits, alpine passes. Rooms full of things with engines. This is the main thread.' },
+              { Icon: Wrench,  title: 'Machines',     body: 'Factories, circuits, alpine passes. Rooms full of things with engines.' },
               { Icon: Wine,    title: 'Food & Drink',  body: 'Wine cellars, aged cheese, post-track pasta. We take food seriously.' },
-              { Icon: Atom,    title: 'Science',       body: 'CERN. A Concorde on a museum rooftop. The universe is interesting and we keep proving it.' },
+              { Icon: Atom,    title: 'Science',       body: 'CERN. A Concorde on a museum rooftop. We like this stuff.' },
               { Icon: Mountain, title: 'Scenery',      body: 'Alpine passes that make you stop the car and just stand there for a while.' },
             ].map(({ Icon, title, body }) => (
               <div key={title} className="card p-5 flex items-start gap-4">
@@ -77,12 +77,12 @@ export default function ConceptSection() {
               {
                 Icon: Users,
                 title: 'Cars. Beer. Computers.',
-               body: "The three interests overlap almost completely. This trip is what happens when you lean into that.",
+               body: "Cars, beer, computers. Turns out combining all three into a vacation works.",
               },
               {
                 Icon: Camera,
                title: 'Annual',
-               body: 'Different route every year. If this one goes well, we\'ll do it again.',
+               body: 'Different route every year. This is the second one.',
               },
             ].map(({ Icon, title, body }) => (
               <div key={title} className="card p-6">
