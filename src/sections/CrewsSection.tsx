@@ -1,4 +1,4 @@
-import { User, Car, MapPin, CheckCircle } from 'lucide-react';
+import { User, Car, CheckCircle } from 'lucide-react';
 import { CREWS } from '../data/crews';
 
 export default function CrewsSection() {
@@ -54,10 +54,6 @@ export default function CrewsSection() {
                 {crew.carNote && (
                   <p className="text-asphalt-500 text-xs italic ml-5">{crew.carNote}</p>
                 )}
-                <p className="text-asphalt-300 text-sm flex items-center gap-2">
-                  <MapPin size={12} strokeWidth={1.5} className="text-asphalt-500" />
-                  {crew.joining}
-                </p>
               </div>
             </div>
           ))}
