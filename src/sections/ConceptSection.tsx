@@ -18,10 +18,10 @@ export default function ConceptSection() {
               <strong className="text-white">Cicerone</strong> - a guide who walks you through places worth seeing and explains why they matter. The name goes back to Cicero. The idea is that travel should teach you something, not just cover distance.
             </p>
             <p className="text-asphalt-300 text-base leading-relaxed mb-4">
-              Every stop on the route is there for a reason. A factory floor. A mountain pass. A museum that earns the detour. We think about this quite a bit.
+              Every stop on the route is there for a reason. A factory floor. A mountain pass. A museum that earns the detour.
             </p>
             <p className="text-asphalt-300 text-base leading-relaxed">
-              Different route every year. Same spirit. This year it's the Alps, Northern Italy, Monaco, Southern France, Switzerland, and Germany.
+              Different route every year. This year it's the Alps, Northern Italy, Monaco, Southern France, Switzerland, and Germany.
             </p>
           </div>
 
@@ -82,7 +82,7 @@ export default function ConceptSection() {
               {
                 Icon: Camera,
                title: 'Annual',
-               body: 'Different route every year. Same spirit. We want to keep doing this for a long time.',
+               body: 'Different route every year. If this one goes well, we\'ll do it again.',
               },
             ].map(({ Icon, title, body }) => (
               <div key={title} className="card p-6">

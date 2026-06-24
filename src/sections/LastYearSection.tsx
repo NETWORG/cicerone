@@ -12,7 +12,7 @@ export default function LastYearSection() {
             LAST YEAR'S TRIP
           </h2>
           <p className="text-asphalt-300 text-base max-w-2xl mx-auto">
-            Last summer we drove from Prague through Poland, Lithuania, and Latvia and back. About 3,000 km in cars that had no business doing 3,000 km. It was good enough that we decided to make it a regular thing and invite more people.
+            Last summer a group of us joined <a href="https://gumbalkan.cz/" target="_blank" rel="noopener noreferrer" className="text-rally-400 hover:text-rally-300 transition-colors">Gumbalkan</a> - a road trip rally through Poland, Lithuania, and Latvia. It was a good time. Good enough that we wanted to do something similar ourselves, just smaller and on our own terms. So here we are.
           </p>
         </div>
 
