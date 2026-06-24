@@ -12,7 +12,7 @@ export interface Crew {
 export const CREWS: Crew[] = [
   {
     id: 'crew-e30',
-    name: 'Team E30',
+    name: 'Team Polaris',
     members: 'Tomas & Antonin',
     car: 'BMW E30',
     joining: 'Full route',
@@ -36,7 +36,7 @@ export const CREWS: Crew[] = [
   },
   {
     id: 'crew-astra',
-    name: 'Team Cabrio',
+    name: 'Team Astra',
     members: 'Ondrej & Jan',
     car: 'Opel Astra Cabrio',
     joining: 'Full route',
