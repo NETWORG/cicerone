@@ -1,3 +1,5 @@
+import { Radio } from 'lucide-react';
+
 export default function FollowSection() {
   return (
     <section id="follow" className="section-pad bg-asphalt-950">
@@ -10,9 +12,9 @@ export default function FollowSection() {
         </h2>
 
         <div className="card p-10 border-dashed border-asphalt-600">
-          <div className="text-6xl mb-6">📡</div>
+          <Radio size={40} strokeWidth={1} className="text-asphalt-500 mx-auto mb-6" />
           <p className="text-asphalt-200 text-lg font-medium mb-3">
-            Live map & stories — coming July 2026
+            Live map &amp; stories — coming July 2026
           </p>
           <p className="text-asphalt-400 text-sm leading-relaxed max-w-md mx-auto">
             During the rallye we'll share our live location so you can follow the route in real time.
@@ -24,3 +26,4 @@ export default function FollowSection() {
     </section>
   );
 }
+

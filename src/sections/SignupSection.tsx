@@ -1,3 +1,5 @@
+import { Mail, Tag, Users, Car, CalendarDays, HelpCircle } from 'lucide-react';
+
 const SIGNUP_EMAIL = 'adam.prokop@networg.com';
 
 const MAILTO_SUBJECT = encodeURIComponent('Cicerone Rallye 2026 — Sign Up');
@@ -62,33 +64,32 @@ export default function SignupSection() {
         <div className="grid md:grid-cols-2 gap-10 mb-16">
           {/* CTA card */}
           <div className="card p-8 flex flex-col items-center text-center gap-6">
-            <span className="text-6xl">✉️</span>
+            <Mail size={40} strokeWidth={1} className="text-rally-500" />
             <div>
               <p className="text-white font-semibold text-lg mb-2">Drop us a line</p>
               <p className="text-asphalt-400 text-sm mb-6">
                 Tell us your crew name, car, and which dates you plan to join. We'll handle the rest.
               </p>
               <a href={MAILTO_HREF} className="btn-primary text-base w-full justify-center">
-                Sign up by email →
+                Sign up by email
               </a>
               <p className="text-asphalt-500 text-xs mt-3">{SIGNUP_EMAIL}</p>
             </div>
           </div>
 
-          {/* What to include */}
           <div className="flex flex-col gap-4">
             <p className="font-semibold text-white text-sm uppercase tracking-widest">
               Include in your email:
             </p>
             {[
-              ['🏷️', 'Crew name', 'Something memorable. Or your surname. Up to you.'],
-              ['👥', 'Members', 'First names, or full names if you\'d like to be on the crew list.'],
-              ['🚗', 'Car', 'Make, model, year — and any relevant notes (condition, modifications, risk level).'],
-              ['📅', 'Dates', 'Full route, or which legs you plan to join.'],
-              ['❓', 'Questions', 'Anything you\'re unsure about.'],
-            ].map(([emoji, label, desc]) => (
+              { Icon: Tag,          label: 'Crew name',  desc: 'Something memorable. Or your surname. Up to you.' },
+              { Icon: Users,        label: 'Members',    desc: "First names, or full names if you'd like to be on the crew list." },
+              { Icon: Car,          label: 'Car',        desc: "Make, model, year — and any relevant notes (condition, modifications, risk level)." },
+              { Icon: CalendarDays, label: 'Dates',      desc: 'Full route, or which legs you plan to join.' },
+              { Icon: HelpCircle,   label: 'Questions',  desc: "Anything you're unsure about." },
+            ].map(({ Icon, label, desc }) => (
               <div key={label} className="flex items-start gap-3">
-                <span className="text-2xl flex-shrink-0">{emoji}</span>
+                <Icon size={18} strokeWidth={1.25} className="text-rally-500 flex-shrink-0 mt-0.5" />
                 <div>
                   <p className="font-medium text-white text-sm">{label}</p>
                   <p className="text-asphalt-400 text-xs">{desc}</p>

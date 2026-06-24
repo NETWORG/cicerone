@@ -19,7 +19,7 @@ export interface Stop {
   country: string;
   category: StopCategory;
   coords: { lat: number; lng: number };
-  date?: string; // e.g. "Sat, 18 Jul"
+  date?: string;
   blurb: string;
   link?: string;
   optional?: boolean;
@@ -27,20 +27,20 @@ export interface Stop {
 
 export const CATEGORIES: Record<
   StopCategory,
-  { label: string; emoji: string; color: string }
+  { label: string; icon: string; color: string }
 > = {
-  start:   { label: 'Start / Finish', emoji: '🏁', color: '#22c55e' },
-  finish:  { label: 'Finish',         emoji: '🏁', color: '#22c55e' },
-  pass:    { label: 'Mountain Pass',  emoji: '⛰️', color: '#8b5cf6' },
-  cars:    { label: 'Car Meetup',     emoji: '🚗', color: '#f97316' },
-  factory: { label: 'Factory Tour',   emoji: '🏭', color: '#ef4444' },
-  track:   { label: 'Track Day',      emoji: '🏎️', color: '#dc2626' },
-  sea:     { label: 'Sea & Sun',      emoji: '🏖️', color: '#06b6d4' },
-  city:    { label: 'City / Scenery', emoji: '🏙️', color: '#3b82f6' },
-  science: { label: 'Science',        emoji: '⚛️', color: '#6366f1' },
-  museum:  { label: 'Museum',         emoji: '🏛️', color: '#a855f7' },
-  food:    { label: 'Food & Drink',   emoji: '🍷', color: '#f59e0b' },
-  sleep:   { label: 'Overnight',      emoji: '🛏️', color: '#64748b' },
+  start:   { label: 'Start',          icon: 'Flag',         color: '#22c55e' },
+  finish:  { label: 'Finish',         icon: 'FlagOff',      color: '#22c55e' },
+  pass:    { label: 'Mountain Pass',  icon: 'Mountain',     color: '#8b5cf6' },
+  cars:    { label: 'Car Meetup',     icon: 'Car',          color: '#f97316' },
+  factory: { label: 'Factory Tour',   icon: 'Factory',      color: '#ef4444' },
+  track:   { label: 'Track Day',      icon: 'Timer',        color: '#dc2626' },
+  sea:     { label: 'Sea & Sun',      icon: 'Waves',        color: '#06b6d4' },
+  city:    { label: 'City',           icon: 'Building2',    color: '#3b82f6' },
+  science: { label: 'Science',        icon: 'Atom',         color: '#6366f1' },
+  museum:  { label: 'Museum',         icon: 'Landmark',     color: '#a855f7' },
+  food:    { label: 'Food & Drink',   icon: 'Wine',         color: '#f59e0b' },
+  sleep:   { label: 'Overnight',      icon: 'BedDouble',    color: '#64748b' },
 };
 
 export const STOPS: Stop[] = [

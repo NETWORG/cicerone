@@ -1,3 +1,4 @@
+import { User, Car, MapPin, CheckCircle } from 'lucide-react';
 import { CREWS } from '../data/crews';
 
 export default function CrewsSection() {
@@ -30,8 +31,8 @@ export default function CrewsSection() {
               <div className="flex items-center justify-between">
                 <span className="font-display text-xl text-white tracking-wide">{crew.name}</span>
                 {crew.confirmed ? (
-                  <span className="category-badge bg-green-500/10 border border-green-500/30 text-green-400 text-xs">
-                    ✓ Confirmed
+                  <span className="inline-flex items-center gap-1 category-badge bg-green-500/10 border border-green-500/30 text-green-400 text-xs">
+                    <CheckCircle size={11} strokeWidth={1.5} /> Confirmed
                   </span>
                 ) : (
                   <span className="category-badge bg-asphalt-700 text-asphalt-400 text-xs">
@@ -41,20 +42,20 @@ export default function CrewsSection() {
               </div>
 
               <div className="flex flex-col gap-1">
-                <p className="text-asphalt-300 text-sm">
-                  <span className="text-asphalt-500 mr-1">👤</span>
+                <p className="text-asphalt-300 text-sm flex items-center gap-2">
+                  <User size={12} strokeWidth={1.5} className="text-asphalt-500" />
                   {crew.members}
                 </p>
-                <p className="text-asphalt-300 text-sm">
-                  <span className="text-asphalt-500 mr-1">🚗</span>
+                <p className="text-asphalt-300 text-sm flex items-center gap-2">
+                  <Car size={12} strokeWidth={1.5} className="text-asphalt-500" />
                   {crew.car}
-                  {crew.carYear && <span className="text-asphalt-500"> · {crew.carYear}</span>}
+                  {crew.carYear && <span className="text-asphalt-500">· {crew.carYear}</span>}
                 </p>
                 {crew.carNote && (
                   <p className="text-asphalt-500 text-xs italic ml-5">{crew.carNote}</p>
                 )}
-                <p className="text-asphalt-300 text-sm">
-                  <span className="text-asphalt-500 mr-1">📍</span>
+                <p className="text-asphalt-300 text-sm flex items-center gap-2">
+                  <MapPin size={12} strokeWidth={1.5} className="text-asphalt-500" />
                   {crew.joining}
                 </p>
               </div>

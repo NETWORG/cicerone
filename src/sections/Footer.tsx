@@ -1,3 +1,5 @@
+import { Flag } from 'lucide-react';
+
 export default function Footer() {
   const year = new Date().getFullYear();
 
@@ -6,10 +8,10 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
         {/* Logo */}
         <div className="flex items-center gap-3">
-          <span className="text-2xl">🏁</span>
+          <Flag size={20} strokeWidth={1.5} className="text-rally-500" />
           <div>
             <p className="font-display text-lg text-white tracking-widest">CICERONE RALLYE</p>
-            <p className="text-asphalt-500 text-xs">A modern Grand Tour · Annual</p>
+            <p className="text-asphalt-500 text-xs">A curated road trip · Annual</p>
           </div>
         </div>
 
@@ -36,8 +38,7 @@ export default function Footer() {
 
         {/* Copy */}
         <p className="text-asphalt-600 text-xs text-center md:text-right">
-          © {year} Cicerone Rallye<br />
-          <span className="text-asphalt-700">Made with 🔧 and ☕</span>
+          © {year} Cicerone Rallye
         </p>
       </div>
     </footer>

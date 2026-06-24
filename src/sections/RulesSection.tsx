@@ -1,31 +1,33 @@
+import { Banknote, Wrench, Map, Users, MapPin, Camera, CheckCircle } from 'lucide-react';
+
 const RULES = [
   {
-    icon: '💸',
+    Icon: Banknote,
     title: 'Cheap or old (or both)',
-    body: 'We prefer cars that are interesting. The gold standard is something very cheap, very old, or very questionable. A Ferrari is welcome but it would be painfully embarrassing next to a 1997 Accord.',
+    body: 'We prefer cars that are interesting. The gold standard is something very cheap, very old, or very questionable. A Ferrari is welcome but would be painfully embarrassing next to a 1997 Accord.',
   },
   {
-    icon: '🔧',
+    Icon: Wrench,
     title: 'Breakdowns are the lore',
-    body: 'Last year our car broke down twice on the road. Both times we fixed it ourselves. Both times it was the most memorable moment of the day. If your car is reliable, bring a toolkit anyway.',
+    body: "Our car broke down twice on a previous trip. Both times we fixed it roadside. Both times it was the most memorable moment of the day. If your car is reliable, bring a toolkit anyway.",
   },
   {
-    icon: '🗺️',
+    Icon: Map,
     title: 'No mandatory stops',
     body: "The itinerary is a plan, not a contract. Every stop is optional. Groups can split, diverge, and rejoin at any point. We share live location so everyone knows where everyone is.",
   },
   {
-    icon: '🚗',
+    Icon: Users,
     title: 'Groups are independent',
-    body: 'You don\'t have to follow us. You don\'t have to stay with us. The idea is that multiple crews travel loosely together, meet at planned stops, and share experiences after.',
+    body: "You don't have to follow us. You don't have to stay with us. Multiple crews travel loosely together, meet at planned stops, and share experiences after.",
   },
   {
-    icon: '📍',
+    Icon: MapPin,
     title: 'Share your location',
     body: 'We use live location sharing so anyone can follow the trip online and crews can find each other without coordination overhead.',
   },
   {
-    icon: '📷',
+    Icon: Camera,
     title: 'Document everything',
     body: 'Photos, stories, breakdowns, food, views — post it all. The community of followers is part of the rallye even if they\'re not on the road.',
   },
@@ -36,7 +38,7 @@ const WHAT_TO_BRING = [
   'European breakdown kit (warning triangle, vest, first-aid)',
   'Vignettes for Austria, Switzerland (mandatory)',
   'Basic tools + spare fluids for your specific car',
-  'Cash — some things on alpine passes don\'t take cards',
+  'Cash — some alpine passes don\'t take cards',
   'A dashcam (you\'ll want the footage)',
   'Sense of humour (mandatory)',
 ];
@@ -58,11 +60,11 @@ export default function RulesSection() {
         </div>
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
-          {RULES.map((rule) => (
-            <div key={rule.title} className="card p-6">
-              <span className="text-4xl mb-4 block">{rule.icon}</span>
-              <h3 className="font-semibold text-white text-lg mb-2">{rule.title}</h3>
-              <p className="text-asphalt-300 text-sm leading-relaxed">{rule.body}</p>
+          {RULES.map(({ Icon, title, body }) => (
+            <div key={title} className="card p-6">
+              <Icon size={28} strokeWidth={1.25} className="text-rally-500 mb-4" />
+              <h3 className="font-semibold text-white text-lg mb-2">{title}</h3>
+              <p className="text-asphalt-300 text-sm leading-relaxed">{body}</p>
             </div>
           ))}
         </div>
@@ -70,12 +72,12 @@ export default function RulesSection() {
         {/* What to bring */}
         <div className="card p-8 max-w-2xl mx-auto">
           <h3 className="font-display text-2xl text-white mb-6 tracking-wide">
-            📦 WHAT TO BRING
+            WHAT TO BRING
           </h3>
           <ul className="flex flex-col gap-3">
             {WHAT_TO_BRING.map((item) => (
               <li key={item} className="flex items-start gap-3 text-asphalt-300 text-sm">
-                <span className="text-rally-500 mt-0.5 flex-shrink-0">✓</span>
+                <CheckCircle size={14} strokeWidth={1.5} className="text-rally-500 mt-0.5 flex-shrink-0" />
                 <span>{item}</span>
               </li>
             ))}

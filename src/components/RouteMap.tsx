@@ -1,4 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
+import React from 'react';
+import * as LucideIcons from 'lucide-react';
+import { type LucideProps, Map as MapIcon, X } from 'lucide-react';
 import {
   APIProvider,
   Map,
@@ -6,11 +9,10 @@ import {
   InfoWindow,
   useMap,
 } from '@vis.gl/react-google-maps';
-import { STOPS, CATEGORIES, type Stop } from '../data/stops';
+import { STOPS, CATEGORIES, type Stop, type StopCategory } from '../data/stops';
 import CategoryBadge from './CategoryBadge';
 
 const API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY as string | undefined;
-
 const PATH_COORDS = STOPS.map((s) => s.coords);
 
 function RoutePolyline() {
@@ -38,16 +40,16 @@ function RoutePolyline() {
 
 function MarkerPin({ stop }: { stop: Stop }) {
   const meta = CATEGORIES[stop.category];
+  const iconName = meta.icon as keyof typeof LucideIcons;
+  const Icon = LucideIcons[iconName] as React.ComponentType<LucideProps> | undefined;
+
   return (
-    <div
-      className="flex flex-col items-center"
-      style={{ transform: 'translateY(-100%)' }}
-    >
+    <div className="flex flex-col items-center" style={{ transform: 'translateY(-100%)' }}>
       <div
-        className="w-9 h-9 rounded-full flex items-center justify-center text-lg shadow-lg border-2 border-white/30"
+        className="w-9 h-9 rounded-full flex items-center justify-center shadow-lg border-2 border-white/20"
         style={{ backgroundColor: meta.color }}
       >
-        {meta.emoji}
+        {Icon && <Icon size={16} strokeWidth={1.75} color="#fff" />}
       </div>
       <div
         className="w-0 h-0"
@@ -63,18 +65,18 @@ function MarkerPin({ stop }: { stop: Stop }) {
 
 function StopInfoWindow({ stop, onClose }: { stop: Stop; onClose: () => void }) {
   return (
-    <div className="bg-asphalt-900 rounded-xl p-4 max-w-xs" style={{ color: '#e2e4ea' }}>
+    <div className="bg-asphalt-900 rounded-xl p-4 max-w-xs relative" style={{ color: '#e2e4ea' }}>
       <button
         onClick={onClose}
-        className="absolute top-2 right-2 text-asphalt-400 hover:text-white transition-colors text-xl leading-none"
+        className="absolute top-2 right-2 text-asphalt-400 hover:text-white transition-colors"
         aria-label="Close"
       >
-        ×
+        <X size={16} strokeWidth={1.5} />
       </button>
       <div className="mb-2">
         <CategoryBadge category={stop.category} />
       </div>
-      <h3 className="font-bold text-base mb-1" style={{ color: '#fff' }}>
+      <h3 className="font-bold text-base mb-1 pr-5" style={{ color: '#fff' }}>
         {stop.name}
       </h3>
       <p className="text-xs mb-2" style={{ color: '#9ca3af' }}>
@@ -104,15 +106,22 @@ function StopInfoWindow({ stop, onClose }: { stop: Stop; onClose: () => void }) 
   );
 }
 
+function CategoryIcon({ category }: { category: StopCategory }) {
+  const meta = CATEGORIES[category];
+  const iconName = meta.icon as keyof typeof LucideIcons;
+  const Icon = LucideIcons[iconName] as React.ComponentType<LucideProps> | undefined;
+  return Icon ? <Icon size={12} strokeWidth={1.5} style={{ color: meta.color }} /> : null;
+}
+
 function MapLegend() {
-  const shown = ['start', 'pass', 'cars', 'factory', 'track', 'sea', 'city', 'science', 'museum', 'food'] as const;
+  const shown: StopCategory[] = ['start', 'pass', 'cars', 'factory', 'track', 'sea', 'city', 'science', 'museum', 'food'];
   return (
     <div className="absolute bottom-3 left-3 bg-asphalt-900/95 backdrop-blur border border-asphalt-700 rounded-xl p-3 flex flex-col gap-1.5">
       {shown.map((cat) => {
         const m = CATEGORIES[cat];
         return (
-          <div key={cat} className="flex items-center gap-2 text-xs text-asphalt-200">
-            <span className="text-sm">{m.emoji}</span>
+          <div key={cat} className="flex items-center gap-2 text-xs" style={{ color: '#c0c4ce' }}>
+            <CategoryIcon category={cat} />
             <span>{m.label}</span>
           </div>
         );
@@ -158,12 +167,12 @@ export default function RouteMap() {
     return (
       <div
         id="route-map"
-        className="flex flex-col items-center justify-center bg-asphalt-800 border border-asphalt-700 rounded-xl text-center p-8"
+        className="flex flex-col items-center justify-center bg-asphalt-800 border border-asphalt-700 rounded-xl text-center p-8 gap-4"
       >
-        <span className="text-5xl mb-4">🗺️</span>
-        <p className="text-asphalt-200 font-semibold mb-2">Interactive map coming soon</p>
+        <MapIcon size={40} strokeWidth={1} className="text-asphalt-500" />
+        <p className="text-asphalt-200 font-semibold">Interactive map coming soon</p>
         <p className="text-asphalt-400 text-sm max-w-sm">
-          Add a <code className="text-rally-400">VITE_GOOGLE_MAPS_API_KEY</code> environment variable to enable the live map with category pins and route overlay.
+          Add a <code className="text-rally-400">VITE_GOOGLE_MAPS_API_KEY</code> environment variable to enable the live route map.
         </p>
       </div>
     );
