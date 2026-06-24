@@ -12,7 +12,7 @@ export default function Hero() {
         <img
           src={photo1}
           alt="Open road"
-          className="w-full h-full object-cover opacity-25"
+          className="w-full h-full object-cover opacity-40"
         />
         <div className="absolute inset-0 hero-gradient" />
       </div>
@@ -20,7 +20,7 @@ export default function Hero() {
       {/* Content */}
       <div className="relative z-10 text-center px-4 max-w-4xl mx-auto">
         {/* Edition badge */}
-        <div className="inline-flex items-center gap-2 bg-rally-500/10 border border-rally-500/30 text-rally-400 text-sm font-medium px-4 py-2 rounded-full mb-8">
+        <div className="inline-flex items-center gap-2 border border-white/50 text-white/90 text-sm font-medium px-4 py-2 rounded-full mb-8">
           <Flag size={14} strokeWidth={1.5} />
           <span>Transalpine Edition · 18–26 Jul 2026</span>
         </div>
@@ -47,7 +47,7 @@ export default function Hero() {
           <a href="#join" className="btn-primary text-base px-8 py-4">
             Join the Rallye
           </a>
-          <a href="#route" className="btn-outline text-base px-8 py-4">
+          <a href="#route" className="inline-flex items-center gap-2 rounded font-semibold transition-all duration-150 cursor-pointer select-none border-2 border-white text-white px-8 py-4 text-base hover:bg-white hover:text-asphalt-100 active:scale-95">
             See the Route
           </a>
         </div>

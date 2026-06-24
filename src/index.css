@@ -94,13 +94,14 @@ body {
   #route-map { height: 600px; }
 }
 
-/* ── Hero gradient (dark overlay over photo) ── */
+/* ── Hero gradient (dark overlay over photo, uniform top/bottom) ── */
 .hero-gradient {
   background: linear-gradient(
-    to top,
-    rgba(8,7,7,0.92) 0%,
-    rgba(8,7,7,0.5) 40%,
-    rgba(8,7,7,0.25) 100%
+    180deg,
+    rgba(8,7,7,0.75) 0%,
+    rgba(8,7,7,0.45) 35%,
+    rgba(8,7,7,0.55) 65%,
+    rgba(8,7,7,0.92) 100%
   );
 }
 
