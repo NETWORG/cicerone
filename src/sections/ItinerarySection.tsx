@@ -12,7 +12,7 @@ export default function ItinerarySection() {
           <p className="text-rally-500 text-sm font-semibold uppercase tracking-widest mb-3">
             Day by Day
           </p>
-          <h2 className="font-display text-5xl md:text-6xl text-white tracking-wide">
+          <h2 className="font-display text-5xl md:text-6xl text-asphalt-100 tracking-wide">
             ITINERARY
           </h2>
           <p className="text-asphalt-400 text-sm mt-4">
@@ -35,11 +35,9 @@ export default function ItinerarySection() {
                 <div key={stop.id} className="relative flex gap-6 md:gap-10 pl-10 md:pl-20">
                   {/* Timeline dot */}
                   <div
-                    className="absolute left-0 md:left-4 top-4 w-8 h-8 rounded-full flex items-center justify-center border-2 flex-shrink-0 z-10"
+                    className="absolute left-0 md:left-4 top-4 w-8 h-8 rounded-full flex items-center justify-center border-2 flex-shrink-0 z-10 bg-white"
                     style={{
-                      backgroundColor: meta.color + '22',
                       borderColor: meta.color,
-                      boxShadow: `0 0 12px ${meta.color}44`,
                     }}
                   >
                     {Icon && <Icon size={14} strokeWidth={1.5} style={{ color: meta.color }} />}
@@ -55,13 +53,13 @@ export default function ItinerarySection() {
                     <div className="flex flex-wrap items-center gap-2 mb-2">
                       <CategoryBadge category={stop.category} />
                       {stop.optional && (
-                        <span className="category-badge bg-asphalt-700 text-asphalt-300">
+                        <span className="category-badge border border-asphalt-600 text-asphalt-500">
                           Optional
                         </span>
                       )}
                     </div>
 
-                    <h3 className="font-bold text-white text-lg mb-1">{stop.name}</h3>
+                    <h3 className="font-bold text-asphalt-100 text-lg mb-1">{stop.name}</h3>
 
                     <p className="text-asphalt-400 text-xs mb-3 flex items-center gap-3 flex-wrap">
                       <span className="flex items-center gap-1"><MapPin size={11} strokeWidth={1.5} />{stop.location}</span>

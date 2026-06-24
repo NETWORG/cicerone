@@ -52,7 +52,7 @@ export default function SignupSection() {
           <p className="text-rally-500 text-sm font-semibold uppercase tracking-widest mb-3">
             Ready?
           </p>
-          <h2 className="font-display text-5xl md:text-6xl text-white mb-4 tracking-wide">
+          <h2 className="font-display text-5xl md:text-6xl text-asphalt-100 mb-4 tracking-wide">
             JOIN THE RALLYE
           </h2>
           <p className="text-asphalt-300 text-base max-w-xl mx-auto">
@@ -65,7 +65,7 @@ export default function SignupSection() {
           <div className="card p-8 flex flex-col items-center text-center gap-6">
             <Mail size={40} strokeWidth={1} className="text-rally-500" />
             <div>
-              <p className="text-white font-semibold text-lg mb-2">Drop us a line</p>
+              <p className="text-asphalt-100 font-semibold text-lg mb-2">Drop us a line</p>
               <p className="text-asphalt-400 text-sm mb-6">
                 Tell us about your crew and car. We'll get back to you.
               </p>
@@ -77,7 +77,7 @@ export default function SignupSection() {
           </div>
 
           <div className="flex flex-col gap-4">
-            <p className="font-semibold text-white text-sm uppercase tracking-widest">
+            <p className="font-semibold text-asphalt-100 text-sm uppercase tracking-widest">
               Include in your email:
             </p>
             {[
@@ -90,7 +90,7 @@ export default function SignupSection() {
               <div key={label} className="flex items-start gap-3">
                 <Icon size={18} strokeWidth={1.25} className="text-rally-500 flex-shrink-0 mt-0.5" />
                 <div>
-                  <p className="font-medium text-white text-sm">{label}</p>
+                  <p className="font-medium text-asphalt-100 text-sm">{label}</p>
                   <p className="text-asphalt-400 text-xs">{desc}</p>
                 </div>
               </div>
@@ -100,11 +100,11 @@ export default function SignupSection() {
 
         {/* FAQ */}
         <div>
-          <h3 className="font-display text-3xl text-white mb-6 tracking-wide">FAQ</h3>
+          <h3 className="font-display text-3xl text-asphalt-100 mb-6 tracking-wide">FAQ</h3>
           <div className="flex flex-col gap-4">
             {FAQ.map((item) => (
               <div key={item.q} className="card p-5">
-                <p className="font-semibold text-white mb-2 text-sm">{item.q}</p>
+                <p className="font-semibold text-asphalt-100 mb-2 text-sm">{item.q}</p>
                 <p className="text-asphalt-300 text-sm leading-relaxed">{item.a}</p>
               </div>
             ))}

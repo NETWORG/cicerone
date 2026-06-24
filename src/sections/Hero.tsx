@@ -31,14 +31,14 @@ export default function Hero() {
           <span className="text-rally-500">RALLYE</span>
         </h1>
 
-        <p className="font-display text-2xl sm:text-3xl text-asphalt-200 tracking-wider mb-4">
+        <p className="font-display text-2xl sm:text-3xl text-white/70 tracking-wider mb-4">
           TRANSALPINE EDITION 2026
         </p>
 
-        <p className="text-asphalt-300 text-base sm:text-lg max-w-2xl mx-auto mb-2">
+        <p className="text-white/60 text-base sm:text-lg max-w-2xl mx-auto mb-2">
           Alps — Italy — Monaco — France — Switzerland — Germany
         </p>
-        <p className="text-asphalt-400 text-sm sm:text-base max-w-xl mx-auto mb-10">
+        <p className="text-white/50 text-sm sm:text-base max-w-xl mx-auto mb-10">
           18–26 July 2026 · Fun cars. Great places. Breakdowns welcome.
         </p>
 
@@ -54,7 +54,7 @@ export default function Hero() {
       </div>
 
       {/* Scroll indicator */}
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 text-asphalt-500 animate-bounce">
+      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 text-white/30 animate-bounce">
         <span className="text-xs tracking-widest uppercase">Scroll</span>
         <ChevronDown size={18} strokeWidth={1.5} />
       </div>

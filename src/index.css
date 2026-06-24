@@ -1,30 +1,40 @@
 @import "tailwindcss";
 
 @theme {
-  /* Palette — dark asphalt + amber + white */
-  --color-asphalt-950: #0d0e10;
-  --color-asphalt-900: #13151a;
-  --color-asphalt-800: #1c1f27;
-  --color-asphalt-700: #252932;
-  --color-asphalt-600: #343843;
-  --color-asphalt-400: #6b7280;
-  --color-asphalt-200: #c0c4ce;
-  --color-asphalt-100: #e2e4ea;
-  --color-asphalt-50:  #f4f5f7;
+  /* ── Paper / motor racing palette ── */
+  /* Backgrounds: light → warm white → card white */
+  --color-asphalt-950: #ffffff;
+  --color-asphalt-900: #f4f3ef;
+  --color-asphalt-800: #ffffff;
+  /* Borders */
+  --color-asphalt-700: #d8d4ce;
+  --color-asphalt-600: #b4b0aa;
+  /* Text scale (reads dark on light bg) */
+  --color-asphalt-500: #8a8784;
+  --color-asphalt-400: #5c5a57;
+  --color-asphalt-300: #2d2c2a;
+  --color-asphalt-200: #181716;
+  --color-asphalt-100: #0a0909;
+  --color-asphalt-50:  #080807;
 
-  --color-rally-500: #f59e0b;   /* amber */
-  --color-rally-400: #fbbf24;
-  --color-rally-300: #fcd34d;
-  --color-rally-600: #d97706;
+  /* ── Racing red (replaces amber) ── */
+  --color-rally-500: #c8102e;
+  --color-rally-400: #e01530;
+  --color-rally-600: #9e0c24;
+  --color-rally-300: #f44358;
 
-  --color-accent-red:  #ef4444;
-  --color-accent-blue: #3b82f6;
+  /* ── Dark ink for footer ── */
+  --color-ink-950: #0a0909;
+  --color-ink-800: #1a1716;
+  --color-ink-500: #6b6864;
+  --color-ink-300: #a8a5a2;
 
-  /* Typography */
+  --color-accent-red:  #c8102e;
+  --color-accent-blue: #1d4ed8;
+
   --font-display: 'Bebas Neue', 'Impact', ui-sans-serif, system-ui, sans-serif;
   --font-sans:    'Inter', ui-sans-serif, system-ui, sans-serif;
 
-  /* Spacing tokens */
   --spacing-section: 5rem;
 }
 
@@ -35,14 +45,14 @@ html {
 }
 
 body {
-  @apply bg-asphalt-950 text-asphalt-100 font-sans antialiased;
+  @apply bg-asphalt-950 text-asphalt-300 font-sans antialiased;
   font-family: var(--font-sans);
 }
 
 /* ── Scrollbar ── */
 ::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-track { background: var(--color-asphalt-900); }
-::-webkit-scrollbar-thumb { background: var(--color-asphalt-600); border-radius: 3px; }
+::-webkit-scrollbar-thumb { background: var(--color-asphalt-700); border-radius: 3px; }
 ::-webkit-scrollbar-thumb:hover { background: var(--color-rally-500); }
 
 /* ── Display headings ── */
@@ -56,30 +66,27 @@ body {
   @apply py-20 px-4 md:px-8 lg:px-16;
 }
 
-/* ── Card ── */
+/* ── Card — white, sharp, clean border ── */
 .card {
-  @apply bg-asphalt-800 border border-asphalt-700 rounded-xl overflow-hidden;
+  @apply bg-white border border-asphalt-700 rounded overflow-hidden;
 }
 
-/* ── Button base ── */
-.btn {
-  @apply inline-flex items-center gap-2 rounded-lg font-semibold transition-all duration-200 cursor-pointer select-none;
-}
+/* ── Button — red primary, black outline ── */
 .btn-primary {
-  @apply inline-flex items-center gap-2 rounded-lg font-semibold transition-all duration-200 cursor-pointer select-none bg-rally-500 text-asphalt-950 px-6 py-3 hover:bg-rally-400 active:scale-95;
+  @apply inline-flex items-center gap-2 rounded font-semibold transition-all duration-150 cursor-pointer select-none bg-rally-500 text-white px-6 py-3 hover:bg-rally-600 active:scale-95;
 }
 .btn-outline {
-  @apply inline-flex items-center gap-2 rounded-lg font-semibold transition-all duration-200 cursor-pointer select-none border-2 border-rally-500 text-rally-500 px-6 py-3 hover:bg-rally-500 hover:text-asphalt-950 active:scale-95;
+  @apply inline-flex items-center gap-2 rounded font-semibold transition-all duration-150 cursor-pointer select-none border-2 border-asphalt-100 text-asphalt-100 px-6 py-3 hover:bg-asphalt-100 hover:text-white active:scale-95;
 }
 
 /* ── Category badge ── */
 .category-badge {
-  @apply inline-flex items-center gap-1.5 text-xs font-medium px-2 py-0.5 rounded-full;
+  @apply inline-flex items-center gap-1.5 text-xs font-medium px-2 py-0.5 rounded;
 }
 
 /* ── Map container ── */
 #route-map {
-  @apply w-full rounded-xl overflow-hidden;
+  @apply w-full rounded overflow-hidden;
   height: 480px;
 }
 
@@ -87,13 +94,13 @@ body {
   #route-map { height: 600px; }
 }
 
-/* ── Gradient overlays ── */
+/* ── Hero gradient (dark overlay over photo) ── */
 .hero-gradient {
   background: linear-gradient(
-    135deg,
-    var(--color-asphalt-950) 0%,
-    rgba(13,14,16,0.6) 40%,
-    rgba(245,158,11,0.1) 100%
+    to top,
+    rgba(8,7,7,0.92) 0%,
+    rgba(8,7,7,0.5) 40%,
+    rgba(8,7,7,0.25) 100%
   );
 }
 
@@ -110,7 +117,6 @@ body {
 }
 
 /* ── Google Maps InfoWindow chrome reset ── */
-/* Strip the white box, shadow, padding and tail so only our dark card shows */
 .gm-style .gm-style-iw-c {
   background: transparent !important;
   box-shadow: none !important;
@@ -122,15 +128,12 @@ body {
   overflow: visible !important;
   max-height: none !important;
 }
-/* Hide the white tail/triangle */
 .gm-style .gm-style-iw-t::after {
   display: none !important;
 }
-/* Hide Google's own close button — we have our own in the card */
 .gm-style button.gm-ui-hover-effect {
   display: none !important;
 }
-/* Hide the outer wrapper shadow/bg */
 .gm-style .gm-style-iw-tc {
   display: none !important;
 }

@@ -65,10 +65,10 @@ function MarkerPin({ stop }: { stop: Stop }) {
 
 function StopInfoWindow({ stop, onClose }: { stop: Stop; onClose: () => void }) {
   return (
-    <div className="bg-asphalt-900 rounded-xl p-4 max-w-xs relative shadow-2xl" style={{ color: '#e2e4ea' }}>
+    <div className="bg-white rounded border border-asphalt-700 p-4 max-w-xs relative shadow-lg" style={{ color: '#2d2c2a' }}>
       <button
         onClick={onClose}
-        className="absolute top-2 right-2 text-asphalt-400 hover:text-white transition-colors"
+        className="absolute top-2 right-2 text-asphalt-500 hover:text-asphalt-100 transition-colors"
         aria-label="Close"
       >
         <X size={16} strokeWidth={1.5} />
@@ -76,14 +76,14 @@ function StopInfoWindow({ stop, onClose }: { stop: Stop; onClose: () => void }) 
       <div className="mb-2">
         <CategoryBadge category={stop.category} />
       </div>
-      <h3 className="font-bold text-base mb-1 pr-5" style={{ color: '#fff' }}>
+      <h3 className="font-bold text-base mb-1 pr-5" style={{ color: '#0a0909' }}>
         {stop.name}
       </h3>
-      <p className="text-xs mb-2" style={{ color: '#9ca3af' }}>
+      <p className="text-xs mb-2" style={{ color: '#8a8784' }}>
         {stop.location}
         {stop.date && ` · ${stop.date}`}
       </p>
-      <p className="text-sm leading-relaxed" style={{ color: '#c0c4ce' }}>
+      <p className="text-sm leading-relaxed" style={{ color: '#2d2c2a' }}>
         {stop.blurb}
       </p>
       {stop.link && (
@@ -92,13 +92,13 @@ function StopInfoWindow({ stop, onClose }: { stop: Stop; onClose: () => void }) 
           target="_blank"
           rel="noopener noreferrer"
           className="inline-block mt-3 text-xs font-medium"
-          style={{ color: '#f59e0b' }}
+          style={{ color: '#c8102e' }}
         >
           Learn more →
         </a>
       )}
       {stop.optional && (
-        <span className="inline-block mt-2 text-xs px-2 py-0.5 rounded-full" style={{ background: '#f59e0b22', color: '#f59e0b' }}>
+        <span className="inline-block mt-2 text-xs px-2 py-0.5 rounded border" style={{ borderColor: '#d8d4ce', color: '#8a8784' }}>
           Optional stop
         </span>
       )}
@@ -116,11 +116,11 @@ function CategoryIcon({ category }: { category: StopCategory }) {
 function MapLegend() {
   const shown: StopCategory[] = ['start', 'pass', 'cars', 'factory', 'track', 'sea', 'city', 'science', 'museum', 'food'];
   return (
-    <div className="absolute bottom-3 left-3 bg-asphalt-900/95 backdrop-blur border border-asphalt-700 rounded-xl p-3 flex flex-col gap-1.5">
+    <div className="absolute bottom-3 left-3 bg-white/95 backdrop-blur border border-asphalt-700 rounded p-3 flex flex-col gap-1.5 shadow-md">
       {shown.map((cat) => {
         const m = CATEGORIES[cat];
         return (
-          <div key={cat} className="flex items-center gap-2 text-xs" style={{ color: '#c0c4ce' }}>
+          <div key={cat} className="flex items-center gap-2 text-xs" style={{ color: '#2d2c2a' }}>
             <CategoryIcon category={cat} />
             <span>{m.label}</span>
           </div>
@@ -167,7 +167,7 @@ export default function RouteMap() {
     return (
       <div
         id="route-map"
-        className="flex flex-col items-center justify-center bg-asphalt-800 border border-asphalt-700 rounded-xl text-center p-8 gap-4"
+        className="flex flex-col items-center justify-center bg-asphalt-900 border border-asphalt-700 rounded text-center p-8 gap-4"
       >
         <MapIcon size={40} strokeWidth={1} className="text-asphalt-500" />
         <p className="text-asphalt-200 font-semibold">Interactive map coming soon</p>
@@ -188,7 +188,7 @@ export default function RouteMap() {
           gestureHandling="greedy"
           disableDefaultUI={false}
           style={{ width: '100%', height: '100%', borderRadius: '0.75rem' }}
-          colorScheme="DARK"
+          colorScheme="LIGHT"
         >
           <MapContent />
         </Map>

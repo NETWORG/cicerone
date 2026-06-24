@@ -10,7 +10,7 @@ export default function ConceptSection() {
             <p className="text-rally-500 text-sm font-semibold uppercase tracking-widest mb-3">
               The Name
             </p>
-            <h2 className="font-display text-5xl md:text-6xl text-white mb-6 leading-none tracking-wide">
+            <h2 className="font-display text-5xl md:text-6xl text-asphalt-100 mb-6 leading-none tracking-wide">
               CURATED ROUTES.<br />
               <span className="text-rally-500">REAL PLACES.</span>
             </h2>
@@ -35,7 +35,7 @@ export default function ConceptSection() {
               <div key={title} className="card p-5 flex items-start gap-4">
                 <Icon size={22} strokeWidth={1.25} className="text-rally-500 flex-shrink-0 mt-0.5" />
                 <div>
-                  <p className="font-semibold text-white mb-1">{title}</p>
+                  <p className="font-semibold text-asphalt-100 mb-1">{title}</p>
                   <p className="text-asphalt-300 text-sm leading-relaxed">{body}</p>
                 </div>
               </div>
@@ -48,7 +48,7 @@ export default function ConceptSection() {
           <p className="text-rally-500 text-sm font-semibold uppercase tracking-widest mb-3 text-center">
             The Format
           </p>
-          <h2 className="font-display text-4xl md:text-5xl text-white mb-12 text-center tracking-wide">
+          <h2 className="font-display text-4xl md:text-5xl text-asphalt-100 mb-12 text-center tracking-wide">
             HOW IT WORKS
           </h2>
 
@@ -87,7 +87,7 @@ export default function ConceptSection() {
             ].map(({ Icon, title, body }) => (
               <div key={title} className="card p-6">
                 <Icon size={28} strokeWidth={1.25} className="text-rally-500 mb-4" />
-                <h3 className="font-semibold text-white mb-2 text-lg">{title}</h3>
+                <h3 className="font-semibold text-asphalt-100 mb-2 text-lg">{title}</h3>
                 <p className="text-asphalt-300 text-sm leading-relaxed">{body}</p>
               </div>
             ))}

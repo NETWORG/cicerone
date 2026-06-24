@@ -51,7 +51,7 @@ export default function RulesSection() {
           <p className="text-rally-500 text-sm font-semibold uppercase tracking-widest mb-3">
             The Spirit of the Rallye
           </p>
-          <h2 className="font-display text-5xl md:text-6xl text-white tracking-wide">
+          <h2 className="font-display text-5xl md:text-6xl text-asphalt-100 tracking-wide">
             THE CARS &amp; THE RULES
           </h2>
           <p className="text-asphalt-400 text-sm mt-4 max-w-xl mx-auto">
@@ -63,7 +63,7 @@ export default function RulesSection() {
           {RULES.map(({ Icon, title, body }) => (
             <div key={title} className="card p-6">
               <Icon size={28} strokeWidth={1.25} className="text-rally-500 mb-4" />
-              <h3 className="font-semibold text-white text-lg mb-2">{title}</h3>
+              <h3 className="font-semibold text-asphalt-100 text-lg mb-2">{title}</h3>
               <p className="text-asphalt-300 text-sm leading-relaxed">{body}</p>
             </div>
           ))}
@@ -71,7 +71,7 @@ export default function RulesSection() {
 
         {/* What to bring */}
         <div className="card p-8 max-w-2xl mx-auto">
-          <h3 className="font-display text-2xl text-white mb-6 tracking-wide">
+          <h3 className="font-display text-2xl text-asphalt-100 mb-6 tracking-wide">
             WHAT TO BRING
           </h3>
           <ul className="flex flex-col gap-3">

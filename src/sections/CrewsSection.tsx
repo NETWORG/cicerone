@@ -9,7 +9,7 @@ export default function CrewsSection() {
           <p className="text-rally-500 text-sm font-semibold uppercase tracking-widest mb-3">
             Who's Coming
           </p>
-          <h2 className="font-display text-5xl md:text-6xl text-white tracking-wide">
+          <h2 className="font-display text-5xl md:text-6xl text-asphalt-100 tracking-wide">
             SIGNED UP CREWS
           </h2>
           <p className="text-asphalt-400 text-sm mt-4">
@@ -29,13 +29,13 @@ export default function CrewsSection() {
               }`}
             >
               <div className="flex items-center justify-between">
-                <span className="font-display text-xl text-white tracking-wide">{crew.name}</span>
+                <span className="font-display text-xl text-asphalt-100 tracking-wide">{crew.name}</span>
                 {crew.confirmed ? (
-                  <span className="inline-flex items-center gap-1 category-badge bg-green-500/10 border border-green-500/30 text-green-400 text-xs">
+                  <span className="inline-flex items-center gap-1 category-badge bg-green-50 border border-green-300 text-green-700 text-xs">
                     <CheckCircle size={11} strokeWidth={1.5} /> Confirmed
                   </span>
                 ) : (
-                  <span className="category-badge bg-asphalt-700 text-asphalt-400 text-xs">
+                  <span className="category-badge border border-asphalt-600 text-asphalt-500 text-xs">
                     Spot open
                   </span>
                 )}

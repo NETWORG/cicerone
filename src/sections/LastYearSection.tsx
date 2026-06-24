@@ -8,7 +8,7 @@ export default function LastYearSection() {
           <p className="text-rally-500 text-sm font-semibold uppercase tracking-widest mb-3">
             Where it Started
           </p>
-          <h2 className="font-display text-5xl md:text-6xl text-white mb-4 tracking-wide">
+          <h2 className="font-display text-5xl md:text-6xl text-asphalt-100 mb-4 tracking-wide">
             LAST YEAR'S TRIP
           </h2>
           <p className="text-asphalt-300 text-base max-w-2xl mx-auto">
