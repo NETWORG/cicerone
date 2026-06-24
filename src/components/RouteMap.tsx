@@ -65,7 +65,7 @@ function MarkerPin({ stop }: { stop: Stop }) {
 
 function StopInfoWindow({ stop, onClose }: { stop: Stop; onClose: () => void }) {
   return (
-    <div className="bg-asphalt-900 rounded-xl p-4 max-w-xs relative" style={{ color: '#e2e4ea' }}>
+    <div className="bg-asphalt-900 rounded-xl p-4 max-w-xs relative shadow-2xl" style={{ color: '#e2e4ea' }}>
       <button
         onClick={onClose}
         className="absolute top-2 right-2 text-asphalt-400 hover:text-white transition-colors"
