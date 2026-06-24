@@ -22,7 +22,7 @@ export default function Hero() {
         {/* Edition badge */}
         <div className="inline-flex items-center gap-2 bg-rally-500/10 border border-rally-500/30 text-rally-400 text-sm font-medium px-4 py-2 rounded-full mb-8">
           <Flag size={14} strokeWidth={1.5} />
-          <span>Transalpine Edition · July 2026</span>
+          <span>Transalpine Edition · 18–26 Jul 2026</span>
         </div>
 
         {/* Title */}
@@ -39,7 +39,7 @@ export default function Hero() {
           Alps — Italy — Monaco — France — Switzerland — Germany
         </p>
         <p className="text-asphalt-400 text-sm sm:text-base max-w-xl mx-auto mb-10">
-          17–25 July 2026 · Fun cars. Great places. Breakdowns welcome.
+          18–26 July 2026 · Fun cars. Great places. Breakdowns welcome.
         </p>
 
         {/* CTAs */}

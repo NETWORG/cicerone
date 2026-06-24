@@ -15,7 +15,7 @@ export const EDITIONS: Edition[] = [
     year: 2026,
     title: 'Transalpine Edition',
     subtitle: 'Prague → Alps → Italy → Monaco → France → Switzerland → Germany → Prague',
-    dates: '17–25 Jul 2026',
+    dates: '18–26 Jul 2026',
     active: true,
     countries: ['CZ', 'AT', 'IT', 'MC', 'FR', 'CH', 'DE'],
     summary:
