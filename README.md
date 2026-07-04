@@ -31,6 +31,6 @@ npm run generate:route
 
 This calls the Google Directions API a handful of times (once per ~25-stop
 chunk) and writes the resulting road-accurate path to
-`src/data/route-path.ts` — commit that file along with your `stops.ts`
+`src/data/route-path.ts` - commit that file along with your `stops.ts`
 changes. The site itself never calls the Directions API at runtime, only
 the Maps JavaScript API to render tiles/markers.

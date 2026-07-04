@@ -43,7 +43,7 @@ export default function RouteSection() {
                     <span className="text-xs text-asphalt-400 font-medium tracking-wider">{code}</span>
                   </span>
                   {i < COUNTRIES.length - 1 && (
-                    <span className="text-asphalt-700 text-xs select-none">—</span>
+                    <span className="text-asphalt-700 text-xs select-none">-</span>
                   )}
                 </span>
               );

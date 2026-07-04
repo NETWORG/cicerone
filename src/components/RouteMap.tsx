@@ -18,7 +18,7 @@ const API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY as string | undefined;
 
 // The route line is precomputed once (see scripts/generate-route-path.mjs)
 // and committed as static data, so the map never needs to call the
-// Directions API at runtime — every visitor just gets a plain polyline.
+// Directions API at runtime - every visitor just gets a plain polyline.
 function RoutePolyline() {
   const map = useMap();
 

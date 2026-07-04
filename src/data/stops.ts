@@ -59,7 +59,7 @@ export const CATEGORIES: Record<
 export const STOPS: Stop[] = [
   {
     id: 'prague-start',
-    name: 'Prague — Start',
+    name: 'Prague - Start',
     location: 'Sokolovská, Prague, Czech Republic',
     country: 'CZ',
     category: 'start',
@@ -79,7 +79,7 @@ export const STOPS: Stop[] = [
     date: 'Sat, 18 Jul 2026',
     time: '14:27',
     blurb:
-      'Europe\'s most spectacular alpine road — and this weekend the FAT International "Mankei" gathers hundreds of Porsches at the top. We crash the party (respectfully).',
+      'Europe\'s most spectacular alpine road - and this weekend the FAT International "Mankei" gathers hundreds of Porsches at the top. We crash the party (respectfully).',
     link: 'https://fat-international.com/en/pages/mankei',
     driveFromPrevious: { distanceKm: 595.7, durationMin: 507 },
   },
@@ -111,7 +111,7 @@ export const STOPS: Stop[] = [
   },
   {
     id: 'speck',
-    name: '[Speck] Il Maso dello Speck',
+    name: 'Il Maso dello Speck',
     location: 'Val Venosta area, South Tyrol, Italy',
     country: 'IT',
     category: 'food',
@@ -119,12 +119,12 @@ export const STOPS: Stop[] = [
     date: 'Sun, 19 Jul 2026',
     time: '13:31',
     blurb:
-      'South Tyrolean speck straight from the smokehouse — cured ham with an Alpine twist, paired with local bread and something cold to drink.',
+      'South Tyrolean speck straight from the smokehouse - cured ham with an Alpine twist, paired with local bread and something cold to drink.',
     driveFromPrevious: { distanceKm: 157.5, durationMin: 140 },
   },
   {
     id: 'overnight-trentino',
-    name: 'Overnight — Trentino',
+    name: 'Overnight - Trentino',
     location: 'Trentino, Italy',
     country: 'IT',
     category: 'sleep',
@@ -151,7 +151,7 @@ export const STOPS: Stop[] = [
   },
   {
     id: 'ferrari',
-    name: 'Ferrari Museum & Factory — Maranello',
+    name: 'Ferrari Museum & Factory - Maranello',
     location: 'Maranello, Modena, Italy',
     country: 'IT',
     category: 'factory',
@@ -159,13 +159,13 @@ export const STOPS: Stop[] = [
     date: 'Mon, 20 Jul 2026',
     time: '12:45',
     blurb:
-      "Formula One trophies, road car evolution, and the factory where every Ferrari is still built. The smell of the prancing horse's birthplace — something you don't forget.",
+      "Formula One trophies, road car evolution, and the factory where every Ferrari is still built. The smell of the prancing horse's birthplace - something you don't forget.",
     link: 'https://www.ferrari.com/en-EN/maranello/ferrari-museum',
     driveFromPrevious: { distanceKm: 34.5, durationMin: 47 },
   },
   {
     id: 'white-wine',
-    name: '[White Wine] Manaresi Agricoltura e Vini',
+    name: 'Manaresi Agricoltura e Vini',
     location: 'Modena countryside, Italy',
     country: 'IT',
     category: 'food',
@@ -173,12 +173,12 @@ export const STOPS: Stop[] = [
     date: 'Mon, 20 Jul 2026',
     time: '15:19',
     blurb:
-      "A hillside winery in the Modena countryside — we swap Lambrusco reds for their crisp whites for an afternoon.",
+      "A hillside winery in the Modena countryside - we swap Lambrusco reds for their crisp whites for an afternoon.",
     driveFromPrevious: { distanceKm: 32.1, durationMin: 34 },
   },
   {
     id: 'pizza',
-    name: '[Pizza] Pistamentuccia',
+    name: 'Pistamentuccia',
     location: 'Modena area, Italy',
     country: 'IT',
     category: 'food',
@@ -186,12 +186,12 @@ export const STOPS: Stop[] = [
     date: 'Mon, 20 Jul 2026',
     time: '16:39',
     blurb:
-      'Proper Italian pizza break — thin crust, wood-fired, no apologies.',
+      'Proper Italian pizza break - thin crust, wood-fired, no apologies.',
     driveFromPrevious: { distanceKm: 13.8, durationMin: 19 },
   },
   {
     id: 'balsamic',
-    name: '[Balsamic Vinegar] Acetaia Giusti - Since 1605',
+    name: 'Acetaia Giusti - Since 1605',
     location: 'Modena, Italy',
     country: 'IT',
     category: 'food',
@@ -204,7 +204,7 @@ export const STOPS: Stop[] = [
   },
   {
     id: 'overnight-reggio-emilia',
-    name: 'Overnight — Reggio Emilia area',
+    name: 'Overnight - Reggio Emilia area',
     location: 'Reggio Emilia area, Italy',
     country: 'IT',
     category: 'sleep',
@@ -224,13 +224,13 @@ export const STOPS: Stop[] = [
     date: 'Tue, 21 Jul 2026',
     time: '08:28',
     blurb:
-      "The king of cheeses in its homeland. This museum tracks 800 years of Parmigiano-Reggiano — how it's made, aged, and why the wheels are still cracked open by hand.",
+      "The king of cheeses in its homeland. This museum tracks 800 years of Parmigiano-Reggiano - how it's made, aged, and why the wheels are still cracked open by hand.",
     link: 'https://www.museidelfood.it/',
     driveFromPrevious: { distanceKm: 35.6, durationMin: 28 },
   },
   {
     id: 'prosciutto',
-    name: '[Prosciutto] Museo del Prosciutto e dei Salumi di Parma',
+    name: 'Museo del Prosciutto e dei Salumi di Parma',
     location: 'Langhirano, Parma, Italy',
     country: 'IT',
     category: 'food',
@@ -238,12 +238,12 @@ export const STOPS: Stop[] = [
     date: 'Tue, 21 Jul 2026',
     time: '10:29',
     blurb:
-      'Deep in prosciutto country. The museum walks through centuries of curing tradition in the hills above Parma — then lets us taste the results.',
+      'Deep in prosciutto country. The museum walks through centuries of curing tradition in the hills above Parma - then lets us taste the results.',
     driveFromPrevious: { distanceKm: 59.9, durationMin: 61 },
   },
   {
     id: 'trackday',
-    name: '[Trackday] Motodromo Castelletto di Branduzzo',
+    name: 'Motodromo Castelletto di Branduzzo',
     location: 'Castelletto di Branduzzo, Pavia, Italy',
     country: 'IT',
     category: 'track',
@@ -251,13 +251,13 @@ export const STOPS: Stop[] = [
     date: 'Tue, 21 Jul 2026',
     time: '13:27',
     blurb:
-      'Our shitboxes take to a proper race circuit. No timekeeping, no pressure — just seat time on real asphalt.',
+      'Our shitboxes take to a proper race circuit. No timekeeping, no pressure - just seat time on real asphalt.',
     optional: true,
     driveFromPrevious: { distanceKm: 146.0, durationMin: 118 },
   },
   {
     id: 'overnight-genoa',
-    name: 'Overnight — Genoa area',
+    name: 'Overnight - Genoa area',
     location: 'Genoa area, Italy',
     country: 'IT',
     category: 'sleep',
@@ -269,7 +269,7 @@ export const STOPS: Stop[] = [
   },
   {
     id: 'chocolate',
-    name: '[Chocolate] Fabbrica di Cioccolato Viganotti',
+    name: 'Fabbrica di Cioccolato Viganotti',
     location: 'Genoa, Italy',
     country: 'IT',
     category: 'food',
@@ -282,7 +282,7 @@ export const STOPS: Stop[] = [
   },
   {
     id: 'pesto',
-    name: "[Pesto] Il Pesto di Pra' di Bruzzone e Ferrari",
+    name: "Il Pesto di Pra' di Bruzzone e Ferrari",
     location: "Pra', Genoa, Italy",
     country: 'IT',
     category: 'food',
@@ -290,12 +290,12 @@ export const STOPS: Stop[] = [
     date: 'Wed, 22 Jul 2026',
     time: '09:46',
     blurb:
-      'The birthplace of pesto alla genovese. Basil, pine nuts, and a mortar and pestle — the real deal, no blender allowed.',
+      'The birthplace of pesto alla genovese. Basil, pine nuts, and a mortar and pestle - the real deal, no blender allowed.',
     driveFromPrevious: { distanceKm: 17.4, durationMin: 24 },
   },
   {
     id: 'baia-dei-saraceni',
-    name: '[Beach] Baia dei Saraceni - Semaforo Capo Noli',
+    name: 'Baia dei Saraceni - Semaforo Capo Noli',
     location: 'Capo Noli, Savona, Italy',
     country: 'IT',
     category: 'sea',
@@ -303,12 +303,12 @@ export const STOPS: Stop[] = [
     date: 'Wed, 22 Jul 2026',
     time: '11:33',
     blurb:
-      'A hidden cove below the Capo Noli lighthouse on the Ligurian coast — a quick swim stop before the olive groves and the drive to Monaco.',
+      'A hidden cove below the Capo Noli lighthouse on the Ligurian coast - a quick swim stop before the olive groves and the drive to Monaco.',
     driveFromPrevious: { distanceKm: 53.1, durationMin: 47 },
   },
   {
     id: 'olive-oil',
-    name: '[Olive Oil] Sommariva Tradizione Agricola',
+    name: 'Sommariva Tradizione Agricola',
     location: 'Imperia, Liguria, Italy',
     country: 'IT',
     category: 'food',
@@ -334,7 +334,7 @@ export const STOPS: Stop[] = [
   },
   {
     id: 'saint-tropez-overnight',
-    name: 'Saint-Tropez — Overnight',
+    name: 'Saint-Tropez - Overnight',
     location: 'Saint-Tropez area, Var, France',
     country: 'FR',
     category: 'sleep',
@@ -354,7 +354,7 @@ export const STOPS: Stop[] = [
     date: 'Thu, 23 Jul 2026',
     time: '09:26',
     blurb:
-      "Housed in the old gendarmerie made famous by Louis de Funès' Gendarme de Saint-Tropez films, this quirky museum blends real police history with movie memorabilia — a fun, offbeat stop before the coastal roads pull us back inland.",
+      "Housed in the old gendarmerie made famous by Louis de Funès' Gendarme de Saint-Tropez films, this quirky museum blends real police history with movie memorabilia - a fun, offbeat stop before the coastal roads pull us back inland.",
     driveFromPrevious: { distanceKm: 0, durationMin: 0 },
   },
   {
@@ -384,7 +384,7 @@ export const STOPS: Stop[] = [
   },
   {
     id: 'cern',
-    name: 'CERN — Large Hadron Collider',
+    name: 'CERN - Large Hadron Collider',
     location: 'Geneva, Switzerland',
     country: 'CH',
     category: 'science',
@@ -406,12 +406,12 @@ export const STOPS: Stop[] = [
     date: 'Sat, 25 Jul 2026',
     time: '17:32',
     blurb:
-      'One of the great Swiss Alpine passes — hairpins, glacier views, and a starring role in the Bond film Goldfinger.',
+      'One of the great Swiss Alpine passes - hairpins, glacier views, and a starring role in the Bond film Goldfinger.',
     driveFromPrevious: { distanceKm: 273.7, durationMin: 216 },
   },
   {
     id: 'overnight-central-switzerland',
-    name: 'Overnight — Central Switzerland',
+    name: 'Overnight - Central Switzerland',
     location: 'Central Switzerland, near Lucerne',
     country: 'CH',
     category: 'sleep',
@@ -431,13 +431,13 @@ export const STOPS: Stop[] = [
     date: 'Sun, 26 Jul 2026',
     time: '11:34',
     blurb:
-      '160 vehicles over nine floors tracing 140 years of automotive history — from the Patent-Motorwagen to the SLR McLaren. One of the finest car museums on earth.',
+      '160 vehicles over nine floors tracing 140 years of automotive history - from the Patent-Motorwagen to the SLR McLaren. One of the finest car museums on earth.',
     link: 'https://www.mercedes-benz.com/en/brand/mercedes-benz-museum/',
     driveFromPrevious: { distanceKm: 249.4, durationMin: 214 },
   },
   {
     id: 'sinsheim',
-    name: 'Technik Museum Sinsheim — Concorde',
+    name: 'Technik Museum Sinsheim - Concorde',
     location: 'Sinsheim, Baden-Württemberg, Germany',
     country: 'DE',
     category: 'museum',
@@ -451,7 +451,7 @@ export const STOPS: Stop[] = [
   },
   {
     id: 'prague-finish',
-    name: 'Prague — Finish',
+    name: 'Prague - Finish',
     location: 'Sokolovská, Prague, Czech Republic',
     country: 'CZ',
     category: 'finish',
@@ -459,7 +459,7 @@ export const STOPS: Stop[] = [
     date: 'Sun, 26 Jul 2026',
     time: '20:00',
     blurb:
-      'The rallye ends where it began — a long final day\'s drive from Sinsheim, straight through to Prague. Cars limp home, stories are told, and plans are quietly made for next year.',
+      'The rallye ends where it began - a long final day\'s drive from Sinsheim, straight through to Prague. Cars limp home, stories are told, and plans are quietly made for next year.',
     driveFromPrevious: { distanceKm: 430, durationMin: 255, estimated: true },
   },
 ];

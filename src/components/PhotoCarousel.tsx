@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
-// Import all 2025 photos via Vite glob — sorted by filename
+// Import all 2025 photos via Vite glob - sorted by filename
 const modules = import.meta.glob('../assets/photos/2025/*.jpg', {
   eager: true,
   import: 'default',
@@ -39,7 +39,7 @@ export default function PhotoCarousel() {
         <img
           key={src}
           src={src}
-          alt={`2025 trip — photo ${i + 1}`}
+          alt={`2025 trip - photo ${i + 1}`}
           className="absolute inset-0 w-full h-full object-cover transition-opacity duration-700"
           style={{ opacity: i === current ? 1 : 0, zIndex: i === current ? 1 : 0 }}
           loading={i < 3 ? 'eager' : 'lazy'}

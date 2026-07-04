@@ -1,5 +1,5 @@
 // Photos for itinerary stops, keyed by stop id. Not every stop has a photo
-// (e.g. unbooked overnight placeholders) — consumers should handle misses.
+// (e.g. unbooked overnight placeholders) - consumers should handle misses.
 // Files live in src/assets/photos/2026/itinerary/<stop-id>.<ext>.
 const modules = import.meta.glob('../assets/photos/2026/itinerary/*.{jpg,jpeg,png,webp,avif}', {
   eager: true,
