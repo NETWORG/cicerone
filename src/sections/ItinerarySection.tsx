@@ -4,7 +4,7 @@ import { type LucideProps, MapPin, CalendarDays, Clock, Route } from 'lucide-rea
 import { ExternalLink } from 'lucide-react';
 import { STOPS, CATEGORIES } from '../data/stops';
 import { ITINERARY_PHOTOS } from '../data/itinerary-photos';
-import { getDayIndex, getDayColor } from '../data/day-colors';
+import { getDayIndex } from '../data/day-colors';
 import CategoryBadge from '../components/CategoryBadge';
 
 export default function ItinerarySection() {
@@ -34,22 +34,17 @@ export default function ItinerarySection() {
               const iconName = meta.icon as keyof typeof LucideIcons;
               const Icon = LucideIcons[iconName] as React.ComponentType<LucideProps> | undefined;
               const isNewDay = stop.date && (idx === 0 || stop.date !== STOPS[idx - 1].date);
-              const dayColor = getDayColor(stop.date);
 
               return (
                 <React.Fragment key={stop.id}>
                   {isNewDay && (
-                    <div className="pl-10 md:pl-20">
-                      <div className="flex items-center gap-3">
-                        <span
-                          className="text-xs font-bold tracking-widest uppercase whitespace-nowrap px-2 py-1 rounded"
-                          style={{ color: dayColor, backgroundColor: `${dayColor}1a` }}
-                        >
-                          Day {getDayIndex(stop.date) + 1}
-                        </span>
-                        <span className="text-asphalt-500 text-xs">{stop.date}</span>
-                        <span className="flex-1 h-px" style={{ backgroundColor: dayColor, opacity: 0.25 }} />
-                      </div>
+                    <div className="flex items-center gap-3 pl-10 md:pl-20 pt-4 first:pt-0">
+                      <CalendarDays size={20} strokeWidth={1.5} className="text-asphalt-300 flex-shrink-0" />
+                      <span className="font-display text-2xl md:text-3xl text-asphalt-100 tracking-wide whitespace-nowrap">
+                        Day {getDayIndex(stop.date) + 1}
+                      </span>
+                      <span className="text-asphalt-400 text-sm whitespace-nowrap">{stop.date}</span>
+                      <span className="flex-1 h-0.5 bg-asphalt-700 rounded-full" />
                     </div>
                   )}
                   <div className="relative flex gap-6 md:gap-10 pl-10 md:pl-20">
