@@ -1,10 +1,11 @@
 import React from 'react';
 import * as LucideIcons from 'lucide-react';
 import { type LucideProps, MapPin, CalendarDays, Clock, Route } from 'lucide-react';
-import { ExternalLink } from 'lucide-react';
+import { ExternalLink, Navigation } from 'lucide-react';
 import { STOPS, CATEGORIES } from '../data/stops';
 import { ITINERARY_PHOTOS } from '../data/itinerary-photos';
 import { getDayIndex } from '../data/day-colors';
+import { googleMapsDirectionsUrl } from '../utils/maps';
 import CategoryBadge from '../components/CategoryBadge';
 
 export default function ItinerarySection() {
@@ -91,6 +92,15 @@ export default function ItinerarySection() {
                       <span className="flex items-center gap-1"><MapPin size={11} strokeWidth={1.5} />{stop.location}</span>
                       {stop.date && <span className="flex items-center gap-1"><CalendarDays size={11} strokeWidth={1.5} />{stop.date}</span>}
                       {stop.time && <span className="flex items-center gap-1"><Clock size={11} strokeWidth={1.5} />{stop.time}</span>}
+                      <a
+                        href={googleMapsDirectionsUrl(stop.coords)}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1 text-asphalt-500 hover:text-rally-400 transition-colors"
+                        aria-label={`Navigate to ${stop.name} in Google Maps`}
+                      >
+                        <Navigation size={11} strokeWidth={1.5} />Navigate
+                      </a>
                     </p>
 
                     {stop.driveFromPrevious && (stop.driveFromPrevious.distanceKm > 0 || stop.driveFromPrevious.durationMin > 0) && (
