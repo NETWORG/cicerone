@@ -6,7 +6,6 @@ const NAV_ITEMS = [
   { href: '#concept', label: 'The Idea' },
   { href: '#route', label: 'Route' },
   { href: '#itinerary', label: 'Itinerary' },
-  { href: '#rules', label: 'Rules' },
   { href: '#crews', label: 'Crews' },
 ];
 

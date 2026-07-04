@@ -15,7 +15,6 @@ export default function Footer() {
             ['#concept', 'The Idea'],
             ['#route', 'Route'],
             ['#itinerary', 'Itinerary'],
-            ['#rules', 'Rules'],
             ['#crews', 'Crews'],
             ['#join', 'Join'],
           ].map(([href, label]) => (
