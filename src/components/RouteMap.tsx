@@ -74,12 +74,12 @@ function MarkerPin({ stop, index }: { stop: Stop; index: number }) {
   return (
     <div className="flex flex-col items-center">
       <div
-        className="relative w-9 h-9 rounded-full flex items-center justify-center shadow-lg border-2 border-white/20"
+        className="relative w-10 h-10 rounded-full flex items-center justify-center shadow-lg border-2 border-white/20"
         style={{ backgroundColor: meta.color }}
       >
-        {Icon && <Icon size={16} strokeWidth={1.75} color="#fff" />}
+        {Icon && <Icon size={17} strokeWidth={1.75} color="#fff" />}
         <span
-          className="absolute -top-2 -right-2 w-6 h-6 rounded-full text-white text-xs font-bold leading-none flex items-center justify-center border-2 border-white shadow"
+          className="absolute -top-2.5 -right-2.5 w-5 h-5 rounded-full text-white text-[11px] font-bold leading-none flex items-center justify-center border-2 border-white shadow"
           style={{ backgroundColor: '#0a0909' }}
         >
           {index}
