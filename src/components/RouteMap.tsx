@@ -15,6 +15,23 @@ import CategoryBadge from './CategoryBadge';
 const API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY as string | undefined;
 const PATH_COORDS = STOPS.map((s) => s.coords);
 
+// The Directions API caps waypoints per request (~25, plus origin/destination).
+// We split the full stop list into overlapping chunks so each request stays
+// under that limit, then stitch the resulting road-accurate polylines together.
+const MAX_WAYPOINTS_PER_REQUEST = 23;
+function chunkStops<T>(stops: T[]): T[][] {
+  const chunkSize = MAX_WAYPOINTS_PER_REQUEST + 2; // + origin + destination
+  if (stops.length <= chunkSize) return [stops];
+  const chunks: T[][] = [];
+  let i = 0;
+  while (i < stops.length - 1) {
+    const end = Math.min(i + chunkSize - 1, stops.length - 1);
+    chunks.push(stops.slice(i, end + 1));
+    i = end; // overlap by one stop so the route stays continuous
+  }
+  return chunks;
+}
+
 function RoutePolyline() {
   const map = useMap();
   const drawnRef = useRef(false);
@@ -24,15 +41,56 @@ function RoutePolyline() {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const g = (window as any).google;
     if (!g) return;
-    new g.maps.Polyline({
+    drawnRef.current = true;
+
+    const polylineOptions = {
+      strokeColor: '#c8102e',
+      strokeOpacity: 0.8,
+      strokeWeight: 3,
+    };
+
+    // Fallback: a straight line between stop coordinates, used immediately and
+    // replaced chunk-by-chunk as real driving directions come back.
+    const fallbackLine = new g.maps.Polyline({
       path: PATH_COORDS,
       geodesic: true,
-      strokeColor: '#c8102e',
-      strokeOpacity: 0.7,
-      strokeWeight: 3,
+      ...polylineOptions,
+      strokeOpacity: 0.35,
       map,
     });
-    drawnRef.current = true;
+
+    const directionsService = new g.maps.DirectionsService();
+    const chunks = chunkStops(STOPS);
+
+    chunks.forEach((chunk) => {
+      if (chunk.length < 2) return;
+      const origin = chunk[0].coords;
+      const destination = chunk[chunk.length - 1].coords;
+      const waypoints = chunk.slice(1, -1).map((s) => ({ location: s.coords, stopover: true }));
+
+      directionsService.route(
+        {
+          origin,
+          destination,
+          waypoints,
+          travelMode: g.maps.TravelMode.DRIVING,
+        },
+        (result: unknown, status: string) => {
+          if (status !== 'OK' || !result) return;
+          new g.maps.DirectionsRenderer({
+            map,
+            directions: result,
+            suppressMarkers: true,
+            preserveViewport: true,
+            polylineOptions,
+          });
+        }
+      );
+    });
+
+    return () => {
+      fallbackLine.setMap(null);
+    };
   }, [map]);
 
   return null;
@@ -44,7 +102,7 @@ function MarkerPin({ stop }: { stop: Stop }) {
   const Icon = LucideIcons[iconName] as React.ComponentType<LucideProps> | undefined;
 
   return (
-    <div className="flex flex-col items-center" style={{ transform: 'translateY(-100%)' }}>
+    <div className="flex flex-col items-center">
       <div
         className="w-9 h-9 rounded-full flex items-center justify-center shadow-lg border-2 border-white/20"
         style={{ backgroundColor: meta.color }}
@@ -82,7 +140,14 @@ function StopInfoWindow({ stop, onClose }: { stop: Stop; onClose: () => void }) 
       <p className="text-xs mb-2" style={{ color: '#8a8784' }}>
         {stop.location}
         {stop.date && ` · ${stop.date}`}
+        {stop.time && ` · ${stop.time}`}
       </p>
+      {stop.driveFromPrevious && (stop.driveFromPrevious.distanceKm > 0 || stop.driveFromPrevious.durationMin > 0) && (
+        <p className="text-xs mb-2" style={{ color: '#8a8784' }}>
+          {stop.driveFromPrevious.distanceKm.toFixed(1)} km / {Math.floor(stop.driveFromPrevious.durationMin / 60)}h {stop.driveFromPrevious.durationMin % 60}min from previous stop
+          {stop.driveFromPrevious.estimated && ' (estimated)'}
+        </p>
+      )}
       <p className="text-sm leading-relaxed" style={{ color: '#2d2c2a' }}>
         {stop.blurb}
       </p>

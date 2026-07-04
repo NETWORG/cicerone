@@ -87,11 +87,15 @@ body {
 /* ── Map container ── */
 #route-map {
   @apply w-full rounded overflow-hidden;
-  height: 480px;
+  height: 560px;
 }
 
 @media (min-width: 768px) {
-  #route-map { height: 600px; }
+  #route-map { height: 720px; }
+}
+
+@media (min-width: 1280px) {
+  #route-map { height: 820px; }
 }
 
 /* ── Hero gradient (dark overlay over photo, uniform top/bottom) ── */
