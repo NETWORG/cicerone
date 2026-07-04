@@ -79,7 +79,8 @@ function MarkerPin({ stop, index }: { stop: Stop; index: number }) {
       >
         {Icon && <Icon size={16} strokeWidth={1.75} color="#fff" />}
         <span
-          className="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-asphalt-950 text-white text-xs font-bold leading-none flex items-center justify-center border-2 border-white shadow"
+          className="absolute -top-2 -right-2 w-6 h-6 rounded-full text-white text-xs font-bold leading-none flex items-center justify-center border-2 border-white shadow"
+          style={{ backgroundColor: '#0a0909' }}
         >
           {index}
         </span>
