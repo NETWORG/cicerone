@@ -10,7 +10,8 @@ export type StopCategory =
   | 'science'
   | 'museum'
   | 'food'
-  | 'sleep';
+  | 'sleep'
+  | 'sport';
 
 export interface DriveLeg {
   /** Driving distance from the previous stop, in kilometers. */
@@ -54,6 +55,7 @@ export const CATEGORIES: Record<
   museum:  { label: 'Museum',         icon: 'Landmark',     color: '#a855f7' },
   food:    { label: 'Food & Drink',   icon: 'Wine',         color: '#f59e0b' },
   sleep:   { label: 'Overnight',      icon: 'BedDouble',    color: '#64748b' },
+  sport:   { label: 'Sport Event',    icon: 'Trophy',       color: '#eab308' },
 };
 
 export const STOPS: Stop[] = [
@@ -367,8 +369,21 @@ export const STOPS: Stop[] = [
     date: 'Thu, 23 Jul 2026',
     time: '22:00',
     blurb:
-      'Base camp in the French Alps, at the foot of the legendary Alpe d\'Huez climb, for a two-night rest.',
+      'Base camp in the French Alps, at the foot of the legendary Alpe d\'Huez climb, for two nights.',
     driveFromPrevious: { distanceKm: 376.0, durationMin: 314 },
+  },
+  {
+    id: 'alpe-dhuez-tdf',
+    name: 'Alpe d\'Huez - Tour de France Stage 19 Finish',
+    location: 'Alpe d\'Huez, Isère, France',
+    country: 'FR',
+    category: 'sport',
+    coords: { lat: 45.0918, lng: 6.06972 },
+    date: 'Fri, 24 Jul 2026',
+    time: '16:30',
+    blurb:
+      'No driving today. Gondolas up from Allemond for a morning hike in the high mountains, then over to Alpe d\'Huez to watch the actual Tour de France Stage 19 finish live, one of the legendary hairpin climbs. Gondolas back down to Allemond in the evening, cars parked the whole time.',
+    driveFromPrevious: { distanceKm: 0, durationMin: 0 },
   },
   {
     id: 'allemond-2',
@@ -379,7 +394,7 @@ export const STOPS: Stop[] = [
     coords: { lat: 45.13235, lng: 6.033781 },
     date: 'Fri, 24 Jul 2026',
     time: '17:00',
-    blurb: 'A full rest day before the final stretch toward Geneva.',
+    blurb: 'Back at base after the Tour de France, cars right where we left them.',
     driveFromPrevious: { distanceKm: 0, durationMin: 0 },
   },
   {

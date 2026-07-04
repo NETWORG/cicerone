@@ -181,7 +181,7 @@ function CategoryIcon({ category }: { category: StopCategory }) {
 }
 
 function MapLegend() {
-  const shown: StopCategory[] = ['start', 'pass', 'cars', 'factory', 'track', 'sea', 'city', 'science', 'museum', 'food'];
+  const shown: StopCategory[] = ['start', 'pass', 'cars', 'factory', 'track', 'sea', 'city', 'science', 'museum', 'food', 'sport'];
   return (
     <div className="absolute bottom-3 left-3 bg-white/95 backdrop-blur border border-asphalt-700 rounded p-3 flex flex-col gap-1.5 shadow-md">
       {shown.map((cat) => {
