@@ -1,6 +1,7 @@
 import React from 'react';
 import * as LucideIcons from 'lucide-react';
-import { type LucideProps, MapPin, CalendarDays, ExternalLink } from 'lucide-react';
+import { type LucideProps, MapPin, CalendarDays, Clock, Route } from 'lucide-react';
+import { ExternalLink } from 'lucide-react';
 import { STOPS, CATEGORIES } from '../data/stops';
 import CategoryBadge from '../components/CategoryBadge';
 
@@ -64,7 +65,16 @@ export default function ItinerarySection() {
                     <p className="text-asphalt-400 text-xs mb-3 flex items-center gap-3 flex-wrap">
                       <span className="flex items-center gap-1"><MapPin size={11} strokeWidth={1.5} />{stop.location}</span>
                       {stop.date && <span className="flex items-center gap-1"><CalendarDays size={11} strokeWidth={1.5} />{stop.date}</span>}
+                      {stop.time && <span className="flex items-center gap-1"><Clock size={11} strokeWidth={1.5} />{stop.time}</span>}
                     </p>
+
+                    {stop.driveFromPrevious && (stop.driveFromPrevious.distanceKm > 0 || stop.driveFromPrevious.durationMin > 0) && (
+                      <p className="text-asphalt-500 text-xs mb-3 flex items-center gap-1">
+                        <Route size={11} strokeWidth={1.5} />
+                        {stop.driveFromPrevious.distanceKm.toFixed(1)} km / {Math.floor(stop.driveFromPrevious.durationMin / 60)}h {stop.driveFromPrevious.durationMin % 60}min from previous stop
+                        {stop.driveFromPrevious.estimated && ' (estimated)'}
+                      </p>
+                    )}
 
                     <p className="text-asphalt-300 text-sm leading-relaxed">{stop.blurb}</p>
 

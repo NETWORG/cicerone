@@ -3,6 +3,7 @@ import * as Flags from 'country-flag-icons/react/3x2';
 import RouteMap from '../components/RouteMap';
 import { STOPS } from '../data/stops';
 
+const ATTRACTION_STOPS = STOPS.filter((s) => !['start', 'finish', 'sleep'].includes(s.category));
 const COUNTRIES = [...new Set(STOPS.map((s) => s.country))];
 
 const COUNTRY_NAMES: Record<string, string> = {
@@ -24,7 +25,7 @@ export default function RouteSection() {
             The Route
           </p>
           <h2 className="font-display text-5xl md:text-6xl text-asphalt-100 mb-4 tracking-wide">
-            {STOPS.length - 2} STOPS · {COUNTRIES.length} COUNTRIES
+            {ATTRACTION_STOPS.length} STOPS · {COUNTRIES.length} COUNTRIES
           </h2>
 
           {/* Country flags row */}
