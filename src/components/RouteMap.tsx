@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import React from 'react';
 import * as LucideIcons from 'lucide-react';
-import { type LucideProps, Map as MapIcon, X } from 'lucide-react';
+import { type LucideProps, Map as MapIcon, X, MapPinned } from 'lucide-react';
 import {
   APIProvider,
   Map,
@@ -13,6 +13,7 @@ import { STOPS, CATEGORIES, type Stop, type StopCategory } from '../data/stops';
 import { ROUTE_SEGMENTS } from '../data/route-segments';
 import { DAY_COLORS } from '../data/day-colors';
 import { ITINERARY_PHOTOS } from '../data/itinerary-photos';
+import { googleMapsPinUrl } from '../utils/maps';
 import CategoryBadge from './CategoryBadge';
 
 const API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY as string | undefined;
@@ -143,6 +144,15 @@ function StopInfoWindow({ stop, index, onClose }: { stop: Stop; index: number; o
         {stop.date && ` · ${stop.date}`}
         {stop.time && ` · ${stop.time}`}
       </p>
+      <a
+        href={googleMapsPinUrl(stop.coords)}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="map-link-btn mb-2"
+        aria-label={`Open ${stop.name} in Google Maps`}
+      >
+        <MapPinned size={12} strokeWidth={1.75} />Open in Maps
+      </a>
       {stop.driveFromPrevious && (stop.driveFromPrevious.distanceKm > 0 || stop.driveFromPrevious.durationMin > 0) && (
         <p className="text-xs mb-2" style={{ color: '#8a8784' }}>
           {stop.driveFromPrevious.distanceKm.toFixed(1)} km / {Math.floor(stop.driveFromPrevious.durationMin / 60)}h {stop.driveFromPrevious.durationMin % 60}min from previous stop

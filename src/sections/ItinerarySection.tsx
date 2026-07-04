@@ -1,10 +1,11 @@
 import React from 'react';
 import * as LucideIcons from 'lucide-react';
-import { type LucideProps, MapPin, CalendarDays, Clock, Route } from 'lucide-react';
+import { type LucideProps, MapPin, MapPinned, CalendarDays, Clock, Route } from 'lucide-react';
 import { ExternalLink } from 'lucide-react';
 import { STOPS, CATEGORIES } from '../data/stops';
 import { ITINERARY_PHOTOS } from '../data/itinerary-photos';
 import { getDayIndex } from '../data/day-colors';
+import { googleMapsPinUrl } from '../utils/maps';
 import CategoryBadge from '../components/CategoryBadge';
 
 export default function ItinerarySection() {
@@ -92,6 +93,16 @@ export default function ItinerarySection() {
                       {stop.date && <span className="flex items-center gap-1"><CalendarDays size={11} strokeWidth={1.5} />{stop.date}</span>}
                       {stop.time && <span className="flex items-center gap-1"><Clock size={11} strokeWidth={1.5} />{stop.time}</span>}
                     </p>
+
+                    <a
+                      href={googleMapsPinUrl(stop.coords)}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="map-link-btn mb-3"
+                      aria-label={`Open ${stop.name} in Google Maps`}
+                    >
+                      <MapPinned size={12} strokeWidth={1.75} />Open in Maps
+                    </a>
 
                     {stop.driveFromPrevious && (stop.driveFromPrevious.distanceKm > 0 || stop.driveFromPrevious.durationMin > 0) && (
                       <p className="text-asphalt-500 text-xs mb-3 flex items-center gap-1">
