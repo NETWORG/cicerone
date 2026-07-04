@@ -43,11 +43,13 @@ export default function ItinerarySection() {
                     }}
                   >
                     {Icon && <Icon size={14} strokeWidth={1.5} style={{ color: meta.color }} />}
-                  </div>
-
-                  {/* Step number */}
-                  <div className="absolute left-0 md:left-4 top-11 text-xs text-asphalt-500 w-8 text-center">
-                    {idx + 1}
+                    {/* Step number badge */}
+                    <span
+                      className="absolute -bottom-1.5 -right-1.5 w-4 h-4 rounded-full text-white text-[9px] font-semibold leading-none flex items-center justify-center border-2 border-white"
+                      style={{ backgroundColor: meta.color }}
+                    >
+                      {idx + 1}
+                    </span>
                   </div>
 
                   {/* Card */}
