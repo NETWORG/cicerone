@@ -3,7 +3,6 @@ import Hero from './sections/Hero';
 import ConceptSection from './sections/ConceptSection';
 import RouteSection from './sections/RouteSection';
 import ItinerarySection from './sections/ItinerarySection';
-import RulesSection from './sections/RulesSection';
 import LastYearSection from './sections/LastYearSection';
 import CrewsSection from './sections/CrewsSection';
 import FollowSection from './sections/FollowSection';
@@ -20,7 +19,6 @@ export default function App() {
         <ItinerarySection />
         <LastYearSection />
         <ConceptSection />
-        <RulesSection />
         <CrewsSection />
         <FollowSection />
         <SignupSection />
