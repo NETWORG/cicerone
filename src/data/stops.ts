@@ -8,7 +8,9 @@ export type StopCategory =
   | 'sea'
   | 'city'
   | 'science'
-  | 'museum'
+  | 'car-museum'
+  | 'tech-museum'
+  | 'culture'
   | 'food'
   | 'sleep'
   | 'sport';
@@ -43,19 +45,21 @@ export const CATEGORIES: Record<
   StopCategory,
   { label: string; icon: string; color: string }
 > = {
-  start:   { label: 'Start',          icon: 'Flag',         color: '#22c55e' },
-  finish:  { label: 'Finish',         icon: 'FlagOff',      color: '#22c55e' },
-  pass:    { label: 'Mountain Pass',  icon: 'Mountain',     color: '#8b5cf6' },
-  cars:    { label: 'Car Meetup',     icon: 'Car',          color: '#f97316' },
-  factory: { label: 'Factory Tour',   icon: 'Factory',      color: '#ef4444' },
-  track:   { label: 'Track Day',      icon: 'Timer',        color: '#dc2626' },
-  sea:     { label: 'Sea & Sun',      icon: 'Waves',        color: '#06b6d4' },
-  city:    { label: 'City',           icon: 'Building2',    color: '#3b82f6' },
-  science: { label: 'Science',        icon: 'Atom',         color: '#6366f1' },
-  museum:  { label: 'Museum',         icon: 'Landmark',     color: '#a855f7' },
-  food:    { label: 'Food & Drink',   icon: 'Wine',         color: '#f59e0b' },
-  sleep:   { label: 'Overnight',      icon: 'BedDouble',    color: '#64748b' },
-  sport:   { label: 'Sport Event',    icon: 'Trophy',       color: '#eab308' },
+  start:       { label: 'Start',          icon: 'Flag',         color: '#22c55e' },
+  finish:      { label: 'Finish',         icon: 'FlagOff',      color: '#22c55e' },
+  pass:        { label: 'Driving Road',   icon: 'Route',        color: '#8b5cf6' },
+  cars:        { label: 'Car Meetup',     icon: 'Car',          color: '#f97316' },
+  factory:     { label: 'Factory Tour',   icon: 'Factory',      color: '#ef4444' },
+  track:       { label: 'Track Day',      icon: 'Gauge',        color: '#dc2626' },
+  sea:         { label: 'Sea & Sun',      icon: 'Waves',        color: '#06b6d4' },
+  city:        { label: 'City',           icon: 'Building2',    color: '#3b82f6' },
+  science:     { label: 'Science',        icon: 'Atom',         color: '#6366f1' },
+  'car-museum':  { label: 'Car Museum',      icon: 'CarFront',    color: '#14b8a6' },
+  'tech-museum': { label: 'Tech Museum',     icon: 'Rocket',      color: '#0ea5e9' },
+  culture:       { label: 'Film & History',  icon: 'Clapperboard', color: '#d946ef' },
+  food:        { label: 'Food & Drink',   icon: 'Wine',         color: '#f59e0b' },
+  sleep:       { label: 'Overnight',      icon: 'BedDouble',    color: '#64748b' },
+  sport:       { label: 'Sport Event',    icon: 'Trophy',       color: '#eab308' },
 };
 
 export const STOPS: Stop[] = [
@@ -364,7 +368,7 @@ export const STOPS: Stop[] = [
     name: 'Musée de la Gendarmerie et du Cinéma',
     location: '2 Place Blanqui, Saint-Tropez, Var, France',
     country: 'FR',
-    category: 'museum',
+    category: 'culture',
     coords: { lat: 43.2694, lng: 6.6356 },
     date: 'Thu, 23 Jul 2026',
     time: '09:30',
@@ -454,7 +458,7 @@ export const STOPS: Stop[] = [
     name: 'Mercedes-Benz Museum',
     location: 'Stuttgart, Germany',
     country: 'DE',
-    category: 'museum',
+    category: 'car-museum',
     coords: { lat: 48.788201, lng: 9.233992 },
     date: 'Sun, 26 Jul 2026',
     time: '11:30',
@@ -468,7 +472,7 @@ export const STOPS: Stop[] = [
     name: 'Technik Museum Sinsheim - Concorde',
     location: 'Sinsheim, Baden-Württemberg, Germany',
     country: 'DE',
-    category: 'museum',
+    category: 'tech-museum',
     coords: { lat: 49.238345, lng: 8.897235 },
     date: 'Sun, 26 Jul 2026',
     time: '15:45',
