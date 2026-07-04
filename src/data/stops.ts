@@ -108,8 +108,21 @@ export const STOPS: Stop[] = [
     date: 'Sun, 19 Jul 2026',
     time: '10:15',
     blurb:
-      '2,758 m above sea level, 48 hairpins on the north face. Top Gear\'s "greatest driving road in the world." We do it early morning before the coaches arrive.',
+      '2,758 m above sea level, 48 numbered hairpins on the Prato allo Stelvio ascent - Top Gear\'s "greatest driving road in the world." We do it early morning before the coaches arrive, then cross straight over to the Bormio side for the descent.',
     driveFromPrevious: { distanceKm: 102.1, durationMin: 131 },
+  },
+  {
+    id: 'gavia',
+    name: 'Passo di Gavia (via Bormio)',
+    location: 'Passo di Gavia, Lombardy, Italy',
+    country: 'IT',
+    category: 'pass',
+    coords: { lat: 46.343491, lng: 10.484626 },
+    date: 'Sun, 19 Jul 2026',
+    time: '11:15',
+    blurb:
+      'Down the Stelvio\'s Bormio side (34 more hairpins, wider and faster than the morning\'s climb), then straight up one of the narrowest, most exposed passes in the Alps. Two legendary climbs before lunch.',
+    driveFromPrevious: { distanceKm: 47.4, durationMin: 66 },
   },
   {
     id: 'speck',
@@ -122,7 +135,7 @@ export const STOPS: Stop[] = [
     time: '13:30',
     blurb:
       'South Tyrolean speck straight from the smokehouse - cured ham with an Alpine twist, paired with local bread and something cold to drink.',
-    driveFromPrevious: { distanceKm: 157.5, durationMin: 140 },
+    driveFromPrevious: { distanceKm: 112, durationMin: 131 },
   },
   {
     id: 'overnight-trentino',
