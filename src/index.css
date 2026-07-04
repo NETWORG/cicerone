@@ -23,6 +23,11 @@
   --color-rally-600: #9e0c24;
   --color-rally-300: #f44358;
 
+  /* ── Sun yellow (secondary accent) ── */
+  --color-sun-400: #facc15;
+  --color-sun-500: #eab308;
+  --color-sun-600: #ca8a04;
+
   /* ── Dark ink for footer ── */
   --color-ink-950: #0a0909;
   --color-ink-800: #1a1716;
@@ -83,6 +88,12 @@ body {
 .category-badge {
   @apply inline-flex items-center gap-1.5 text-xs font-medium px-2 py-0.5 rounded;
 }
+
+/* ── Small "open in Maps" chip button ── */
+.map-link-btn {
+  @apply inline-flex items-center gap-1 text-xs font-semibold px-2 py-1 rounded border border-asphalt-600 bg-asphalt-900 text-asphalt-300 transition-colors hover:bg-rally-500 hover:text-white hover:border-rally-500;
+}
+
 
 /* ── Map container ── */
 #route-map {

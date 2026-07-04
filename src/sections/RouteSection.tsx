@@ -20,6 +20,9 @@ export default function RouteSection() {
     <section id="route" className="section-pad bg-asphalt-900">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-10">
+          <p className="text-sun-600 text-sm font-semibold uppercase tracking-widest mb-3">
+            Nine Days, Six Countries
+          </p>
           <h2 className="font-display text-5xl md:text-6xl text-asphalt-100 mb-4 tracking-wide">
             The Route
           </h2>
@@ -35,12 +38,12 @@ export default function RouteSection() {
                       className="w-9 h-6 rounded-sm shadow-md border border-white/10 transition-transform group-hover:scale-110"
                     />
                   )}
-                  <span className="text-xs text-asphalt-400 font-medium tracking-wider">{code}</span>
+                  <span className="text-xs text-asphalt-300 font-medium tracking-wider">{code}</span>
                 </span>
               );
             })}
           </div>
-          <p className="text-asphalt-400 text-sm mt-4">
+          <p className="text-asphalt-300 text-sm mt-4">
             Click any pin for details. Each color traces one day's drive.
           </p>
         </div>

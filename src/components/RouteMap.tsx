@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import React from 'react';
 import * as LucideIcons from 'lucide-react';
-import { type LucideProps, Map as MapIcon, X, Navigation } from 'lucide-react';
+import { type LucideProps, Map as MapIcon, X, MapPinned } from 'lucide-react';
 import {
   APIProvider,
   Map,
@@ -13,7 +13,7 @@ import { STOPS, CATEGORIES, type Stop, type StopCategory } from '../data/stops';
 import { ROUTE_SEGMENTS } from '../data/route-segments';
 import { DAY_COLORS } from '../data/day-colors';
 import { ITINERARY_PHOTOS } from '../data/itinerary-photos';
-import { googleMapsDirectionsUrl } from '../utils/maps';
+import { googleMapsPinUrl } from '../utils/maps';
 import CategoryBadge from './CategoryBadge';
 
 const API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY as string | undefined;
@@ -145,14 +145,13 @@ function StopInfoWindow({ stop, index, onClose }: { stop: Stop; index: number; o
         {stop.time && ` · ${stop.time}`}
       </p>
       <a
-        href={googleMapsDirectionsUrl(stop.coords)}
+        href={googleMapsPinUrl(stop.coords)}
         target="_blank"
         rel="noopener noreferrer"
-        className="inline-flex items-center gap-1 text-xs font-medium mb-2 transition-colors"
-        style={{ color: '#8a8784' }}
-        aria-label={`Navigate to ${stop.name} in Google Maps`}
+        className="map-link-btn mb-2"
+        aria-label={`Open ${stop.name} in Google Maps`}
       >
-        <Navigation size={11} strokeWidth={1.5} />Navigate
+        <MapPinned size={12} strokeWidth={1.75} />Open in Maps
       </a>
       {stop.driveFromPrevious && (stop.driveFromPrevious.distanceKm > 0 || stop.driveFromPrevious.durationMin > 0) && (
         <p className="text-xs mb-2" style={{ color: '#8a8784' }}>
