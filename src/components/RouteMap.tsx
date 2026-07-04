@@ -102,7 +102,7 @@ function MarkerPin({ stop }: { stop: Stop }) {
   const Icon = LucideIcons[iconName] as React.ComponentType<LucideProps> | undefined;
 
   return (
-    <div className="flex flex-col items-center" style={{ transform: 'translateY(-100%)' }}>
+    <div className="flex flex-col items-center">
       <div
         className="w-9 h-9 rounded-full flex items-center justify-center shadow-lg border-2 border-white/20"
         style={{ backgroundColor: meta.color }}

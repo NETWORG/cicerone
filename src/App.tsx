@@ -17,9 +17,9 @@ export default function App() {
       <main>
         <Hero />
         <RouteSection />
+        <ItinerarySection />
         <LastYearSection />
         <ConceptSection />
-        <ItinerarySection />
         <RulesSection />
         <CrewsSection />
         <FollowSection />
