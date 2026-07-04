@@ -277,6 +277,7 @@ export default function RouteMap() {
           gestureHandling="greedy"
           disableDefaultUI={false}
           mapTypeControl={false}
+          fullscreenControl={true}
           style={{ width: '100%', height: '100%', borderRadius: '0.75rem' }}
           colorScheme="LIGHT"
         >
