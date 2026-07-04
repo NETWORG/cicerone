@@ -66,12 +66,12 @@ body {
   @apply py-20 px-4 md:px-8 lg:px-16;
 }
 
-/* ── Card — white, shadow lifts it off any background ── */
+/* ── Card - white, shadow lifts it off any background ── */
 .card {
   @apply bg-white border border-asphalt-700 shadow-sm rounded overflow-hidden;
 }
 
-/* ── Button — red primary, black outline ── */
+/* ── Button - red primary, black outline ── */
 .btn-primary {
   @apply inline-flex items-center gap-2 rounded font-semibold transition-all duration-150 cursor-pointer select-none bg-rally-500 text-white px-6 py-3 hover:bg-rally-600 active:scale-95;
 }

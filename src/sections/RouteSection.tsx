@@ -3,7 +3,6 @@ import * as Flags from 'country-flag-icons/react/3x2';
 import RouteMap from '../components/RouteMap';
 import { STOPS } from '../data/stops';
 
-const ATTRACTION_STOPS = STOPS.filter((s) => !['start', 'finish', 'sleep'].includes(s.category));
 const COUNTRIES = [...new Set(STOPS.map((s) => s.country))];
 
 const COUNTRY_NAMES: Record<string, string> = {
@@ -21,11 +20,8 @@ export default function RouteSection() {
     <section id="route" className="section-pad bg-asphalt-900">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-10">
-          <p className="text-rally-500 text-sm font-semibold uppercase tracking-widest mb-3">
-            The Route
-          </p>
           <h2 className="font-display text-5xl md:text-6xl text-asphalt-100 mb-4 tracking-wide">
-            {ATTRACTION_STOPS.length} STOPS · {COUNTRIES.length} COUNTRIES
+            The Route
           </h2>
 
           {/* Country flags row */}
@@ -43,14 +39,14 @@ export default function RouteSection() {
                     <span className="text-xs text-asphalt-400 font-medium tracking-wider">{code}</span>
                   </span>
                   {i < COUNTRIES.length - 1 && (
-                    <span className="text-asphalt-700 text-xs select-none">—</span>
+                    <span className="text-asphalt-700 text-xs select-none">-</span>
                   )}
                 </span>
               );
             })}
           </div>
           <p className="text-asphalt-400 text-sm mt-4">
-            Click any pin for details. The amber line shows the planned route.
+            Click any pin for details. Each color traces one day's drive.
           </p>
         </div>
 

@@ -36,7 +36,7 @@ export default function Hero() {
         </p>
 
         <p className="text-white/60 text-base sm:text-lg max-w-2xl mx-auto mb-2">
-          Alps — Italy — Monaco — France — Switzerland — Germany
+          Alps - Italy - Monaco - France - Switzerland - Germany
         </p>
         <p className="text-white/50 text-sm sm:text-base max-w-xl mx-auto mb-10">
           18–26 July 2026 · Fun cars. Great places. Breakdowns welcome.

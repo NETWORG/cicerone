@@ -3,6 +3,8 @@ import * as LucideIcons from 'lucide-react';
 import { type LucideProps, MapPin, CalendarDays, Clock, Route } from 'lucide-react';
 import { ExternalLink } from 'lucide-react';
 import { STOPS, CATEGORIES } from '../data/stops';
+import { ITINERARY_PHOTOS } from '../data/itinerary-photos';
+import { getDayIndex } from '../data/day-colors';
 import CategoryBadge from '../components/CategoryBadge';
 
 export default function ItinerarySection() {
@@ -31,26 +33,49 @@ export default function ItinerarySection() {
               const isEndpoint = stop.category === 'start' || stop.category === 'finish';
               const iconName = meta.icon as keyof typeof LucideIcons;
               const Icon = LucideIcons[iconName] as React.ComponentType<LucideProps> | undefined;
+              const isNewDay = stop.date && (idx === 0 || stop.date !== STOPS[idx - 1].date);
 
               return (
-                <div key={stop.id} className="relative flex gap-6 md:gap-10 pl-10 md:pl-20">
+                <React.Fragment key={stop.id}>
+                  {isNewDay && (
+                    <div className="flex items-center gap-3 pl-10 md:pl-20 pt-4 first:pt-0">
+                      <CalendarDays size={20} strokeWidth={1.5} className="text-asphalt-300 flex-shrink-0" />
+                      <span className="font-display text-2xl md:text-3xl text-asphalt-100 tracking-wide whitespace-nowrap">
+                        Day {getDayIndex(stop.date) + 1}
+                      </span>
+                      <span className="text-asphalt-400 text-sm whitespace-nowrap">{stop.date}</span>
+                      <span className="flex-1 h-0.5 bg-asphalt-700 rounded-full" />
+                    </div>
+                  )}
+                  <div className="relative flex gap-6 md:gap-10 pl-10 md:pl-20">
                   {/* Timeline dot */}
                   <div
-                    className="absolute left-0 md:left-4 top-4 w-8 h-8 rounded-full flex items-center justify-center border-2 flex-shrink-0 z-10 bg-white"
+                    className="absolute left-0 md:left-4 top-4 w-10 h-10 rounded-full flex items-center justify-center border-2 flex-shrink-0 z-10 bg-white"
                     style={{
                       borderColor: meta.color,
                     }}
                   >
-                    {Icon && <Icon size={14} strokeWidth={1.5} style={{ color: meta.color }} />}
-                  </div>
-
-                  {/* Step number */}
-                  <div className="absolute left-0 md:left-4 top-11 text-xs text-asphalt-500 w-8 text-center">
-                    {idx + 1}
+                    {Icon && <Icon size={16} strokeWidth={1.5} style={{ color: meta.color }} />}
+                    {/* Step number badge */}
+                    <span
+                      className="absolute -bottom-2.5 -right-2.5 w-5 h-5 rounded-full text-white text-[11px] font-bold leading-none flex items-center justify-center border-2 border-white shadow"
+                      style={{ backgroundColor: meta.color }}
+                    >
+                      {idx + 1}
+                    </span>
                   </div>
 
                   {/* Card */}
-                  <div className={`card flex-1 p-5 ${isEndpoint ? 'border-rally-500/40' : ''}`}>
+                  <div className={`card flex-1 overflow-hidden ${isEndpoint ? 'border-rally-500/40' : ''}`}>
+                    {ITINERARY_PHOTOS[stop.id] && (
+                      <img
+                        src={ITINERARY_PHOTOS[stop.id]}
+                        alt={stop.name}
+                        className="w-full h-40 md:h-48 object-cover"
+                        loading="lazy"
+                      />
+                    )}
+                    <div className="p-5">
                     <div className="flex flex-wrap items-center gap-2 mb-2">
                       <CategoryBadge category={stop.category} />
                       {stop.optional && (
@@ -88,8 +113,10 @@ export default function ItinerarySection() {
                         Official site <ExternalLink size={11} strokeWidth={1.5} />
                       </a>
                     )}
+                    </div>
                   </div>
-                </div>
+                  </div>
+                </React.Fragment>
               );
             })}
           </div>

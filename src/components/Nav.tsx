@@ -8,7 +8,6 @@ const NAV_ITEMS = [
   { href: '#itinerary', label: 'Itinerary' },
   { href: '#rules', label: 'Rules' },
   { href: '#crews', label: 'Crews' },
-  { href: '#join', label: 'Join' },
 ];
 
 export default function Nav() {

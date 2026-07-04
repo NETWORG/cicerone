@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import React from 'react';
 import * as LucideIcons from 'lucide-react';
 import { type LucideProps, Map as MapIcon, X } from 'lucide-react';
@@ -10,93 +10,67 @@ import {
   useMap,
 } from '@vis.gl/react-google-maps';
 import { STOPS, CATEGORIES, type Stop, type StopCategory } from '../data/stops';
+import { ROUTE_SEGMENTS } from '../data/route-segments';
+import { DAY_COLORS } from '../data/day-colors';
+import { ITINERARY_PHOTOS } from '../data/itinerary-photos';
 import CategoryBadge from './CategoryBadge';
 
 const API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY as string | undefined;
-const PATH_COORDS = STOPS.map((s) => s.coords);
 
-// The Directions API caps waypoints per request (~25, plus origin/destination).
-// We split the full stop list into overlapping chunks so each request stays
-// under that limit, then stitch the resulting road-accurate polylines together.
-const MAX_WAYPOINTS_PER_REQUEST = 23;
-function chunkStops<T>(stops: T[]): T[][] {
-  const chunkSize = MAX_WAYPOINTS_PER_REQUEST + 2; // + origin + destination
-  if (stops.length <= chunkSize) return [stops];
-  const chunks: T[][] = [];
-  let i = 0;
-  while (i < stops.length - 1) {
-    const end = Math.min(i + chunkSize - 1, stops.length - 1);
-    chunks.push(stops.slice(i, end + 1));
-    i = end; // overlap by one stop so the route stays continuous
-  }
-  return chunks;
-}
-
+// The route line is precomputed once per day (see scripts/generate-route-path.mjs)
+// and committed as static data, so the map never needs to call the
+// Directions API at runtime - every visitor just gets plain polylines, one
+// per day, each colored to match that day's itinerary section.
 function RoutePolyline() {
   const map = useMap();
-  const drawnRef = useRef(false);
 
   useEffect(() => {
-    if (!map || drawnRef.current) return;
+    if (!map) return;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const g = (window as any).google;
     if (!g) return;
-    drawnRef.current = true;
 
-    const polylineOptions = {
-      strokeColor: '#c8102e',
-      strokeOpacity: 0.8,
-      strokeWeight: 3,
-    };
-
-    // Fallback: a straight line between stop coordinates, used immediately and
-    // replaced chunk-by-chunk as real driving directions come back.
-    const fallbackLine = new g.maps.Polyline({
-      path: PATH_COORDS,
-      geodesic: true,
-      ...polylineOptions,
-      strokeOpacity: 0.35,
-      map,
-    });
-
-    const directionsService = new g.maps.DirectionsService();
-    const chunks = chunkStops(STOPS);
-
-    chunks.forEach((chunk) => {
-      if (chunk.length < 2) return;
-      const origin = chunk[0].coords;
-      const destination = chunk[chunk.length - 1].coords;
-      const waypoints = chunk.slice(1, -1).map((s) => ({ location: s.coords, stopover: true }));
-
-      directionsService.route(
-        {
-          origin,
-          destination,
-          waypoints,
-          travelMode: g.maps.TravelMode.DRIVING,
-        },
-        (result: unknown, status: string) => {
-          if (status !== 'OK' || !result) return;
-          new g.maps.DirectionsRenderer({
-            map,
-            directions: result,
-            suppressMarkers: true,
-            preserveViewport: true,
-            polylineOptions,
-          });
-        }
-      );
+    const lines = ROUTE_SEGMENTS.map((segment, i) => {
+      return new g.maps.Polyline({
+        path: segment.path,
+        geodesic: true,
+        strokeColor: DAY_COLORS[i % DAY_COLORS.length],
+        strokeOpacity: 0.85,
+        strokeWeight: 4,
+        map,
+      });
     });
 
     return () => {
-      fallbackLine.setMap(null);
+      lines.forEach((line) => line.setMap(null));
     };
   }, [map]);
 
   return null;
 }
 
-function MarkerPin({ stop }: { stop: Stop }) {
+// Zooms/pans the map to fit the whole route on load, instead of a fixed
+// center+zoom that leaves most of the map looking empty.
+function FitToRoute() {
+  const map = useMap();
+
+  useEffect(() => {
+    if (!map) return;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const g = (window as any).google;
+    if (!g) return;
+
+    const allPoints = ROUTE_SEGMENTS.flatMap((segment) => segment.path);
+    const bounds = new g.maps.LatLngBounds();
+    const points = allPoints.length > 0 ? allPoints : STOPS.map((s) => s.coords);
+    points.forEach((p: { lat: number; lng: number }) => bounds.extend(p));
+    map.fitBounds(bounds, 24);
+  }, [map]);
+
+  return null;
+}
+
+function MarkerPin({ stop, index }: { stop: Stop; index: number }) {
   const meta = CATEGORIES[stop.category];
   const iconName = meta.icon as keyof typeof LucideIcons;
   const Icon = LucideIcons[iconName] as React.ComponentType<LucideProps> | undefined;
@@ -104,10 +78,16 @@ function MarkerPin({ stop }: { stop: Stop }) {
   return (
     <div className="flex flex-col items-center">
       <div
-        className="w-9 h-9 rounded-full flex items-center justify-center shadow-lg border-2 border-white/20"
+        className="relative w-10 h-10 rounded-full flex items-center justify-center shadow-lg border-2 border-white/20"
         style={{ backgroundColor: meta.color }}
       >
-        {Icon && <Icon size={16} strokeWidth={1.75} color="#fff" />}
+        {Icon && <Icon size={17} strokeWidth={1.75} color="#fff" />}
+        <span
+          className="absolute -top-2.5 -right-2.5 w-5 h-5 rounded-full text-white text-[11px] font-bold leading-none flex items-center justify-center border-2 border-white shadow"
+          style={{ backgroundColor: '#0a0909' }}
+        >
+          {index}
+        </span>
       </div>
       <div
         className="w-0 h-0"
@@ -121,18 +101,39 @@ function MarkerPin({ stop }: { stop: Stop }) {
   );
 }
 
-function StopInfoWindow({ stop, onClose }: { stop: Stop; onClose: () => void }) {
+function StopInfoWindow({ stop, index, onClose }: { stop: Stop; index: number; onClose: () => void }) {
+  const photo = ITINERARY_PHOTOS[stop.id];
   return (
-    <div className="bg-white rounded border border-asphalt-700 p-4 max-w-xs relative shadow-lg" style={{ color: '#2d2c2a' }}>
+    <div className="bg-white rounded border border-asphalt-700 max-w-xs relative shadow-lg overflow-hidden" style={{ color: '#2d2c2a' }}>
       <button
         onClick={onClose}
-        className="absolute top-2 right-2 text-asphalt-500 hover:text-asphalt-100 transition-colors"
+        className="absolute top-2 right-2 z-10 w-6 h-6 flex items-center justify-center rounded-full bg-white/90 text-asphalt-500 hover:text-asphalt-100 transition-colors"
         aria-label="Close"
       >
         <X size={16} strokeWidth={1.5} />
       </button>
-      <div className="mb-2">
+      {photo && (
+        <div className="relative">
+          <img src={photo} alt={stop.name} className="w-full h-32 object-cover" />
+          <span
+            className="absolute -bottom-3 left-3 w-8 h-8 rounded-full text-white text-sm font-bold leading-none flex items-center justify-center border-2 border-white shadow z-10"
+            style={{ backgroundColor: CATEGORIES[stop.category].color }}
+          >
+            {index}
+          </span>
+        </div>
+      )}
+      <div className={`p-4 ${photo ? 'pt-5' : ''}`}>
+      <div className="mb-2 flex items-center gap-2">
         <CategoryBadge category={stop.category} />
+        {!photo && (
+          <span
+            className="w-6 h-6 rounded-full text-white text-xs font-bold leading-none flex items-center justify-center"
+            style={{ backgroundColor: CATEGORIES[stop.category].color }}
+          >
+            {index}
+          </span>
+        )}
       </div>
       <h3 className="font-bold text-base mb-1 pr-5" style={{ color: '#0a0909' }}>
         {stop.name}
@@ -167,6 +168,7 @@ function StopInfoWindow({ stop, onClose }: { stop: Stop; onClose: () => void }) 
           Optional stop
         </span>
       )}
+      </div>
     </div>
   );
 }
@@ -179,7 +181,7 @@ function CategoryIcon({ category }: { category: StopCategory }) {
 }
 
 function MapLegend() {
-  const shown: StopCategory[] = ['start', 'pass', 'cars', 'factory', 'track', 'sea', 'city', 'science', 'museum', 'food'];
+  const shown: StopCategory[] = ['start', 'pass', 'cars', 'factory', 'track', 'sea', 'city', 'science', 'museum', 'food', 'sport'];
   return (
     <div className="absolute bottom-3 left-3 bg-white/95 backdrop-blur border border-asphalt-700 rounded p-3 flex flex-col gap-1.5 shadow-md">
       {shown.map((cat) => {
@@ -201,14 +203,15 @@ function MapContent() {
   return (
     <>
       <RoutePolyline />
-      {STOPS.map((stop) => (
+      <FitToRoute />
+      {STOPS.map((stop, idx) => (
         <AdvancedMarker
           key={stop.id}
           position={stop.coords}
           onClick={() => setSelected(stop)}
           title={stop.name}
         >
-          <MarkerPin stop={stop} />
+          <MarkerPin stop={stop} index={idx + 1} />
         </AdvancedMarker>
       ))}
 
@@ -218,7 +221,11 @@ function MapContent() {
           onCloseClick={() => setSelected(null)}
           pixelOffset={[0, -44]}
         >
-          <StopInfoWindow stop={selected} onClose={() => setSelected(null)} />
+          <StopInfoWindow
+            stop={selected}
+            index={STOPS.findIndex((s) => s.id === selected.id) + 1}
+            onClose={() => setSelected(null)}
+          />
         </InfoWindow>
       )}
 
