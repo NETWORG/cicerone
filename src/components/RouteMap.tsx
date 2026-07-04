@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import React from 'react';
 import * as LucideIcons from 'lucide-react';
 import { type LucideProps, Map as MapIcon, X } from 'lucide-react';
@@ -20,14 +20,12 @@ const API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY as string | undefined;
 // Directions API at runtime — every visitor just gets a plain polyline.
 function RoutePolyline() {
   const map = useMap();
-  const drawnRef = useRef(false);
 
   useEffect(() => {
-    if (!map || drawnRef.current) return;
+    if (!map) return;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const g = (window as any).google;
     if (!g) return;
-    drawnRef.current = true;
 
     const line = new g.maps.Polyline({
       path: ROUTE_PATH,
@@ -50,14 +48,12 @@ function RoutePolyline() {
 // center+zoom that leaves most of the map looking empty.
 function FitToRoute() {
   const map = useMap();
-  const firedRef = useRef(false);
 
   useEffect(() => {
-    if (!map || firedRef.current) return;
+    if (!map) return;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const g = (window as any).google;
     if (!g) return;
-    firedRef.current = true;
 
     const bounds = new g.maps.LatLngBounds();
     const points = ROUTE_PATH.length > 0 ? ROUTE_PATH : STOPS.map((s) => s.coords);
