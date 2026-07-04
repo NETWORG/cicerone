@@ -24,7 +24,7 @@ export default function RouteSection() {
             The Route
           </p>
           <h2 className="font-display text-5xl md:text-6xl text-asphalt-100 mb-4 tracking-wide">
-            PRAGUE TO PRAGUE, THE LONG WAY
+            PRAGUE TO PRAGUE
           </h2>
 
           {/* Country flags row */}
