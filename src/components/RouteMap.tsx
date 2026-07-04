@@ -66,7 +66,7 @@ function FitToRoute() {
 }
 
 
-function MarkerPin({ stop }: { stop: Stop }) {
+function MarkerPin({ stop, index }: { stop: Stop; index: number }) {
   const meta = CATEGORIES[stop.category];
   const iconName = meta.icon as keyof typeof LucideIcons;
   const Icon = LucideIcons[iconName] as React.ComponentType<LucideProps> | undefined;
@@ -74,10 +74,15 @@ function MarkerPin({ stop }: { stop: Stop }) {
   return (
     <div className="flex flex-col items-center">
       <div
-        className="w-9 h-9 rounded-full flex items-center justify-center shadow-lg border-2 border-white/20"
+        className="relative w-9 h-9 rounded-full flex items-center justify-center shadow-lg border-2 border-white/20"
         style={{ backgroundColor: meta.color }}
       >
         {Icon && <Icon size={16} strokeWidth={1.75} color="#fff" />}
+        <span
+          className="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-asphalt-950 text-white text-xs font-bold leading-none flex items-center justify-center border-2 border-white shadow"
+        >
+          {index}
+        </span>
       </div>
       <div
         className="w-0 h-0"
@@ -91,7 +96,7 @@ function MarkerPin({ stop }: { stop: Stop }) {
   );
 }
 
-function StopInfoWindow({ stop, onClose }: { stop: Stop; onClose: () => void }) {
+function StopInfoWindow({ stop, index, onClose }: { stop: Stop; index: number; onClose: () => void }) {
   const photo = ITINERARY_PHOTOS[stop.id];
   return (
     <div className="bg-white rounded border border-asphalt-700 max-w-xs relative shadow-lg overflow-hidden" style={{ color: '#2d2c2a' }}>
@@ -103,11 +108,27 @@ function StopInfoWindow({ stop, onClose }: { stop: Stop; onClose: () => void }) 
         <X size={16} strokeWidth={1.5} />
       </button>
       {photo && (
-        <img src={photo} alt={stop.name} className="w-full h-32 object-cover" />
+        <div className="relative">
+          <img src={photo} alt={stop.name} className="w-full h-32 object-cover" />
+          <span
+            className="absolute -bottom-3 left-3 w-8 h-8 rounded-full text-white text-sm font-bold leading-none flex items-center justify-center border-2 border-white shadow z-10"
+            style={{ backgroundColor: CATEGORIES[stop.category].color }}
+          >
+            {index}
+          </span>
+        </div>
       )}
-      <div className="p-4">
-      <div className="mb-2">
+      <div className={`p-4 ${photo ? 'pt-5' : ''}`}>
+      <div className="mb-2 flex items-center gap-2">
         <CategoryBadge category={stop.category} />
+        {!photo && (
+          <span
+            className="w-6 h-6 rounded-full text-white text-xs font-bold leading-none flex items-center justify-center"
+            style={{ backgroundColor: CATEGORIES[stop.category].color }}
+          >
+            {index}
+          </span>
+        )}
       </div>
       <h3 className="font-bold text-base mb-1 pr-5" style={{ color: '#0a0909' }}>
         {stop.name}
@@ -178,14 +199,14 @@ function MapContent() {
     <>
       <RoutePolyline />
       <FitToRoute />
-      {STOPS.map((stop) => (
+      {STOPS.map((stop, idx) => (
         <AdvancedMarker
           key={stop.id}
           position={stop.coords}
           onClick={() => setSelected(stop)}
           title={stop.name}
         >
-          <MarkerPin stop={stop} />
+          <MarkerPin stop={stop} index={idx + 1} />
         </AdvancedMarker>
       ))}
 
@@ -195,7 +216,11 @@ function MapContent() {
           onCloseClick={() => setSelected(null)}
           pixelOffset={[0, -44]}
         >
-          <StopInfoWindow stop={selected} onClose={() => setSelected(null)} />
+          <StopInfoWindow
+            stop={selected}
+            index={STOPS.findIndex((s) => s.id === selected.id) + 1}
+            onClose={() => setSelected(null)}
+          />
         </InfoWindow>
       )}
 

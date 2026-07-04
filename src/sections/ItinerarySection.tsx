@@ -37,15 +37,15 @@ export default function ItinerarySection() {
                 <div key={stop.id} className="relative flex gap-6 md:gap-10 pl-10 md:pl-20">
                   {/* Timeline dot */}
                   <div
-                    className="absolute left-0 md:left-4 top-4 w-8 h-8 rounded-full flex items-center justify-center border-2 flex-shrink-0 z-10 bg-white"
+                    className="absolute left-0 md:left-4 top-4 w-9 h-9 rounded-full flex items-center justify-center border-2 flex-shrink-0 z-10 bg-white"
                     style={{
                       borderColor: meta.color,
                     }}
                   >
-                    {Icon && <Icon size={14} strokeWidth={1.5} style={{ color: meta.color }} />}
+                    {Icon && <Icon size={15} strokeWidth={1.5} style={{ color: meta.color }} />}
                     {/* Step number badge */}
                     <span
-                      className="absolute -bottom-1.5 -right-1.5 w-4 h-4 rounded-full text-white text-[9px] font-semibold leading-none flex items-center justify-center border-2 border-white"
+                      className="absolute -bottom-2 -right-2 w-6 h-6 rounded-full text-white text-xs font-bold leading-none flex items-center justify-center border-2 border-white shadow"
                       style={{ backgroundColor: meta.color }}
                     >
                       {idx + 1}
