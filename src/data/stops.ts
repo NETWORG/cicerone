@@ -266,7 +266,7 @@ export const STOPS: Stop[] = [
     date: 'Tue, 21 Jul 2026',
     time: '13:30',
     blurb:
-      'Our shitboxes take to a proper race circuit. No timekeeping, no pressure - just seat time on real asphalt.',
+      'Our cars get a proper race circuit for an afternoon. No timekeeping, no pressure - just seat time on real asphalt.',
     optional: true,
     driveFromPrevious: { distanceKm: 146.0, durationMin: 118 },
   },

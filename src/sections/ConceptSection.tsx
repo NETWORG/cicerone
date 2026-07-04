@@ -1,11 +1,53 @@
-import { Wrench, Mountain, CalendarDays, Map, MapPin, Users, Banknote } from 'lucide-react';
+import { Wrench, Mountain, Map, Users, MapPin, Banknote, CheckCircle } from 'lucide-react';
+
+const CARDS = [
+  {
+    Icon: Wrench,
+    title: 'Cheap, old, or characterful',
+    body: 'Any car works if it is interesting. A Ferrari is welcome but would look a bit out of place next to someone\'s 200k km classic.',
+  },
+  {
+    Icon: Wrench,
+    title: 'Breakdowns welcome',
+    body: 'Old cars fail sometimes. When they do, we fix them on the road ourselves. Bring more tools than you think you need and know roughly how your car works.',
+  },
+  {
+    Icon: Map,
+    title: 'Shared plan, your pace',
+    body: 'There\'s a rough itinerary, but it is not binding. Split off, take detours, meet at stops, or skip things. We share live location so everyone can find each other.',
+  },
+  {
+    Icon: Users,
+    title: 'Multiple crews',
+    body: 'We travel loosely together in more than one car. More stories, more help when something fails, better evenings.',
+  },
+  {
+    Icon: MapPin,
+    title: 'Live tracking',
+    body: 'Anyone can follow along online - live map, photos, and updates as they happen.',
+  },
+  {
+    Icon: Banknote,
+    title: 'Low-cost by design',
+    body: 'No luxury package, no shared budget. Keep it simple, split what makes sense, spend money where it is worth it.',
+  },
+];
+
+const WHAT_TO_BRING = [
+  'Valid documents for every country on the route',
+  'European breakdown kit (warning triangle, vest, first-aid)',
+  'Vignettes for Austria and Switzerland - mandatory',
+  'Basic tools and spare fluids for your specific car',
+  'Cash - some alpine passes and toll booths don\'t take cards',
+  'A dashcam (you will want the footage)',
+  'Sense of humour',
+];
 
 export default function ConceptSection() {
   return (
     <section id="concept" className="section-pad bg-asphalt-950">
       <div className="max-w-7xl mx-auto">
-        {/* The Idea */}
-        <div className="grid md:grid-cols-2 gap-12 mb-24">
+        <div className="grid md:grid-cols-2 gap-12 mb-16">
           <div>
             <p className="text-rally-500 text-sm font-semibold uppercase tracking-widest mb-3">
               The Idea
@@ -21,17 +63,12 @@ export default function ConceptSection() {
               We drive thousands of kilometers and stop at interesting places along the way. Going by car lets us experience a lot in one week without turning it into a polished tour.
             </p>
             <p className="text-asphalt-300 text-base leading-relaxed">
-              We travel in multiple crews because it is more fun, keep the costs sensible, and keep the plan easy.
+              Not many rules. But the ones we have, we take seriously.
             </p>
           </div>
 
           <div className="flex flex-col gap-4">
-            {[
-              { Icon: Wrench,   title: 'Questionable cars', body: 'Cheap, old, interesting, slightly broken, or all of the above.' },
-              { Icon: Mountain, title: 'A lot in a week',   body: 'Alpine roads, small towns, museums, factories, food stops, and whatever looks worth pulling over for.' },
-              { Icon: Users,    title: 'Multiple crews',    body: 'More cars means more stories, more help when something fails, and better evenings.' },
-              { Icon: Banknote, title: 'Low-cost by design', body: 'No luxury package. Keep it simple, split what makes sense, and spend money where it is worth it.' },
-            ].map(({ Icon, title, body }) => (
+            {CARDS.map(({ Icon, title, body }) => (
               <div key={title} className="card p-5 flex items-start gap-4">
                 <Icon size={22} strokeWidth={1.25} className="text-rally-500 flex-shrink-0 mt-0.5" />
                 <div>
@@ -43,54 +80,23 @@ export default function ConceptSection() {
           </div>
         </div>
 
-        {/* The Format */}
+        {/* What to bring */}
         <div className="border-t border-asphalt-700 pt-16">
-          <p className="text-rally-500 text-sm font-semibold uppercase tracking-widest mb-3 text-center">
-            The Format
-          </p>
-          <h2 className="font-display text-4xl md:text-5xl text-asphalt-100 mb-12 text-center tracking-wide">
-            HOW IT WORKS
-          </h2>
-
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {[
-              {
-                Icon: CalendarDays,
-                title: 'One week',
-               body: "A week in July. Long enough to cover real distance, short enough to fit around normal life.",
-              },
-              {
-                Icon: Map,
-                title: 'Shared plan, your pace',
-               body: "There's a rough itinerary, but it is not binding. Groups can split, take detours, meet at stops, or skip things.",
-              },
-              {
-                Icon: MapPin,
-                title: 'Live tracking',
-               body: 'Anyone can follow online - live map, photos and updates as they happen.',
-              },
-              {
-                Icon: Wrench,
-                title: 'Breakdowns welcome',
-               body: "The car broke down twice last year. Both times we fixed it on the road. Both times it was the best part of the day.",
-              },
-              {
-                Icon: Users,
-               title: 'More crews, more fun',
-               body: 'We travel loosely together. Enough coordination to help each other, enough freedom that it still feels like a vacation.',
-              },
-              {
-               Icon: Banknote,
-               title: 'Keep it easy',
-               body: 'No big entry fee, no strict program, no overthinking. Fuel, food, rooms, tools, and the road.',
-              },
-            ].map(({ Icon, title, body }) => (
-              <div key={title} className="card p-6">
-                <Icon size={28} strokeWidth={1.25} className="text-rally-500 mb-4" />
-                <h3 className="font-semibold text-asphalt-100 mb-2 text-lg">{title}</h3>
-                <p className="text-asphalt-300 text-sm leading-relaxed">{body}</p>
-              </div>
-            ))}
+          <div className="card p-8 max-w-2xl mx-auto">
+            <div className="flex items-center gap-3 mb-6">
+              <Mountain size={22} strokeWidth={1.25} className="text-rally-500" />
+              <h3 className="font-display text-2xl text-asphalt-100 tracking-wide">
+                WHAT TO BRING
+              </h3>
+            </div>
+            <ul className="flex flex-col gap-3">
+              {WHAT_TO_BRING.map((item) => (
+                <li key={item} className="flex items-start gap-3 text-asphalt-300 text-sm">
+                  <CheckCircle size={14} strokeWidth={1.5} className="text-rally-500 mt-0.5 flex-shrink-0" />
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ul>
           </div>
         </div>
       </div>
