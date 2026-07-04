@@ -11,6 +11,7 @@ import {
 } from '@vis.gl/react-google-maps';
 import { STOPS, CATEGORIES, type Stop, type StopCategory } from '../data/stops';
 import { ROUTE_PATH } from '../data/route-path';
+import { ITINERARY_PHOTOS } from '../data/itinerary-photos';
 import CategoryBadge from './CategoryBadge';
 
 const API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY as string | undefined;
@@ -91,15 +92,20 @@ function MarkerPin({ stop }: { stop: Stop }) {
 }
 
 function StopInfoWindow({ stop, onClose }: { stop: Stop; onClose: () => void }) {
+  const photo = ITINERARY_PHOTOS[stop.id];
   return (
-    <div className="bg-white rounded border border-asphalt-700 p-4 max-w-xs relative shadow-lg" style={{ color: '#2d2c2a' }}>
+    <div className="bg-white rounded border border-asphalt-700 max-w-xs relative shadow-lg overflow-hidden" style={{ color: '#2d2c2a' }}>
       <button
         onClick={onClose}
-        className="absolute top-2 right-2 text-asphalt-500 hover:text-asphalt-100 transition-colors"
+        className="absolute top-2 right-2 z-10 w-6 h-6 flex items-center justify-center rounded-full bg-white/90 text-asphalt-500 hover:text-asphalt-100 transition-colors"
         aria-label="Close"
       >
         <X size={16} strokeWidth={1.5} />
       </button>
+      {photo && (
+        <img src={photo} alt={stop.name} className="w-full h-32 object-cover" />
+      )}
+      <div className="p-4">
       <div className="mb-2">
         <CategoryBadge category={stop.category} />
       </div>
@@ -136,6 +142,7 @@ function StopInfoWindow({ stop, onClose }: { stop: Stop; onClose: () => void }) 
           Optional stop
         </span>
       )}
+      </div>
     </div>
   );
 }

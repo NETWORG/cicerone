@@ -3,6 +3,7 @@ import * as LucideIcons from 'lucide-react';
 import { type LucideProps, MapPin, CalendarDays, Clock, Route } from 'lucide-react';
 import { ExternalLink } from 'lucide-react';
 import { STOPS, CATEGORIES } from '../data/stops';
+import { ITINERARY_PHOTOS } from '../data/itinerary-photos';
 import CategoryBadge from '../components/CategoryBadge';
 
 export default function ItinerarySection() {
@@ -50,7 +51,16 @@ export default function ItinerarySection() {
                   </div>
 
                   {/* Card */}
-                  <div className={`card flex-1 p-5 ${isEndpoint ? 'border-rally-500/40' : ''}`}>
+                  <div className={`card flex-1 overflow-hidden ${isEndpoint ? 'border-rally-500/40' : ''}`}>
+                    {ITINERARY_PHOTOS[stop.id] && (
+                      <img
+                        src={ITINERARY_PHOTOS[stop.id]}
+                        alt={stop.name}
+                        className="w-full h-40 md:h-48 object-cover"
+                        loading="lazy"
+                      />
+                    )}
+                    <div className="p-5">
                     <div className="flex flex-wrap items-center gap-2 mb-2">
                       <CategoryBadge category={stop.category} />
                       {stop.optional && (
@@ -88,6 +98,7 @@ export default function ItinerarySection() {
                         Official site <ExternalLink size={11} strokeWidth={1.5} />
                       </a>
                     )}
+                    </div>
                   </div>
                 </div>
               );
