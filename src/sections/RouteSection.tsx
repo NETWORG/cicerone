@@ -46,7 +46,7 @@ export default function RouteSection() {
             })}
           </div>
           <p className="text-asphalt-400 text-sm mt-4">
-            Click any pin for details. The amber line shows the planned route.
+            Click any pin for details. Each color traces one day's drive.
           </p>
         </div>
 

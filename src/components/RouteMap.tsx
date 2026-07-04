@@ -10,15 +10,17 @@ import {
   useMap,
 } from '@vis.gl/react-google-maps';
 import { STOPS, CATEGORIES, type Stop, type StopCategory } from '../data/stops';
-import { ROUTE_PATH } from '../data/route-path';
+import { ROUTE_SEGMENTS } from '../data/route-segments';
+import { DAY_COLORS, DAYS, getDayColor } from '../data/day-colors';
 import { ITINERARY_PHOTOS } from '../data/itinerary-photos';
 import CategoryBadge from './CategoryBadge';
 
 const API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY as string | undefined;
 
-// The route line is precomputed once (see scripts/generate-route-path.mjs)
+// The route line is precomputed once per day (see scripts/generate-route-path.mjs)
 // and committed as static data, so the map never needs to call the
-// Directions API at runtime - every visitor just gets a plain polyline.
+// Directions API at runtime - every visitor just gets plain polylines, one
+// per day, each colored to match that day's itinerary section.
 function RoutePolyline() {
   const map = useMap();
 
@@ -28,17 +30,19 @@ function RoutePolyline() {
     const g = (window as any).google;
     if (!g) return;
 
-    const line = new g.maps.Polyline({
-      path: ROUTE_PATH,
-      geodesic: true,
-      strokeColor: '#c8102e',
-      strokeOpacity: 0.8,
-      strokeWeight: 3,
-      map,
+    const lines = ROUTE_SEGMENTS.map((segment, i) => {
+      return new g.maps.Polyline({
+        path: segment.path,
+        geodesic: true,
+        strokeColor: DAY_COLORS[i % DAY_COLORS.length],
+        strokeOpacity: 0.85,
+        strokeWeight: 4,
+        map,
+      });
     });
 
     return () => {
-      line.setMap(null);
+      lines.forEach((line) => line.setMap(null));
     };
   }, [map]);
 
@@ -56,13 +60,36 @@ function FitToRoute() {
     const g = (window as any).google;
     if (!g) return;
 
+    const allPoints = ROUTE_SEGMENTS.flatMap((segment) => segment.path);
     const bounds = new g.maps.LatLngBounds();
-    const points = ROUTE_PATH.length > 0 ? ROUTE_PATH : STOPS.map((s) => s.coords);
+    const points = allPoints.length > 0 ? allPoints : STOPS.map((s) => s.coords);
     points.forEach((p: { lat: number; lng: number }) => bounds.extend(p));
     map.fitBounds(bounds, 24);
   }, [map]);
 
   return null;
+}
+
+// Short "18 Jul" style label from a full date string like "Sat, 18 Jul 2026".
+function shortDayLabel(date: string): string {
+  const parts = date.split(',')[1]?.trim().split(' ') ?? [];
+  return parts.slice(0, 2).join(' ');
+}
+
+function DayLegend() {
+  return (
+    <div className="flex flex-wrap justify-center items-center gap-x-4 gap-y-2 mt-4">
+      {DAYS.map((date, i) => (
+        <span key={date} className="flex items-center gap-1.5 text-xs text-asphalt-400">
+          <span
+            className="w-2.5 h-2.5 rounded-full flex-shrink-0"
+            style={{ backgroundColor: getDayColor(date) }}
+          />
+          Day {i + 1} · {shortDayLabel(date)}
+        </span>
+      ))}
+    </div>
+  );
 }
 
 
@@ -261,6 +288,7 @@ export default function RouteMap() {
           <MapContent />
         </Map>
       </div>
+      <DayLegend />
     </APIProvider>
   );
 }

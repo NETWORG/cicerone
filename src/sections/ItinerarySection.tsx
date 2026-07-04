@@ -4,6 +4,7 @@ import { type LucideProps, MapPin, CalendarDays, Clock, Route } from 'lucide-rea
 import { ExternalLink } from 'lucide-react';
 import { STOPS, CATEGORIES } from '../data/stops';
 import { ITINERARY_PHOTOS } from '../data/itinerary-photos';
+import { getDayIndex, getDayColor } from '../data/day-colors';
 import CategoryBadge from '../components/CategoryBadge';
 
 export default function ItinerarySection() {
@@ -32,9 +33,26 @@ export default function ItinerarySection() {
               const isEndpoint = stop.category === 'start' || stop.category === 'finish';
               const iconName = meta.icon as keyof typeof LucideIcons;
               const Icon = LucideIcons[iconName] as React.ComponentType<LucideProps> | undefined;
+              const isNewDay = stop.date && (idx === 0 || stop.date !== STOPS[idx - 1].date);
+              const dayColor = getDayColor(stop.date);
 
               return (
-                <div key={stop.id} className="relative flex gap-6 md:gap-10 pl-10 md:pl-20">
+                <React.Fragment key={stop.id}>
+                  {isNewDay && (
+                    <div className="pl-10 md:pl-20">
+                      <div className="flex items-center gap-3">
+                        <span
+                          className="text-xs font-bold tracking-widest uppercase whitespace-nowrap px-2 py-1 rounded"
+                          style={{ color: dayColor, backgroundColor: `${dayColor}1a` }}
+                        >
+                          Day {getDayIndex(stop.date) + 1}
+                        </span>
+                        <span className="text-asphalt-500 text-xs">{stop.date}</span>
+                        <span className="flex-1 h-px" style={{ backgroundColor: dayColor, opacity: 0.25 }} />
+                      </div>
+                    </div>
+                  )}
+                  <div className="relative flex gap-6 md:gap-10 pl-10 md:pl-20">
                   {/* Timeline dot */}
                   <div
                     className="absolute left-0 md:left-4 top-4 w-10 h-10 rounded-full flex items-center justify-center border-2 flex-shrink-0 z-10 bg-white"
@@ -102,7 +120,8 @@ export default function ItinerarySection() {
                     )}
                     </div>
                   </div>
-                </div>
+                  </div>
+                </React.Fragment>
               );
             })}
           </div>
