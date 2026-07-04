@@ -294,6 +294,19 @@ export const STOPS: Stop[] = [
     driveFromPrevious: { distanceKm: 17.4, durationMin: 24 },
   },
   {
+    id: 'baia-dei-saraceni',
+    name: '[Beach] Baia dei Saraceni - Semaforo Capo Noli',
+    location: 'Capo Noli, Savona, Italy',
+    country: 'IT',
+    category: 'sea',
+    coords: { lat: 44.189544, lng: 8.407462 },
+    date: 'Wed, 22 Jul 2026',
+    time: '11:33',
+    blurb:
+      'A hidden cove below the Capo Noli lighthouse on the Ligurian coast — a quick swim stop before the olive groves and the drive to Monaco.',
+    driveFromPrevious: { distanceKm: 53.1, durationMin: 47 },
+  },
+  {
     id: 'olive-oil',
     name: '[Olive Oil] Sommariva Tradizione Agricola',
     location: 'Imperia, Liguria, Italy',
@@ -301,10 +314,10 @@ export const STOPS: Stop[] = [
     category: 'food',
     coords: { lat: 44.050271, lng: 8.211492 },
     date: 'Wed, 22 Jul 2026',
-    time: '11:49',
+    time: '14:08',
     blurb:
       "Liguria's olive groves produce some of Italy's finest oil. A tasting among the trees before we cross into France.",
-    driveFromPrevious: { distanceKm: 77.9, durationMin: 63 },
+    driveFromPrevious: { distanceKm: 33.1, durationMin: 35 },
   },
   {
     id: 'monaco',
@@ -314,10 +327,10 @@ export const STOPS: Stop[] = [
     category: 'city',
     coords: { lat: 43.73141, lng: 7.41903 },
     date: 'Wed, 22 Jul 2026',
-    time: '14:08',
+    time: '16:27',
     blurb:
       "Drive the Monaco GP circuit on public roads. Count the Ferraris parked outside casinos. Notice that our cars are more interesting than half of them.",
-    driveFromPrevious: { distanceKm: 98.2, durationMin: 78 },
+    driveFromPrevious: { distanceKm: 100.5, durationMin: 80 },
   },
   {
     id: 'saint-tropez-overnight',
@@ -327,9 +340,9 @@ export const STOPS: Stop[] = [
     category: 'sleep',
     coords: { lat: 43.270873, lng: 6.636532 },
     date: 'Wed, 22 Jul 2026',
-    time: '19:07',
+    time: '20:00',
     blurb: 'First night on the Côte d\'Azur. Camp/hotel details still being finalized for this stretch.',
-    driveFromPrevious: { distanceKm: 133.7, durationMin: 118 },
+    driveFromPrevious: { distanceKm: 133.4, durationMin: 111 },
   },
   {
     id: 'saint-tropez',
@@ -339,7 +352,7 @@ export const STOPS: Stop[] = [
     category: 'sea',
     coords: { lat: 43.270873, lng: 6.636532 },
     date: 'Thu, 23 Jul 2026',
-    time: '08:00',
+    time: '09:26',
     blurb:
       'Sun, yachts, and impossibly narrow streets. A morning to explore Saint-Tropez before the coastal roads pull us back inland.',
     driveFromPrevious: { distanceKm: 0, durationMin: 0 },
