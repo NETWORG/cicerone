@@ -276,6 +276,7 @@ export default function RouteMap() {
           mapId="cicerone-rallye"
           gestureHandling="greedy"
           disableDefaultUI={false}
+          mapTypeControl={false}
           style={{ width: '100%', height: '100%', borderRadius: '0.75rem' }}
           colorScheme="LIGHT"
         >
