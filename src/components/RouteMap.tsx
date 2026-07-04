@@ -11,7 +11,7 @@ import {
 } from '@vis.gl/react-google-maps';
 import { STOPS, CATEGORIES, type Stop, type StopCategory } from '../data/stops';
 import { ROUTE_SEGMENTS } from '../data/route-segments';
-import { DAY_COLORS, DAYS, getDayColor } from '../data/day-colors';
+import { DAY_COLORS } from '../data/day-colors';
 import { ITINERARY_PHOTOS } from '../data/itinerary-photos';
 import CategoryBadge from './CategoryBadge';
 
@@ -69,29 +69,6 @@ function FitToRoute() {
 
   return null;
 }
-
-// Short "18 Jul" style label from a full date string like "Sat, 18 Jul 2026".
-function shortDayLabel(date: string): string {
-  const parts = date.split(',')[1]?.trim().split(' ') ?? [];
-  return parts.slice(0, 2).join(' ');
-}
-
-function DayLegend() {
-  return (
-    <div className="flex flex-wrap justify-center items-center gap-x-4 gap-y-2 mt-4">
-      {DAYS.map((date, i) => (
-        <span key={date} className="flex items-center gap-1.5 text-xs text-asphalt-400">
-          <span
-            className="w-2.5 h-2.5 rounded-full flex-shrink-0"
-            style={{ backgroundColor: getDayColor(date) }}
-          />
-          Day {i + 1} · {shortDayLabel(date)}
-        </span>
-      ))}
-    </div>
-  );
-}
-
 
 function MarkerPin({ stop, index }: { stop: Stop; index: number }) {
   const meta = CATEGORIES[stop.category];
@@ -288,7 +265,6 @@ export default function RouteMap() {
           <MapContent />
         </Map>
       </div>
-      <DayLegend />
     </APIProvider>
   );
 }
