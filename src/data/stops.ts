@@ -346,15 +346,15 @@ export const STOPS: Stop[] = [
   },
   {
     id: 'saint-tropez',
-    name: 'Saint-Tropez',
-    location: 'Saint-Tropez, Var, France',
+    name: 'Musée de la Gendarmerie et du Cinéma',
+    location: '2 Place Blanqui, Saint-Tropez, Var, France',
     country: 'FR',
-    category: 'sea',
-    coords: { lat: 43.270873, lng: 6.636532 },
+    category: 'museum',
+    coords: { lat: 43.2694, lng: 6.6356 },
     date: 'Thu, 23 Jul 2026',
     time: '09:26',
     blurb:
-      'Sun, yachts, and impossibly narrow streets. A morning to explore Saint-Tropez before the coastal roads pull us back inland.',
+      "Housed in the old gendarmerie made famous by Louis de Funès' Gendarme de Saint-Tropez films, this quirky museum blends real police history with movie memorabilia — a fun, offbeat stop before the coastal roads pull us back inland.",
     driveFromPrevious: { distanceKm: 0, durationMin: 0 },
   },
   {
