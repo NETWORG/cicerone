@@ -20,11 +20,8 @@ export default function RouteSection() {
     <section id="route" className="section-pad bg-asphalt-900">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-10">
-          <p className="text-rally-500 text-sm font-semibold uppercase tracking-widest mb-3">
-            The Route
-          </p>
           <h2 className="font-display text-5xl md:text-6xl text-asphalt-100 mb-4 tracking-wide">
-            PRAGUE TO PRAGUE
+            The Route
           </h2>
 
           {/* Country flags row */}
