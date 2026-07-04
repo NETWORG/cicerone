@@ -180,14 +180,31 @@ function CategoryIcon({ category }: { category: StopCategory }) {
   return Icon ? <Icon size={12} strokeWidth={1.5} style={{ color: meta.color }} /> : null;
 }
 
+const LEGEND_CATEGORIES: StopCategory[] = ['start', 'pass', 'cars', 'factory', 'track', 'sea', 'city', 'science', 'car-museum', 'tech-museum', 'culture', 'food', 'sport'];
+
 function MapLegend() {
-  const shown: StopCategory[] = ['start', 'pass', 'cars', 'factory', 'track', 'sea', 'city', 'science', 'car-museum', 'tech-museum', 'culture', 'food', 'sport'];
   return (
-    <div className="absolute bottom-3 left-3 bg-white/95 backdrop-blur border border-asphalt-700 rounded p-3 flex flex-col gap-1.5 shadow-md">
-      {shown.map((cat) => {
+    <div className="hidden sm:flex absolute bottom-3 left-3 bg-white/95 backdrop-blur border border-asphalt-700 rounded p-3 flex-col gap-1.5 shadow-md">
+      {LEGEND_CATEGORIES.map((cat) => {
         const m = CATEGORIES[cat];
         return (
           <div key={cat} className="flex items-center gap-2 text-xs" style={{ color: '#2d2c2a' }}>
+            <CategoryIcon category={cat} />
+            <span>{m.label}</span>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+function MapLegendBelow() {
+  return (
+    <div className="sm:hidden grid grid-cols-2 gap-x-4 gap-y-2 bg-asphalt-900 border border-asphalt-700 rounded p-4 mt-3">
+      {LEGEND_CATEGORIES.map((cat) => {
+        const m = CATEGORIES[cat];
+        return (
+          <div key={cat} className="flex items-center gap-2 text-xs text-asphalt-300">
             <CategoryIcon category={cat} />
             <span>{m.label}</span>
           </div>
@@ -259,12 +276,15 @@ export default function RouteMap() {
           mapId="cicerone-rallye"
           gestureHandling="greedy"
           disableDefaultUI={false}
+          mapTypeControl={false}
+          fullscreenControl={true}
           style={{ width: '100%', height: '100%', borderRadius: '0.75rem' }}
           colorScheme="LIGHT"
         >
           <MapContent />
         </Map>
       </div>
+      <MapLegendBelow />
     </APIProvider>
   );
 }
