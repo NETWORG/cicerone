@@ -77,7 +77,7 @@ export const STOPS: Stop[] = [
     category: 'cars',
     coords: { lat: 47.112985, lng: 12.830887 },
     date: 'Sat, 18 Jul 2026',
-    time: '14:27',
+    time: '14:30',
     blurb:
       'Europe\'s most spectacular alpine road - and this weekend the FAT International "Mankei" gathers hundreds of Porsches at the top. We crash the party (respectfully).',
     link: 'https://fat-international.com/en/pages/mankei',
@@ -91,7 +91,7 @@ export const STOPS: Stop[] = [
     category: 'sleep',
     coords: { lat: 46.683272, lng: 11.281948 },
     date: 'Sat, 18 Jul 2026',
-    time: '20:55',
+    time: '21:00',
     blurb:
       "First night's camp, high above Merano. Cars cool down, boots come off, day one is in the books.",
     driveFromPrevious: { distanceKm: 253.5, durationMin: 269 },
@@ -104,7 +104,7 @@ export const STOPS: Stop[] = [
     category: 'pass',
     coords: { lat: 46.527266, lng: 10.452183 },
     date: 'Sun, 19 Jul 2026',
-    time: '10:11',
+    time: '10:15',
     blurb:
       '2,758 m above sea level, 48 hairpins on the north face. Top Gear\'s "greatest driving road in the world." We do it early morning before the coaches arrive.',
     driveFromPrevious: { distanceKm: 102.1, durationMin: 131 },
@@ -117,7 +117,7 @@ export const STOPS: Stop[] = [
     category: 'food',
     coords: { lat: 46.066302, lng: 11.122535 },
     date: 'Sun, 19 Jul 2026',
-    time: '13:31',
+    time: '13:30',
     blurb:
       'South Tyrolean speck straight from the smokehouse - cured ham with an Alpine twist, paired with local bread and something cold to drink.',
     driveFromPrevious: { distanceKm: 157.5, durationMin: 140 },
@@ -130,7 +130,7 @@ export const STOPS: Stop[] = [
     category: 'sleep',
     coords: { lat: 45.73675, lng: 10.954811 },
     date: 'Sun, 19 Jul 2026',
-    time: '14:18',
+    time: '14:15',
     blurb:
       "Second night's camp, exact hotel/spot not booked yet. Somewhere in Trentino to sleep off Stelvio's 48 hairpins.",
     driveFromPrevious: { distanceKm: 45.3, durationMin: 32 },
@@ -143,7 +143,7 @@ export const STOPS: Stop[] = [
     category: 'factory',
     coords: { lat: 44.657641, lng: 11.123959 },
     date: 'Mon, 20 Jul 2026',
-    time: '09:57',
+    time: '10:00',
     blurb:
       'Walk the floor where Huracáns and Uruses are hand-assembled. The museum holds prototypes, race cars, and the occasional car that "wasn\'t quite right." We appreciate the honesty.',
     link: 'https://www.lamborghini.com/en-en/museum',
@@ -171,7 +171,7 @@ export const STOPS: Stop[] = [
     category: 'food',
     coords: { lat: 44.491693, lng: 11.19604 },
     date: 'Mon, 20 Jul 2026',
-    time: '15:19',
+    time: '15:15',
     blurb:
       "A hillside winery in the Modena countryside - we swap Lambrusco reds for their crisp whites for an afternoon.",
     driveFromPrevious: { distanceKm: 32.1, durationMin: 34 },
@@ -184,7 +184,7 @@ export const STOPS: Stop[] = [
     category: 'food',
     coords: { lat: 44.498865, lng: 11.340915 },
     date: 'Mon, 20 Jul 2026',
-    time: '16:39',
+    time: '16:45',
     blurb:
       'Proper Italian pizza break - thin crust, wood-fired, no apologies.',
     driveFromPrevious: { distanceKm: 13.8, durationMin: 19 },
@@ -210,7 +210,7 @@ export const STOPS: Stop[] = [
     category: 'sleep',
     coords: { lat: 44.802744, lng: 10.443689 },
     date: 'Mon, 20 Jul 2026',
-    time: '19:23',
+    time: '19:30',
     blurb: 'Third night\'s camp, exact hotel/spot not booked yet.',
     driveFromPrevious: { distanceKm: 45.9, durationMin: 33 },
   },
@@ -222,7 +222,7 @@ export const STOPS: Stop[] = [
     category: 'food',
     coords: { lat: 44.927383, lng: 10.119963 },
     date: 'Tue, 21 Jul 2026',
-    time: '08:28',
+    time: '08:30',
     blurb:
       "The king of cheeses in its homeland. This museum tracks 800 years of Parmigiano-Reggiano - how it's made, aged, and why the wheels are still cracked open by hand.",
     link: 'https://www.museidelfood.it/',
@@ -236,7 +236,7 @@ export const STOPS: Stop[] = [
     category: 'food',
     coords: { lat: 44.61197, lng: 10.268382 },
     date: 'Tue, 21 Jul 2026',
-    time: '10:29',
+    time: '10:30',
     blurb:
       'Deep in prosciutto country. The museum walks through centuries of curing tradition in the hills above Parma - then lets us taste the results.',
     driveFromPrevious: { distanceKm: 59.9, durationMin: 61 },
@@ -249,7 +249,7 @@ export const STOPS: Stop[] = [
     category: 'track',
     coords: { lat: 45.07129, lng: 9.103941 },
     date: 'Tue, 21 Jul 2026',
-    time: '13:27',
+    time: '13:30',
     blurb:
       'Our shitboxes take to a proper race circuit. No timekeeping, no pressure - just seat time on real asphalt.',
     optional: true,
@@ -263,7 +263,7 @@ export const STOPS: Stop[] = [
     category: 'sleep',
     coords: { lat: 44.504682, lng: 8.923697 },
     date: 'Tue, 21 Jul 2026',
-    time: '15:44',
+    time: '15:45',
     blurb: 'Fourth night\'s camp, exact hotel/spot not booked yet.',
     driveFromPrevious: { distanceKm: 94.6, durationMin: 76 },
   },
@@ -275,7 +275,7 @@ export const STOPS: Stop[] = [
     category: 'food',
     coords: { lat: 44.406117, lng: 8.933043 },
     date: 'Wed, 22 Jul 2026',
-    time: '08:22',
+    time: '08:15',
     blurb:
       "A historic chocolate workshop in Genoa's old town, still hand-crafting bars and pralines the way they did generations ago.",
     driveFromPrevious: { distanceKm: 18.4, durationMin: 22 },
@@ -288,7 +288,7 @@ export const STOPS: Stop[] = [
     category: 'food',
     coords: { lat: 44.430011, lng: 8.782949 },
     date: 'Wed, 22 Jul 2026',
-    time: '09:46',
+    time: '09:45',
     blurb:
       'The birthplace of pesto alla genovese. Basil, pine nuts, and a mortar and pestle - the real deal, no blender allowed.',
     driveFromPrevious: { distanceKm: 17.4, durationMin: 24 },
@@ -301,7 +301,7 @@ export const STOPS: Stop[] = [
     category: 'sea',
     coords: { lat: 44.189544, lng: 8.407462 },
     date: 'Wed, 22 Jul 2026',
-    time: '11:33',
+    time: '11:30',
     blurb:
       'A hidden cove below the Capo Noli lighthouse on the Ligurian coast - a quick swim stop before the olive groves and the drive to Monaco.',
     driveFromPrevious: { distanceKm: 53.1, durationMin: 47 },
@@ -314,7 +314,7 @@ export const STOPS: Stop[] = [
     category: 'food',
     coords: { lat: 44.050271, lng: 8.211492 },
     date: 'Wed, 22 Jul 2026',
-    time: '14:08',
+    time: '14:15',
     blurb:
       "Liguria's olive groves produce some of Italy's finest oil. A tasting among the trees before we cross into France.",
     driveFromPrevious: { distanceKm: 33.1, durationMin: 35 },
@@ -327,7 +327,7 @@ export const STOPS: Stop[] = [
     category: 'city',
     coords: { lat: 43.73141, lng: 7.41903 },
     date: 'Wed, 22 Jul 2026',
-    time: '16:27',
+    time: '16:30',
     blurb:
       "Drive the Monaco GP circuit on public roads. Count the Ferraris parked outside casinos. Notice that our cars are more interesting than half of them.",
     driveFromPrevious: { distanceKm: 100.5, durationMin: 80 },
@@ -352,7 +352,7 @@ export const STOPS: Stop[] = [
     category: 'museum',
     coords: { lat: 43.2694, lng: 6.6356 },
     date: 'Thu, 23 Jul 2026',
-    time: '09:26',
+    time: '09:30',
     blurb:
       "Housed in the old gendarmerie made famous by Louis de Funès' Gendarme de Saint-Tropez films, this quirky museum blends real police history with movie memorabilia - a fun, offbeat stop before the coastal roads pull us back inland.",
     driveFromPrevious: { distanceKm: 0, durationMin: 0 },
@@ -404,7 +404,7 @@ export const STOPS: Stop[] = [
     category: 'pass',
     coords: { lat: 46.572905, lng: 8.415352 },
     date: 'Sat, 25 Jul 2026',
-    time: '17:32',
+    time: '17:30',
     blurb:
       'One of the great Swiss Alpine passes - hairpins, glacier views, and a starring role in the Bond film Goldfinger.',
     driveFromPrevious: { distanceKm: 273.7, durationMin: 216 },
@@ -429,7 +429,7 @@ export const STOPS: Stop[] = [
     category: 'museum',
     coords: { lat: 48.788201, lng: 9.233992 },
     date: 'Sun, 26 Jul 2026',
-    time: '11:34',
+    time: '11:30',
     blurb:
       '160 vehicles over nine floors tracing 140 years of automotive history - from the Patent-Motorwagen to the SLR McLaren. One of the finest car museums on earth.',
     link: 'https://www.mercedes-benz.com/en/brand/mercedes-benz-museum/',
@@ -443,7 +443,7 @@ export const STOPS: Stop[] = [
     category: 'museum',
     coords: { lat: 49.238345, lng: 8.897235 },
     date: 'Sun, 26 Jul 2026',
-    time: '15:46',
+    time: '15:45',
     blurb:
       'Two Concordes sit on the roof. Inside: Formula 1, WWII aircraft, rockets, and a working steam locomotive. Maximum density of interesting things.',
     link: 'https://www.technik-museum.de/en/sinsheim/',
@@ -457,9 +457,9 @@ export const STOPS: Stop[] = [
     category: 'finish',
     coords: { lat: 50.110124, lng: 14.497942 },
     date: 'Sun, 26 Jul 2026',
-    time: '20:00',
+    time: '23:30',
     blurb:
       'The rallye ends where it began - a long final day\'s drive from Sinsheim, straight through to Prague. Cars limp home, stories are told, and plans are quietly made for next year.',
-    driveFromPrevious: { distanceKm: 430, durationMin: 255, estimated: true },
+    driveFromPrevious: { distanceKm: 430, durationMin: 464, estimated: true },
   },
 ];
