@@ -439,10 +439,10 @@ export const STOPS: Stop[] = [
   {
     id: 'prague-finish',
     name: 'Prague — Finish',
-    location: 'Prague, Czech Republic',
+    location: 'Sokolovská, Prague, Czech Republic',
     country: 'CZ',
     category: 'finish',
-    coords: { lat: 50.0755, lng: 14.4378 },
+    coords: { lat: 50.110124, lng: 14.497942 },
     date: 'Sun, 26 Jul 2026',
     time: '20:00',
     blurb:

@@ -10,28 +10,14 @@ import {
   useMap,
 } from '@vis.gl/react-google-maps';
 import { STOPS, CATEGORIES, type Stop, type StopCategory } from '../data/stops';
+import { ROUTE_PATH } from '../data/route-path';
 import CategoryBadge from './CategoryBadge';
 
 const API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY as string | undefined;
-const PATH_COORDS = STOPS.map((s) => s.coords);
 
-// The Directions API caps waypoints per request (~25, plus origin/destination).
-// We split the full stop list into overlapping chunks so each request stays
-// under that limit, then stitch the resulting road-accurate polylines together.
-const MAX_WAYPOINTS_PER_REQUEST = 23;
-function chunkStops<T>(stops: T[]): T[][] {
-  const chunkSize = MAX_WAYPOINTS_PER_REQUEST + 2; // + origin + destination
-  if (stops.length <= chunkSize) return [stops];
-  const chunks: T[][] = [];
-  let i = 0;
-  while (i < stops.length - 1) {
-    const end = Math.min(i + chunkSize - 1, stops.length - 1);
-    chunks.push(stops.slice(i, end + 1));
-    i = end; // overlap by one stop so the route stays continuous
-  }
-  return chunks;
-}
-
+// The route line is precomputed once (see scripts/generate-route-path.mjs)
+// and committed as static data, so the map never needs to call the
+// Directions API at runtime — every visitor just gets a plain polyline.
 function RoutePolyline() {
   const map = useMap();
   const drawnRef = useRef(false);
@@ -43,58 +29,45 @@ function RoutePolyline() {
     if (!g) return;
     drawnRef.current = true;
 
-    const polylineOptions = {
+    const line = new g.maps.Polyline({
+      path: ROUTE_PATH,
+      geodesic: true,
       strokeColor: '#c8102e',
       strokeOpacity: 0.8,
       strokeWeight: 3,
-    };
-
-    // Fallback: a straight line between stop coordinates, used immediately and
-    // replaced chunk-by-chunk as real driving directions come back.
-    const fallbackLine = new g.maps.Polyline({
-      path: PATH_COORDS,
-      geodesic: true,
-      ...polylineOptions,
-      strokeOpacity: 0.35,
       map,
     });
 
-    const directionsService = new g.maps.DirectionsService();
-    const chunks = chunkStops(STOPS);
-
-    chunks.forEach((chunk) => {
-      if (chunk.length < 2) return;
-      const origin = chunk[0].coords;
-      const destination = chunk[chunk.length - 1].coords;
-      const waypoints = chunk.slice(1, -1).map((s) => ({ location: s.coords, stopover: true }));
-
-      directionsService.route(
-        {
-          origin,
-          destination,
-          waypoints,
-          travelMode: g.maps.TravelMode.DRIVING,
-        },
-        (result: unknown, status: string) => {
-          if (status !== 'OK' || !result) return;
-          new g.maps.DirectionsRenderer({
-            map,
-            directions: result,
-            suppressMarkers: true,
-            preserveViewport: true,
-            polylineOptions,
-          });
-        }
-      );
-    });
-
     return () => {
-      fallbackLine.setMap(null);
+      line.setMap(null);
     };
   }, [map]);
 
   return null;
 }
+
+// Zooms/pans the map to fit the whole route on load, instead of a fixed
+// center+zoom that leaves most of the map looking empty.
+function FitToRoute() {
+  const map = useMap();
+  const firedRef = useRef(false);
+
+  useEffect(() => {
+    if (!map || firedRef.current) return;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const g = (window as any).google;
+    if (!g) return;
+    firedRef.current = true;
+
+    const bounds = new g.maps.LatLngBounds();
+    const points = ROUTE_PATH.length > 0 ? ROUTE_PATH : STOPS.map((s) => s.coords);
+    points.forEach((p: { lat: number; lng: number }) => bounds.extend(p));
+    map.fitBounds(bounds, 24);
+  }, [map]);
+
+  return null;
+}
+
 
 function MarkerPin({ stop }: { stop: Stop }) {
   const meta = CATEGORIES[stop.category];
@@ -201,6 +174,7 @@ function MapContent() {
   return (
     <>
       <RoutePolyline />
+      <FitToRoute />
       {STOPS.map((stop) => (
         <AdvancedMarker
           key={stop.id}
