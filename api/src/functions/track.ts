@@ -9,8 +9,10 @@ import { getPositionsTable, positionPartitionKey } from '../positionsTable';
  *   Server URL: https://cicerallye.com/api/track?token=<shared secret>
  *   Device Identifier: <crew id, e.g. crew-e30-polaris>
  *
- * It periodically issues:
- *   GET /api/track?id=crew-e30-polaris&lat=49.1234&lon=16.5678&timestamp=1717000000&token=...
+ * It periodically issues (Traccar Client uses POST for this, but all
+ * parameters are still sent as URL query params rather than a body, so we
+ * accept both GET and POST identically):
+ *   POST /api/track?id=crew-e30-polaris&lat=49.1234&lon=16.5678&timestamp=1717000000&token=...
  *
  * We validate the id against the known crew list, require a shared secret
  * (TRACK_SHARED_SECRET app setting) so a leaked/guessed crew id alone can't
@@ -77,7 +79,7 @@ export async function track(request: HttpRequest, context: InvocationContext): P
 }
 
 app.http('track', {
-  methods: ['GET'],
+  methods: ['GET', 'POST'],
   authLevel: 'anonymous',
   route: 'track',
   handler: track,
