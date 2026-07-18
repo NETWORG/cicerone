@@ -6,6 +6,7 @@ export interface Crew {
   carYear?: number;
   carNote?: string;
   confirmed: boolean;
+  brandLogo?: string;
 }
 
 export const CREWS: Crew[] = [
@@ -15,6 +16,7 @@ export const CREWS: Crew[] = [
     members: 'prokop_adam & prokop_tomas',
     car: 'E30 Polaris',
     confirmed: true,
+    brandLogo: 'bmw',
   },
   {
     id: 'crew-megane',
@@ -22,6 +24,7 @@ export const CREWS: Crew[] = [
     members: 'honzakostejn, martinrehak, zdeneksrejber & pavlicekondrej',
     car: 'Megane',
     confirmed: true,
+    brandLogo: 'renault',
   },
   {
     id: 'crew-eos',
@@ -29,6 +32,7 @@ export const CREWS: Crew[] = [
     members: 'Crmax & Vnown',
     car: 'Eos',
     confirmed: true,
+    brandLogo: 'vw',
   },
   {
     id: 'crew-ereso',
@@ -36,5 +40,6 @@ export const CREWS: Crew[] = [
     members: 'gump_lord & sam.handl',
     car: 'Ereso',
     confirmed: true,
+    brandLogo: 'skoda',
   },
 ];

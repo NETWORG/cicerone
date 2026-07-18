@@ -3,12 +3,24 @@ import { Car, X } from 'lucide-react';
 import { AdvancedMarker, InfoWindow } from '@vis.gl/react-google-maps';
 import { CREWS } from '../../data/crews';
 import type { CrewPosition } from '../../hooks/useCrewPositions';
+import bmwLogo from '../../assets/car-logos/bmw.png';
+import renaultLogo from '../../assets/car-logos/renault.png';
+import vwLogo from '../../assets/car-logos/vw.png';
+import skodaLogo from '../../assets/car-logos/skoda.png';
+
+const BRAND_LOGOS: Record<string, string> = {
+  bmw: bmwLogo,
+  renault: renaultLogo,
+  vw: vwLogo,
+  skoda: skodaLogo,
+};
 
 export default function CrewMarker({ position, color }: { position: CrewPosition; color: string }) {
   const [open, setOpen] = useState(false);
   const crew = CREWS.find((c) => c.id === position.crewId);
   const label = crew ? crew.name : position.crewId;
   const lastUpdate = new Date(position.updatedAt);
+  const logo = crew?.brandLogo ? BRAND_LOGOS[crew.brandLogo] : undefined;
 
   return (
     <>
@@ -26,10 +38,18 @@ export default function CrewMarker({ position, color }: { position: CrewPosition
             />
           )}
           <div
-            className="relative w-12 h-12 rounded-full flex items-center justify-center shadow-xl border-[3px] border-white"
-            style={{ backgroundColor: color, opacity: position.stale ? 0.5 : 1 }}
+            className="relative w-12 h-12 rounded-full flex items-center justify-center shadow-xl border-[3px]"
+            style={{
+              backgroundColor: logo ? '#fff' : color,
+              borderColor: color,
+              opacity: position.stale ? 0.5 : 1,
+            }}
           >
-            <Car size={22} strokeWidth={2.25} color="#fff" />
+            {logo ? (
+              <img src={logo} alt="" className="w-8 h-8 object-contain" />
+            ) : (
+              <Car size={22} strokeWidth={2.25} color="#fff" />
+            )}
           </div>
         </div>
       </AdvancedMarker>
