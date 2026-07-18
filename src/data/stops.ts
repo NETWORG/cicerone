@@ -104,17 +104,17 @@ export const STOPS: Stop[] = [
     driveFromPrevious: { distanceKm: 122.3, durationMin: 109 },
   },
   {
-    id: 'meranerhuette',
-    name: 'Meranerhütte - Rifugio Merano',
-    location: 'Meran 2000, South Tyrol, Italy',
-    country: 'IT',
+    id: 'huben',
+    name: 'Huben 120 - Overnight',
+    location: 'Huben 120, Tyrol, Austria',
+    country: 'AT',
     category: 'sleep',
-    coords: { lat: 46.683272, lng: 11.281948 },
+    coords: { lat: 47.0410251, lng: 10.9741592 },
     date: 'Sat, 18 Jul 2026',
-    time: '22:00',
+    time: '23:00',
     blurb:
-      "First night's camp, high above Merano. Cars cool down, boots come off, day one is in the books.",
-    driveFromPrevious: { distanceKm: 253.5, durationMin: 269 },
+      "First night's camp in Huben, Tyrol. Cars cool down, boots come off, day one is in the books. Leave by 07:40 on Sunday to reach the Stelvio Pass by 10:15.",
+    driveFromPrevious: { distanceKm: 251.0, durationMin: 220 },
   },
   {
     id: 'stelvio',
@@ -127,7 +127,7 @@ export const STOPS: Stop[] = [
     time: '10:15',
     blurb:
       '2,758 m above sea level, 48 numbered hairpins on the Prato allo Stelvio ascent - Top Gear\'s "greatest driving road in the world." We do it early morning before the coaches arrive, then cross straight over to the Bormio side for the descent.',
-    driveFromPrevious: { distanceKm: 102.1, durationMin: 131 },
+    driveFromPrevious: { distanceKm: 149.7, durationMin: 154 },
   },
   {
     id: 'gavia',
