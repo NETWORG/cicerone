@@ -1,8 +1,8 @@
 {
   "routes": [
-    {
-      "route": "/tracker/*",
-      "rewrite": "/api/tracker/*"
-    }
+    { "route": "/tracker/polaris", "rewrite": "/api/tracker/polaris" },
+    { "route": "/tracker/megane", "rewrite": "/api/tracker/megane" },
+    { "route": "/tracker/eos", "rewrite": "/api/tracker/eos" },
+    { "route": "/tracker/ereso", "rewrite": "/api/tracker/ereso" }
   ]
 }
