@@ -17,7 +17,7 @@ export default function RouteMap() {
     <APIProvider apiKey={API_KEY}>
       <div
         id="route-map"
-        className={`relative${isFullscreen ? ' fixed inset-0 z-[999] is-fullscreen' : ''}`}
+        className={isFullscreen ? 'fixed inset-0 z-[999] is-fullscreen' : 'relative'}
       >
         <Map
           defaultCenter={{ lat: 46.5, lng: 9.5 }}
