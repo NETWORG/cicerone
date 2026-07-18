@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Car } from 'lucide-react';
+import { Car, X } from 'lucide-react';
 import { AdvancedMarker, InfoWindow } from '@vis.gl/react-google-maps';
 import { CREWS } from '../../data/crews';
 import type { CrewPosition } from '../../hooks/useCrewPositions';
@@ -40,13 +40,22 @@ export default function CrewMarker({ position, color }: { position: CrewPosition
           onCloseClick={() => setOpen(false)}
           pixelOffset={[0, -28]}
         >
-          <div className="text-sm text-asphalt-300">
-            <p className="font-bold mb-1 text-asphalt-100">{label}</p>
-            {crew && <p className="text-xs mb-1 text-asphalt-500">{crew.car}</p>}
-            <p className={`text-xs ${position.stale ? 'text-rally-500' : 'text-asphalt-500'}`}>
-              {position.stale ? 'Last seen ' : 'Updated '}
-              {lastUpdate.toLocaleTimeString()}
-            </p>
+          <div className="bg-white rounded border border-asphalt-700 max-w-xs relative shadow-lg overflow-hidden text-asphalt-300">
+            <button
+              onClick={() => setOpen(false)}
+              className="absolute top-2 right-2 z-10 w-6 h-6 flex items-center justify-center rounded-full bg-white/90 text-asphalt-500 hover:text-asphalt-100 transition-colors"
+              aria-label="Close"
+            >
+              <X size={16} strokeWidth={1.5} />
+            </button>
+            <div className="p-4">
+              <h3 className="font-bold text-base mb-1 pr-5 text-asphalt-100">{label}</h3>
+              {crew && <p className="text-xs mb-2 text-asphalt-500">{crew.car}</p>}
+              <p className={`text-xs ${position.stale ? 'text-rally-500' : 'text-asphalt-500'}`}>
+                {position.stale ? 'Last seen ' : 'Updated '}
+                {lastUpdate.toLocaleTimeString()}
+              </p>
+            </div>
           </div>
         </InfoWindow>
       )}
