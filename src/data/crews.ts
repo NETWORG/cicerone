@@ -19,7 +19,7 @@ export const CREWS: Crew[] = [
   {
     id: 'crew-megane',
     name: 'Team Megane',
-    members: 'honzakostejn, martinrehak, Martin & zdeneksrejber',
+    members: 'honzakostejn, martinrehak, zdeneksrejber & pavlicekondrej',
     car: 'Megane',
     confirmed: true,
   },
