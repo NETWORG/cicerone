@@ -8,6 +8,7 @@ import FullscreenButton from './FullscreenButton';
 import MarkerPin from './MarkerPin';
 import StopInfoWindow from './StopInfoWindow';
 import MapLegend from './MapLegend';
+import CrewMarkers from './CrewMarkers';
 
 interface MapContentProps {
   isFullscreen: boolean;
@@ -23,6 +24,7 @@ export default function MapContent({ isFullscreen, onToggleFullscreen }: MapCont
       <FitToRoute />
       <MapResizeOnFullscreenChange isFullscreen={isFullscreen} />
       <FullscreenButton isFullscreen={isFullscreen} onToggle={onToggleFullscreen} />
+      <CrewMarkers />
       {STOPS.map((stop, idx) => (
         <AdvancedMarker
           key={stop.id}

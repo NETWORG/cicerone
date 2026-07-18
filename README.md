@@ -3,7 +3,7 @@
 Website for the Cicerone Rallye, a summer road trip.
 
 ## Live site
-`https://networg.github.io/cicerone/`
+`https://cicerallye.com/`
 
 ## Development
 
@@ -16,7 +16,8 @@ npm run dev
 
 ## Build & Deploy
 
-The site deploys automatically via GitHub Actions on every push to `main`.
+The site deploys automatically via GitHub Actions on every push to `main`,
+to an Azure Static Web App (Free tier, resource group `cicerallye`).
 
 ## Route map
 

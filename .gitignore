@@ -24,3 +24,6 @@ dist-ssr
 *.sw?
 .env
 .playwright-cli/
+
+# Azure Functions local secrets (never commit real connection strings)
+api/local.settings.json
