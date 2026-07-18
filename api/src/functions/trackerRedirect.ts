@@ -18,6 +18,9 @@ const CREWS: { id: string; name: string }[] = [
 const TRACCAR_PARAMS =
   'accuracy=medium&distance=200&interval=60&heartbeat=300&buffer=true&wakelock=false&stop_detection=true';
 
+const APP_STORE_URL = 'https://apps.apple.com/app/traccar-client/id843156974';
+const PLAY_STORE_URL = 'https://play.google.com/store/apps/details?id=org.traccar.client';
+
 function renderPage(cards: { name: string; deepLink: string; manualUrl: string; deviceId: string }[]): string {
   const cardsHtml = cards
     .map(
@@ -47,6 +50,8 @@ function renderPage(cards: { name: string; deepLink: string; manualUrl: string; 
   h1 { font-size: 1.25rem; margin-bottom: .25rem; }
   h2 { font-size: 1.05rem; margin: 0 0 10px; }
   p.intro { color: #a6adb4; font-size: .9rem; max-width: 420px; margin: 0 auto 24px; line-height: 1.4; }
+  .install { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; max-width: 420px; margin: 0 auto 24px; }
+  a.store-button { display: inline-flex; align-items: center; gap: 6px; padding: 10px 18px; background: #262b30; border: 1px solid #3a4046; color: #e6e8ea; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: .85rem; }
   .card { max-width: 420px; margin: 0 auto 16px; background: #1b1f23; border: 1px solid #2a2f34; border-radius: 10px; padding: 18px; }
   a.button { display: inline-block; margin: 4px 0 8px; padding: 12px 26px; background: #e0313a; color: #fff; border-radius: 8px; text-decoration: none; font-weight: 600; }
   details { text-align: left; margin-top: 8px; }
@@ -57,7 +62,11 @@ function renderPage(cards: { name: string; deepLink: string; manualUrl: string; 
 </head>
 <body>
   <h1>Cicerallye live tracking setup</h1>
-  <p class="intro">Install Traccar Client first, then tap your crew below to configure it automatically.</p>
+  <p class="intro">1. Install Traccar Client. 2. Tap your crew below to configure it automatically.</p>
+  <div class="install">
+    <a class="store-button" href="${APP_STORE_URL}">📱 App Store (iOS)</a>
+    <a class="store-button" href="${PLAY_STORE_URL}">🤖 Google Play (Android)</a>
+  </div>
   ${cardsHtml}
 </body>
 </html>`;
