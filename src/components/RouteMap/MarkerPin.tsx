@@ -16,16 +16,16 @@ export default function MarkerPin({ stop, index }: { stop: Stop; index: number }
   return (
     <div className="flex flex-col items-center">
       <div
-        className="relative w-10 h-10 rounded-full flex items-center justify-center shadow-lg border-2 border-white/20"
+        className="relative w-7 h-7 rounded-full flex items-center justify-center shadow border-2 border-white/20"
         style={{ backgroundColor: meta.color }}
       >
-        {Icon && <Icon size={17} strokeWidth={1.75} color="#fff" />}
-        <span className="absolute -top-2.5 -right-2.5 w-5 h-5 rounded-full bg-asphalt-100 text-white text-[11px] font-bold leading-none flex items-center justify-center border-2 border-white shadow">
+        {Icon && <Icon size={12} strokeWidth={1.75} color="#fff" />}
+        <span className="absolute -top-2 -right-2 w-4 h-4 rounded-full bg-asphalt-100 text-white text-[9px] font-bold leading-none flex items-center justify-center border-2 border-white shadow">
           {index}
         </span>
       </div>
       <div
-        className="w-0 h-0 border-x-[6px] border-x-transparent border-t-8"
+        className="w-0 h-0 border-x-[4px] border-x-transparent border-t-[6px]"
         style={{ borderTopColor: meta.color }}
       />
     </div>

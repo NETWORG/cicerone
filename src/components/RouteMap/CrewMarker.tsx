@@ -18,11 +18,19 @@ export default function CrewMarker({ position, color }: { position: CrewPosition
         title={`${label}${position.stale ? ' (last seen a while ago)' : ''}`}
         zIndex={999}
       >
-        <div
-          className="w-9 h-9 rounded-full flex items-center justify-center shadow-lg border-2 border-white"
-          style={{ backgroundColor: color, opacity: position.stale ? 0.45 : 1 }}
-        >
-          <Car size={16} strokeWidth={2} color="#fff" />
+        <div className="relative w-12 h-12 flex items-center justify-center">
+          {!position.stale && (
+            <span
+              className="absolute inset-0 rounded-full animate-ping opacity-40"
+              style={{ backgroundColor: color }}
+            />
+          )}
+          <div
+            className="relative w-12 h-12 rounded-full flex items-center justify-center shadow-xl border-[3px] border-white"
+            style={{ backgroundColor: color, opacity: position.stale ? 0.5 : 1 }}
+          >
+            <Car size={22} strokeWidth={2.25} color="#fff" />
+          </div>
         </div>
       </AdvancedMarker>
 
