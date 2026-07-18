@@ -3,16 +3,28 @@ import { VALID_CREW_IDS } from '../crewIds';
 import { getPositionsTable, positionPartitionKey } from '../positionsTable';
 
 /**
- * Receiver endpoint for Traccar Client's "OsmAnd" HTTP reporting protocol.
+ * Receiver endpoint for Traccar Client's location reporting protocol.
  *
  * Traccar Client is configured with:
  *   Server URL: https://cicerallye.com/api/track?token=<shared secret>
  *   Device Identifier: <crew id, e.g. crew-e30-polaris>
  *
- * It periodically issues (Traccar Client uses POST for this, but all
- * parameters are still sent as URL query params rather than a body, so we
- * accept both GET and POST identically):
- *   POST /api/track?id=crew-e30-polaris&lat=49.1234&lon=16.5678&timestamp=1717000000&token=...
+ * Traccar Client >= 9.0.0 posts a JSON body shaped like:
+ *   {
+ *     "location": {
+ *       "timestamp": "2000-01-01T00:00:00.000Z",
+ *       "coords": { "latitude": 0.0, "longitude": 0.0, ... }
+ *     },
+ *     "device_id": "crew-e30-polaris"
+ *   }
+ * Older versions (and the original OsmAnd app) instead send `id`/`lat`/
+ * `lon`/`timestamp` as query params or a form-urlencoded body. We support
+ * both so this keeps working regardless of the crew's installed app
+ * version.
+ *
+ * The shared secret (`?token=` on the Server URL) is passed through
+ * unchanged in both cases since it's part of the URL query string, not
+ * the body.
  *
  * We validate the id against the known crew list, require a shared secret
  * (TRACK_SHARED_SECRET app setting) so a leaked/guessed crew id alone can't
@@ -20,10 +32,50 @@ import { getPositionsTable, positionPartitionKey } from '../positionsTable';
  * `positions` Table Storage table.
  */
 export async function track(request: HttpRequest, context: InvocationContext): Promise<HttpResponseInit> {
-  const id = request.query.get('id');
-  const latRaw = request.query.get('lat');
-  const lonRaw = request.query.get('lon');
-  const timestampRaw = request.query.get('timestamp');
+  let id: string | null = null;
+  let latRaw: string | null = null;
+  let lonRaw: string | null = null;
+  let timestampRaw: string | null = null;
+
+  const contentType = request.headers.get('content-type') ?? '';
+  if (request.method === 'POST' && contentType.includes('application/json')) {
+    try {
+      const json = (await request.json()) as {
+        device_id?: string;
+        location?: { timestamp?: string; coords?: { latitude?: number; longitude?: number } };
+      };
+      id = json.device_id ?? null;
+      latRaw = json.location?.coords?.latitude != null ? String(json.location.coords.latitude) : null;
+      lonRaw = json.location?.coords?.longitude != null ? String(json.location.coords.longitude) : null;
+      timestampRaw = json.location?.timestamp
+        ? String(Math.floor(new Date(json.location.timestamp).getTime() / 1000))
+        : null;
+    } catch (error) {
+      context.warn('Failed to parse JSON body from Traccar Client', error);
+    }
+  } else {
+    // Legacy OsmAnd query/form format: params may be in the query string,
+    // a form-urlencoded body, or both - merge them, query string wins.
+    const params = new URLSearchParams();
+    if (request.method === 'POST') {
+      try {
+        const bodyText = await request.text();
+        for (const [key, value] of new URLSearchParams(bodyText)) {
+          params.set(key, value);
+        }
+      } catch {
+        // No/unreadable body - fine, fall back to query params below.
+      }
+    }
+    for (const [key, value] of request.query) {
+      params.set(key, value);
+    }
+    id = params.get('id') ?? params.get('deviceid');
+    latRaw = params.get('lat');
+    lonRaw = params.get('lon');
+    timestampRaw = params.get('timestamp');
+  }
+
   const token = request.query.get('token');
 
   const expectedToken = process.env.TRACK_SHARED_SECRET;
