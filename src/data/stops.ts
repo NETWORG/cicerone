@@ -71,9 +71,23 @@ export const STOPS: Stop[] = [
     category: 'start',
     coords: { lat: 50.110124, lng: 14.497942 },
     date: 'Sat, 18 Jul 2026',
-    time: '06:00',
+    time: '07:30',
     blurb:
       'The Cicerone Rallye begins. Crews assemble, engines warm up, and the route kicks off heading south-west into Austria.',
+  },
+  {
+    id: 'hangar-7',
+    name: 'Red Bull Hangar-7',
+    location: 'Salzburg, Austria',
+    country: 'AT',
+    category: 'tech-museum',
+    coords: { lat: 47.7935315, lng: 13.0077824 },
+    date: 'Sat, 18 Jul 2026',
+    time: '13:00',
+    blurb:
+      'A glass-and-steel hangar in Salzburg housing Red Bull\'s collection of historic aircraft and Formula 1 cars, with a restaurant and lounge under one curved roof. A scenic detour on the way to Grossglockner.',
+    link: 'https://www.hangar-7.com/en',
+    driveFromPrevious: { distanceKm: 388.0, durationMin: 266 },
   },
   {
     id: 'grossglockner',
@@ -83,11 +97,11 @@ export const STOPS: Stop[] = [
     category: 'cars',
     coords: { lat: 47.112985, lng: 12.830887 },
     date: 'Sat, 18 Jul 2026',
-    time: '14:30',
+    time: '15:30',
     blurb:
       'Europe\'s most spectacular alpine road - and this weekend the FAT International "Mankei" gathers hundreds of Porsches at the top. We crash the party (respectfully).',
     link: 'https://fat-international.com/en/pages/mankei',
-    driveFromPrevious: { distanceKm: 595.7, durationMin: 507 },
+    driveFromPrevious: { distanceKm: 122.3, durationMin: 109 },
   },
   {
     id: 'meranerhuette',
@@ -97,7 +111,7 @@ export const STOPS: Stop[] = [
     category: 'sleep',
     coords: { lat: 46.683272, lng: 11.281948 },
     date: 'Sat, 18 Jul 2026',
-    time: '21:00',
+    time: '22:00',
     blurb:
       "First night's camp, high above Merano. Cars cool down, boots come off, day one is in the books.",
     driveFromPrevious: { distanceKm: 253.5, durationMin: 269 },

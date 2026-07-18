@@ -6,9 +6,8 @@
  * `api/` project builds independently from the frontend.
  */
 export const VALID_CREW_IDS: ReadonlySet<string> = new Set([
-  'crew-e30',
-  'crew-e30-touring',
-  'crew-octavia',
-  'crew-astra',
-  'crew-cabrio',
+  'crew-e30-polaris',
+  'crew-megane',
+  'crew-eos',
+  'crew-ereso',
 ]);
