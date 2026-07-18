@@ -104,6 +104,19 @@ export const STOPS: Stop[] = [
     driveFromPrevious: { distanceKm: 122.3, durationMin: 109 },
   },
   {
+    id: 'staller-sattel',
+    name: 'Staller Sattel + Gasthaus Obersee',
+    location: 'St. Jakob in Defereggen, Tyrol, Austria',
+    country: 'AT',
+    category: 'pass',
+    coords: { lat: 46.8911868, lng: 12.2046279 },
+    date: 'Sat, 18 Jul 2026',
+    time: '17:30',
+    blurb:
+      'A high, narrow border crossing (2,052 m) between the Defereggental in Osttirol and the Antholzertal in South Tyrol - fewer hairpins than the big-name passes, but a proper mountain crossing all the same. Dinner stop at Gasthaus Obersee by the lake before the final push to Huben.',
+    driveFromPrevious: { distanceKm: 112.3, durationMin: 117 },
+  },
+  {
     id: 'huben',
     name: 'Huben 120 - Overnight',
     location: 'Huben 120, Tyrol, Austria',
@@ -114,7 +127,7 @@ export const STOPS: Stop[] = [
     time: '23:00',
     blurb:
       "First night's camp in Huben, Tyrol. Cars cool down, boots come off, day one is in the books. Leave by 07:40 on Sunday to reach the Stelvio Pass by 10:15.",
-    driveFromPrevious: { distanceKm: 251.0, durationMin: 220 },
+    driveFromPrevious: { distanceKm: 208.1, durationMin: 189 },
   },
   {
     id: 'stelvio',
