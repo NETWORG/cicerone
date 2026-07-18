@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import React from 'react';
 import * as LucideIcons from 'lucide-react';
-import { type LucideProps, Map as MapIcon, X, MapPinned } from 'lucide-react';
+import { type LucideProps, Map as MapIcon, X, MapPinned, Car } from 'lucide-react';
 import {
   APIProvider,
   Map,
@@ -13,8 +13,10 @@ import { STOPS, CATEGORIES, type Stop, type StopCategory } from '../data/stops';
 import { ROUTE_SEGMENTS } from '../data/route-segments';
 import { DAY_COLORS } from '../data/day-colors';
 import { ITINERARY_PHOTOS } from '../data/itinerary-photos';
+import { CREWS } from '../data/crews';
 import { googleMapsPinUrl } from '../utils/maps';
 import CategoryBadge from './CategoryBadge';
+import { useCrewPositions, type CrewPosition } from '../hooks/useCrewPositions';
 
 const API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY as string | undefined;
 
@@ -224,6 +226,62 @@ function MapLegendBelow() {
   );
 }
 
+function CrewMarker({ position, color }: { position: CrewPosition; color: string }) {
+  const [open, setOpen] = useState(false);
+  const crew = CREWS.find((c) => c.id === position.crewId);
+  const label = crew ? crew.name : position.crewId;
+  const lastUpdate = new Date(position.updatedAt);
+
+  return (
+    <>
+      <AdvancedMarker
+        position={{ lat: position.lat, lng: position.lon }}
+        onClick={() => setOpen(true)}
+        title={`${label}${position.stale ? ' (last seen a while ago)' : ''}`}
+        zIndex={999}
+      >
+        <div
+          className="w-9 h-9 rounded-full flex items-center justify-center shadow-lg border-2 border-white"
+          style={{ backgroundColor: color, opacity: position.stale ? 0.45 : 1 }}
+        >
+          <Car size={16} strokeWidth={2} color="#fff" />
+        </div>
+      </AdvancedMarker>
+
+      {open && (
+        <InfoWindow
+          position={{ lat: position.lat, lng: position.lon }}
+          onCloseClick={() => setOpen(false)}
+          pixelOffset={[0, -28]}
+        >
+          <div className="text-sm" style={{ color: '#2d2c2a' }}>
+            <p className="font-bold mb-1">{label}</p>
+            {crew && <p className="text-xs mb-1" style={{ color: '#8a8784' }}>{crew.car}</p>}
+            <p className="text-xs" style={{ color: position.stale ? '#c8102e' : '#8a8784' }}>
+              {position.stale ? 'Last seen ' : 'Updated '}
+              {lastUpdate.toLocaleTimeString()}
+            </p>
+          </div>
+        </InfoWindow>
+      )}
+    </>
+  );
+}
+
+function CrewMarkers() {
+  const positions = useCrewPositions();
+
+  return (
+    <>
+      {positions.map((position) => {
+        const idx = CREWS.findIndex((c) => c.id === position.crewId);
+        const color = DAY_COLORS[(idx === -1 ? 0 : idx) % DAY_COLORS.length];
+        return <CrewMarker key={position.crewId} position={position} color={color} />;
+      })}
+    </>
+  );
+}
+
 function MapContent() {
   const [selected, setSelected] = useState<Stop | null>(null);
 
@@ -231,6 +289,7 @@ function MapContent() {
     <>
       <RoutePolyline />
       <FitToRoute />
+      <CrewMarkers />
       {STOPS.map((stop, idx) => (
         <AdvancedMarker
           key={stop.id}
