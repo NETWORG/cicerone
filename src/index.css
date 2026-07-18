@@ -109,6 +109,15 @@ body {
   #route-map { height: 820px; }
 }
 
+/* Our CSS-based fullscreen mode (see RouteMap/useFullscreenToggle) - a
+   higher-specificity id+class rule so it overrides the fixed heights above
+   without needing an inline style. */
+#route-map.is-fullscreen {
+  height: 100dvh;
+  width: 100vw;
+  border-radius: 0;
+}
+
 /* ── Hero gradient (dark overlay over photo, uniform top/bottom) ── */
 .hero-gradient {
   background: linear-gradient(
