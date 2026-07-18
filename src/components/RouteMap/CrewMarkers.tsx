@@ -21,7 +21,7 @@ export default function CrewMarkers() {
             key={position.crewId}
             position={position}
             color={color}
-            markerRef={(marker) => setCrewMarkerRef(marker, position.crewId)}
+            markerRef={setCrewMarkerRef(position.crewId)}
           />
         );
       })}

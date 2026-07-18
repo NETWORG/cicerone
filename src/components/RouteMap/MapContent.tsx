@@ -32,7 +32,7 @@ export default function MapContent({ isFullscreen, onToggleFullscreen }: MapCont
       {STOPS.map((stop, idx) => (
         <AdvancedMarker
           key={stop.id}
-          ref={(marker) => setStopMarkerRef(marker, stop.id)}
+          ref={setStopMarkerRef(stop.id)}
           position={stop.coords}
           onClick={() => {
             setSelected(stop);
