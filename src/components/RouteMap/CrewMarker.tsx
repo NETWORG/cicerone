@@ -1,12 +1,14 @@
 import { useState } from 'react';
 import { Car, X } from 'lucide-react';
-import { AdvancedMarker, InfoWindow } from '@vis.gl/react-google-maps';
+import { AdvancedMarker, InfoWindow, useMap } from '@vis.gl/react-google-maps';
 import { CREWS } from '../../data/crews';
 import type { CrewPosition } from '../../hooks/useCrewPositions';
 import bmwLogo from '../../assets/car-logos/bmw.png';
 import renaultLogo from '../../assets/car-logos/renault.png';
 import vwLogo from '../../assets/car-logos/vw.png';
 import skodaLogo from '../../assets/car-logos/skoda.png';
+import { focusOn } from './focusOn';
+import type { Marker } from '@googlemaps/markerclusterer';
 
 const BRAND_LOGOS: Record<string, string> = {
   bmw: bmwLogo,
@@ -15,18 +17,32 @@ const BRAND_LOGOS: Record<string, string> = {
   skoda: skodaLogo,
 };
 
-export default function CrewMarker({ position, color }: { position: CrewPosition; color: string }) {
+export default function CrewMarker({
+  position,
+  color,
+  markerRef,
+}: {
+  position: CrewPosition;
+  color: string;
+  markerRef?: (marker: Marker | null) => void;
+}) {
   const [open, setOpen] = useState(false);
   const crew = CREWS.find((c) => c.id === position.crewId);
   const label = crew ? crew.name : position.crewId;
   const lastUpdate = new Date(position.updatedAt);
   const logo = crew?.brandLogo ? BRAND_LOGOS[crew.brandLogo] : undefined;
+  const map = useMap();
+  const coords = { lat: position.lat, lng: position.lon };
 
   return (
     <>
       <AdvancedMarker
-        position={{ lat: position.lat, lng: position.lon }}
-        onClick={() => setOpen(true)}
+        ref={markerRef}
+        position={coords}
+        onClick={() => {
+          setOpen(true);
+          focusOn(map, coords);
+        }}
         title={`${label}${position.stale ? ' (last seen a while ago)' : ''}`}
         zIndex={999}
       >
@@ -55,11 +71,7 @@ export default function CrewMarker({ position, color }: { position: CrewPosition
       </AdvancedMarker>
 
       {open && (
-        <InfoWindow
-          position={{ lat: position.lat, lng: position.lon }}
-          onCloseClick={() => setOpen(false)}
-          pixelOffset={[0, -28]}
-        >
+        <InfoWindow position={coords} onCloseClick={() => setOpen(false)} pixelOffset={[0, -28]}>
           <div className="bg-white rounded border border-asphalt-700 max-w-xs relative shadow-lg overflow-hidden text-asphalt-300">
             <button
               onClick={() => setOpen(false)}

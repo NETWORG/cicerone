@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { AdvancedMarker, InfoWindow } from '@vis.gl/react-google-maps';
+import { AdvancedMarker, InfoWindow, useMap } from '@vis.gl/react-google-maps';
 import { STOPS, type Stop } from '../../data/stops';
 import RoutePolyline from './RoutePolyline';
 import FitToRoute from './FitToRoute';
@@ -9,6 +9,8 @@ import MarkerPin from './MarkerPin';
 import StopInfoWindow from './StopInfoWindow';
 import MapLegend from './MapLegend';
 import CrewMarkers from './CrewMarkers';
+import { useClusterer } from './useClusterer';
+import { focusOn } from './focusOn';
 
 interface MapContentProps {
   isFullscreen: boolean;
@@ -17,6 +19,8 @@ interface MapContentProps {
 
 export default function MapContent({ isFullscreen, onToggleFullscreen }: MapContentProps) {
   const [selected, setSelected] = useState<Stop | null>(null);
+  const map = useMap();
+  const setStopMarkerRef = useClusterer(map);
 
   return (
     <>
@@ -28,8 +32,12 @@ export default function MapContent({ isFullscreen, onToggleFullscreen }: MapCont
       {STOPS.map((stop, idx) => (
         <AdvancedMarker
           key={stop.id}
+          ref={(marker) => setStopMarkerRef(marker, stop.id)}
           position={stop.coords}
-          onClick={() => setSelected(stop)}
+          onClick={() => {
+            setSelected(stop);
+            focusOn(map, stop.coords);
+          }}
           title={stop.name}
         >
           <MarkerPin stop={stop} index={idx + 1} />

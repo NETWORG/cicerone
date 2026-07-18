@@ -11,6 +11,7 @@
     "generate:route": "node scripts/generate-route-path.mjs"
   },
   "dependencies": {
+    "@googlemaps/markerclusterer": "^2.6.2",
     "@vis.gl/react-google-maps": "^1.8.3",
     "country-flag-icons": "^1.6.19",
     "lucide-react": "^1.21.0",
