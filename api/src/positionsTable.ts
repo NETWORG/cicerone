@@ -1,4 +1,4 @@
-import { TableClient } from '@azure/data-tables';
+import { TableClient, RestError } from '@azure/data-tables';
 
 const TABLE_NAME = 'positions';
 const PARTITION_KEY = 'crew';
@@ -20,7 +20,18 @@ export async function getPositionsTable(): Promise<TableClient> {
   const client = TableClient.fromConnectionString(connectionString, TABLE_NAME, {
     allowInsecureConnection: connectionString.includes('UseDevelopmentStorage=true'),
   });
-  await client.createTable();
+
+  try {
+    await client.createTable();
+  } catch (error) {
+    // The table is created once and then reused by every subsequent cold
+    // start / instance, so "already exists" is the expected steady state,
+    // not a failure - only rethrow genuinely unexpected errors.
+    const isAlreadyExists =
+      error instanceof RestError && (error.statusCode === 409 || error.code === 'TableAlreadyExists');
+    if (!isAlreadyExists) throw error;
+  }
+
   cachedClient = client;
   return client;
 }
@@ -37,3 +48,4 @@ export interface PositionEntity {
 export function positionPartitionKey(): string {
   return PARTITION_KEY;
 }
+
