@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { MarkerClusterer, type Marker } from '@googlemaps/markerclusterer';
+import { MarkerClusterer, type Marker, type Renderer } from '@googlemaps/markerclusterer';
 
 /**
  * Groups AdvancedMarker instances that overlap at the current zoom level into
@@ -13,8 +13,12 @@ import { MarkerClusterer, type Marker } from '@googlemaps/markerclusterer';
  * `ref={(m) => ...}` would get a new function identity every render, which
  * makes React detach/reattach the ref (and re-run our state update) on every
  * single render, causing an infinite update loop.
+ *
+ * An optional custom `renderer` controls what a cluster bubble looks like
+ * (e.g. the crew clusterer uses a red car-badge instead of the default
+ * blue/red dot, so it stays visually distinct from waypoint clusters).
  */
-export function useClusterer(map: google.maps.Map | null) {
+export function useClusterer(map: google.maps.Map | null, renderer?: Renderer) {
   const [markers, setMarkers] = useState<Record<string, Marker>>({});
   const clusterer = useRef<MarkerClusterer | null>(null);
   const refCallbacks = useRef<Record<string, (marker: Marker | null) => void>>({});
@@ -22,9 +26,9 @@ export function useClusterer(map: google.maps.Map | null) {
   useEffect(() => {
     if (!map) return;
     if (!clusterer.current) {
-      clusterer.current = new MarkerClusterer({ map });
+      clusterer.current = new MarkerClusterer({ map, renderer });
     }
-  }, [map]);
+  }, [map, renderer]);
 
   useEffect(() => {
     clusterer.current?.clearMarkers();

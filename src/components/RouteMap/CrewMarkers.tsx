@@ -4,12 +4,13 @@ import { CREWS } from '../../data/crews';
 import { useCrewPositions } from '../../hooks/useCrewPositions';
 import CrewMarker from './CrewMarker';
 import { useClusterer } from './useClusterer';
+import { crewClusterRenderer } from './crewClusterRenderer';
 
 /** Renders one live car marker per crew that has reported a Traccar position. */
 export default function CrewMarkers() {
   const positions = useCrewPositions();
   const map = useMap();
-  const setCrewMarkerRef = useClusterer(map);
+  const setCrewMarkerRef = useClusterer(map, crewClusterRenderer);
 
   return (
     <>

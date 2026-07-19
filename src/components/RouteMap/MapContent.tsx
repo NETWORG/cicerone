@@ -10,6 +10,7 @@ import StopInfoWindow from './StopInfoWindow';
 import MapLegend from './MapLegend';
 import CrewMarkers from './CrewMarkers';
 import { useClusterer } from './useClusterer';
+import { waypointClusterRenderer } from './waypointClusterRenderer';
 import { focusOn } from './focusOn';
 
 interface MapContentProps {
@@ -20,7 +21,7 @@ interface MapContentProps {
 export default function MapContent({ isFullscreen, onToggleFullscreen }: MapContentProps) {
   const [selected, setSelected] = useState<Stop | null>(null);
   const map = useMap();
-  const setStopMarkerRef = useClusterer(map);
+  const setStopMarkerRef = useClusterer(map, waypointClusterRenderer);
 
   return (
     <>
