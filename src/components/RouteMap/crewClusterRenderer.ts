@@ -1,4 +1,4 @@
-import type { Cluster, ClusterStats, Renderer } from '@googlemaps/markerclusterer';
+import type { Cluster, Renderer } from '@googlemaps/markerclusterer';
 
 /**
  * Car-marker clusters need to read as "cars", not blend in with the default
@@ -7,7 +7,7 @@ import type { Cluster, ClusterStats, Renderer } from '@googlemaps/markerclustere
  * echoing the individual `CrewMarker` style (white ring, drop shadow).
  */
 export const crewClusterRenderer: Renderer = {
-  render({ count, position }: Cluster, _stats: ClusterStats, map: google.maps.Map) {
+  render({ count, position }: Cluster) {
     const div = document.createElement('div');
     div.style.position = 'relative';
     div.style.width = '52px';
@@ -26,7 +26,6 @@ export const crewClusterRenderer: Renderer = {
     div.innerHTML = `🚗<span style="position:absolute;top:-4px;right:-4px;min-width:20px;height:20px;padding:0 4px;background:#1b1f23;color:#fff;font-size:11px;font-weight:700;font-family:sans-serif;border-radius:9999px;display:flex;align-items:center;justify-content:center;border:2px solid #fff;">${count}</span>`;
 
     return new google.maps.marker.AdvancedMarkerElement({
-      map,
       position,
       content: div,
       zIndex: 1000 + count,
