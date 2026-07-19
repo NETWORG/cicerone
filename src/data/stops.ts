@@ -126,8 +126,22 @@ export const STOPS: Stop[] = [
     date: 'Sat, 18 Jul 2026',
     time: '23:00',
     blurb:
-      "First night's camp in Huben, Tyrol. Cars cool down, boots come off, day one is in the books. Leave by 07:40 on Sunday to reach the Stelvio Pass by 10:15.",
+      "First night's camp in Huben, Tyrol. Cars cool down, boots come off, day one is in the books. Leave by 08:30 on Sunday, first stop Passo del Rombo before continuing to the Stelvio Pass.",
     driveFromPrevious: { distanceKm: 208.1, durationMin: 189 },
+  },
+  {
+    id: 'passo-rombo',
+    name: 'Passo del Rombo (Timmelsjoch)',
+    location: 'Timmelsjoch, South Tyrol, Italy',
+    country: 'IT',
+    category: 'pass',
+    coords: { lat: 46.9051198, lng: 11.0973166 },
+    date: 'Sun, 19 Jul 2026',
+    time: '09:15',
+    blurb:
+      "One of the highest paved border crossings in the Alps (2,509 m), linking Austria's Ötztal with South Tyrol's Passeiertal. A quick photo stop at the Timmelsjoch Experience pass museum before dropping down toward the Stelvio.",
+    link: 'https://www.timmelsjoch.com/en/',
+    driveFromPrevious: { distanceKm: 33.2, durationMin: 41 },
   },
   {
     id: 'stelvio',
@@ -137,10 +151,10 @@ export const STOPS: Stop[] = [
     category: 'pass',
     coords: { lat: 46.527266, lng: 10.452183 },
     date: 'Sun, 19 Jul 2026',
-    time: '10:15',
+    time: '11:50',
     blurb:
-      '2,758 m above sea level, 48 numbered hairpins on the Prato allo Stelvio ascent - Top Gear\'s "greatest driving road in the world." We do it early morning before the coaches arrive, then cross straight over to the Bormio side for the descent.',
-    driveFromPrevious: { distanceKm: 149.7, durationMin: 154 },
+      '2,758 m above sea level, 48 numbered hairpins on the Prato allo Stelvio ascent - Top Gear\'s "greatest driving road in the world." Coming down from the Passo del Rombo, we take on the climb, then cross straight over to the Bormio side for the descent.',
+    driveFromPrevious: { distanceKm: 125.0, durationMin: 158 },
   },
   {
     id: 'gavia',
@@ -150,7 +164,7 @@ export const STOPS: Stop[] = [
     category: 'pass',
     coords: { lat: 46.343491, lng: 10.484626 },
     date: 'Sun, 19 Jul 2026',
-    time: '11:15',
+    time: '12:55',
     blurb:
       'Down the Stelvio\'s Bormio side (34 more hairpins, wider and faster than the morning\'s climb), then straight up one of the narrowest, most exposed passes in the Alps. Two legendary climbs before lunch.',
     driveFromPrevious: { distanceKm: 47.4, durationMin: 66 },
@@ -163,7 +177,7 @@ export const STOPS: Stop[] = [
     category: 'food',
     coords: { lat: 46.066302, lng: 11.122535 },
     date: 'Sun, 19 Jul 2026',
-    time: '13:30',
+    time: '15:05',
     blurb:
       'South Tyrolean speck straight from the smokehouse - cured ham with an Alpine twist, paired with local bread and something cold to drink.',
     driveFromPrevious: { distanceKm: 112, durationMin: 131 },
@@ -176,24 +190,10 @@ export const STOPS: Stop[] = [
     category: 'sleep',
     coords: { lat: 45.73675, lng: 10.954811 },
     date: 'Sun, 19 Jul 2026',
-    time: '14:15',
+    time: '15:40',
     blurb:
       "Second night's camp, exact hotel/spot not booked yet. Somewhere in Trentino to sleep off Stelvio's 48 hairpins.",
     driveFromPrevious: { distanceKm: 45.3, durationMin: 32 },
-  },
-  {
-    id: 'lamborghini',
-    name: 'Lamborghini Factory Tour',
-    location: "Sant'Agata Bolognese, Bologna, Italy",
-    country: 'IT',
-    category: 'factory',
-    coords: { lat: 44.657641, lng: 11.123959 },
-    date: 'Mon, 20 Jul 2026',
-    time: '10:00',
-    blurb:
-      'Walk the floor where Huracáns and Uruses are hand-assembled. The museum holds prototypes, race cars, and the occasional car that "wasn\'t quite right." We appreciate the honesty.',
-    link: 'https://www.lamborghini.com/en-en/museum',
-    driveFromPrevious: { distanceKm: 159.0, durationMin: 117 },
   },
   {
     id: 'ferrari',
@@ -203,11 +203,38 @@ export const STOPS: Stop[] = [
     category: 'factory',
     coords: { lat: 44.529792, lng: 10.861412 },
     date: 'Mon, 20 Jul 2026',
-    time: '12:45',
+    time: '10:00',
     blurb:
       "Formula One trophies, road car evolution, and the factory where every Ferrari is still built. The smell of the prancing horse's birthplace - something you don't forget.",
     link: 'https://www.ferrari.com/en-EN/maranello/ferrari-museum',
-    driveFromPrevious: { distanceKm: 34.5, durationMin: 47 },
+    driveFromPrevious: { distanceKm: 155.5, durationMin: 101 },
+  },
+  {
+    id: 'lunch',
+    name: 'Ristorante Cavallino',
+    location: 'Maranello, Modena, Italy',
+    country: 'IT',
+    category: 'food',
+    coords: { lat: 44.5325578, lng: 10.8637456 },
+    date: 'Mon, 20 Jul 2026',
+    time: '11:45',
+    blurb:
+      "Lunch right across from the Ferrari factory gate - the historic canteen where Enzo Ferrari and his drivers used to eat. Then it's on to Sant'Agata for the afternoon tour.",
+    driveFromPrevious: { distanceKm: 0.4, durationMin: 2 },
+  },
+  {
+    id: 'lamborghini',
+    name: 'Lamborghini Factory Tour',
+    location: "Sant'Agata Bolognese, Bologna, Italy",
+    country: 'IT',
+    category: 'factory',
+    coords: { lat: 44.657641, lng: 11.123959 },
+    date: 'Mon, 20 Jul 2026',
+    time: '14:45',
+    blurb:
+      'Walk the floor where Huracáns and Uruses are hand-assembled. The museum holds prototypes, race cars, and the occasional car that "wasn\'t quite right." We appreciate the honesty. Booked tour slot - be on time.',
+    link: 'https://www.lamborghini.com/en-en/museum',
+    driveFromPrevious: { distanceKm: 44.3, durationMin: 42 },
   },
   {
     id: 'white-wine',
@@ -217,10 +244,10 @@ export const STOPS: Stop[] = [
     category: 'food',
     coords: { lat: 44.491693, lng: 11.19604 },
     date: 'Mon, 20 Jul 2026',
-    time: '15:15',
+    time: '16:45',
     blurb:
       "A hillside winery in the Modena countryside - we swap Lambrusco reds for their crisp whites for an afternoon.",
-    driveFromPrevious: { distanceKm: 32.1, durationMin: 34 },
+    driveFromPrevious: { distanceKm: 26.2, durationMin: 30 },
   },
   {
     id: 'pizza',
@@ -230,7 +257,7 @@ export const STOPS: Stop[] = [
     category: 'food',
     coords: { lat: 44.498865, lng: 11.340915 },
     date: 'Mon, 20 Jul 2026',
-    time: '16:45',
+    time: '18:15',
     blurb:
       'Proper Italian pizza break - thin crust, wood-fired, no apologies.',
     driveFromPrevious: { distanceKm: 13.8, durationMin: 19 },
@@ -243,7 +270,7 @@ export const STOPS: Stop[] = [
     category: 'food',
     coords: { lat: 44.683997, lng: 10.940194 },
     date: 'Mon, 20 Jul 2026',
-    time: '18:30',
+    time: '20:00',
     blurb:
       'The oldest balsamic vinegar house in Modena, running since 1605. A tasting flight that ranges from everyday drizzle to vinegar older than some countries.',
     driveFromPrevious: { distanceKm: 55.5, durationMin: 51 },
@@ -256,7 +283,7 @@ export const STOPS: Stop[] = [
     category: 'sleep',
     coords: { lat: 44.802744, lng: 10.443689 },
     date: 'Mon, 20 Jul 2026',
-    time: '19:30',
+    time: '21:00',
     blurb: 'Third night\'s camp, exact hotel/spot not booked yet.',
     driveFromPrevious: { distanceKm: 45.9, durationMin: 33 },
   },
