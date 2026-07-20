@@ -183,17 +183,17 @@ export const STOPS: Stop[] = [
     driveFromPrevious: { distanceKm: 112, durationMin: 131 },
   },
   {
-    id: 'overnight-trentino',
-    name: 'Overnight - Trentino',
-    location: 'Trentino, Italy',
+    id: 'overnight-modena',
+    name: 'Overnight - Modena (Piazza Grande)',
+    location: 'Piazza Grande, Modena, Italy',
     country: 'IT',
     category: 'sleep',
-    coords: { lat: 45.73675, lng: 10.954811 },
+    coords: { lat: 44.6459588, lng: 10.9259916 },
     date: 'Sun, 19 Jul 2026',
-    time: '15:40',
+    time: '22:30',
     blurb:
-      "Second night's camp, exact hotel/spot not booked yet. Somewhere in Trentino to sleep off Stelvio's 48 hairpins.",
-    driveFromPrevious: { distanceKm: 45.3, durationMin: 32 },
+      "Second night's camp right on Piazza Grande in Modena, under the shadow of the Duomo. A long day of Alpine passes meant a late arrival, but a great base for tomorrow's supercar factories.",
+    driveFromPrevious: { distanceKm: 188.4, durationMin: 130 },
   },
   {
     id: 'ferrari',
@@ -203,11 +203,11 @@ export const STOPS: Stop[] = [
     category: 'factory',
     coords: { lat: 44.529792, lng: 10.861412 },
     date: 'Mon, 20 Jul 2026',
-    time: '10:00',
+    time: '10:15',
     blurb:
       "Formula One trophies, road car evolution, and the factory where every Ferrari is still built. The smell of the prancing horse's birthplace - something you don't forget.",
     link: 'https://www.ferrari.com/en-EN/maranello/ferrari-museum',
-    driveFromPrevious: { distanceKm: 155.5, durationMin: 101 },
+    driveFromPrevious: { distanceKm: 22.3, durationMin: 31 },
   },
   {
     id: 'lunch',
@@ -217,7 +217,7 @@ export const STOPS: Stop[] = [
     category: 'food',
     coords: { lat: 44.5325578, lng: 10.8637456 },
     date: 'Mon, 20 Jul 2026',
-    time: '11:45',
+    time: '12:00',
     blurb:
       "Lunch right across from the Ferrari factory gate - the historic canteen where Enzo Ferrari and his drivers used to eat. Then it's on to Sant'Agata for the afternoon tour.",
     driveFromPrevious: { distanceKm: 0.4, durationMin: 2 },
