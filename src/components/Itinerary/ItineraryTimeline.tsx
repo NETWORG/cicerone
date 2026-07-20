@@ -55,10 +55,6 @@ export default function ItineraryTimeline({ onCollapse }: Props) {
           ))}
         </div>
       </div>
-
-      <div className="flex justify-center mt-10">
-        <ItineraryToggleButton direction="collapse" onClick={onCollapse} />
-      </div>
     </div>
   );
 }
