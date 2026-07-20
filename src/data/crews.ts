@@ -7,6 +7,9 @@ export interface Crew {
   carNote?: string;
   confirmed: boolean;
   brandLogo?: string;
+  /** Marker/badge color for this crew's car on the map, chosen to stay
+   *  visually distinct from the other crews at a glance. */
+  color: string;
 }
 
 export const CREWS: Crew[] = [
@@ -17,6 +20,7 @@ export const CREWS: Crew[] = [
     car: 'E30 Polaris',
     confirmed: true,
     brandLogo: 'bmw',
+    color: '#6b7280', // gray
   },
   {
     id: 'crew-megane',
@@ -25,6 +29,7 @@ export const CREWS: Crew[] = [
     car: 'Megane',
     confirmed: true,
     brandLogo: 'renault',
+    color: '#1e3a8a', // dark blue
   },
   {
     id: 'crew-eos',
@@ -33,6 +38,7 @@ export const CREWS: Crew[] = [
     car: 'Eos',
     confirmed: true,
     brandLogo: 'vw',
+    color: '#0c4a6e', // navy - distinct from Megane's dark blue
   },
   {
     id: 'crew-ereso',
@@ -41,5 +47,6 @@ export const CREWS: Crew[] = [
     car: 'Ereso',
     confirmed: true,
     brandLogo: 'skoda',
+    color: '#22d3ee', // neon blue
   },
 ];

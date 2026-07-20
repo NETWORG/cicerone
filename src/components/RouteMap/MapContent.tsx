@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { AdvancedMarker, InfoWindow, useMap } from '@vis.gl/react-google-maps';
 import { STOPS, type Stop } from '../../data/stops';
+import type { CrewPosition } from '../../hooks/useCrewPositions';
 import RoutePolyline from './RoutePolyline';
 import FitToRoute from './FitToRoute';
 import MapResizeOnFullscreenChange from './MapResizeOnFullscreenChange';
@@ -16,9 +17,18 @@ import { focusOn } from './focusOn';
 interface MapContentProps {
   isFullscreen: boolean;
   onToggleFullscreen: () => void;
+  positions: CrewPosition[];
+  selectedCrewId: string | null;
+  onSelectCrew: (id: string | null) => void;
 }
 
-export default function MapContent({ isFullscreen, onToggleFullscreen }: MapContentProps) {
+export default function MapContent({
+  isFullscreen,
+  onToggleFullscreen,
+  positions,
+  selectedCrewId,
+  onSelectCrew,
+}: MapContentProps) {
   const [selected, setSelected] = useState<Stop | null>(null);
   const map = useMap();
   const setStopMarkerRef = useClusterer(map, waypointClusterRenderer);
@@ -29,7 +39,7 @@ export default function MapContent({ isFullscreen, onToggleFullscreen }: MapCont
       <FitToRoute />
       <MapResizeOnFullscreenChange isFullscreen={isFullscreen} />
       <FullscreenButton isFullscreen={isFullscreen} onToggle={onToggleFullscreen} />
-      <CrewMarkers />
+      <CrewMarkers positions={positions} selectedCrewId={selectedCrewId} onSelectCrew={onSelectCrew} />
       {STOPS.map((stop, idx) => (
         <AdvancedMarker
           key={stop.id}
