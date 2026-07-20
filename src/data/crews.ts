@@ -15,7 +15,7 @@ export interface Crew {
 export const CREWS: Crew[] = [
   {
     id: 'crew-e30-polaris',
-    name: 'Team Polaris',
+    name: 'Polaris',
     members: 'prokop_adam & prokop_tomas',
     car: 'E30 Polaris',
     confirmed: true,
@@ -24,7 +24,7 @@ export const CREWS: Crew[] = [
   },
   {
     id: 'crew-megane',
-    name: 'Team Megane',
+    name: 'Megane',
     members: 'honzakostejn, martinrehak, zdeneksrejber & pavlicekondrej',
     car: 'Megane',
     confirmed: true,
@@ -33,7 +33,7 @@ export const CREWS: Crew[] = [
   },
   {
     id: 'crew-eos',
-    name: 'Team Eos',
+    name: 'Eos',
     members: 'Crmax & Vnown',
     car: 'Eos',
     confirmed: true,
@@ -42,7 +42,7 @@ export const CREWS: Crew[] = [
   },
   {
     id: 'crew-ereso',
-    name: 'Team Ereso',
+    name: 'Ereso',
     members: 'gump_lord & sam.handl',
     car: 'Ereso',
     confirmed: true,
