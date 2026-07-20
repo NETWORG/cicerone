@@ -57,7 +57,7 @@ export default function RouteMap() {
         </div>
 
         {!isFullscreen && (
-          <div className="flex flex-col gap-4">
+          <div className="route-map-sidebar flex flex-col gap-4 lg:min-h-0">
             <TrackerTable
               positions={positions}
               selectedCrewId={selectedCrewId}

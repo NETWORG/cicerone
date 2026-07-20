@@ -118,6 +118,20 @@ body {
   border-radius: 0;
 }
 
+/* Tracker/day-stats side column next to the map (see RouteMap/index.tsx).
+   On mobile it's just a normal stacked block (auto height). From `lg:` up,
+   where it sits beside the map as a column, it's capped to the map's
+   current height so the two stay visually aligned instead of the (much
+   longer) day-stats list spilling far past the bottom of the map - the
+   day-stats table scrolls internally instead. */
+@media (min-width: 1024px) {
+  .route-map-sidebar { height: 720px; }
+}
+
+@media (min-width: 1280px) {
+  .route-map-sidebar { height: 820px; }
+}
+
 /* ── Hero gradient (dark overlay over photo, uniform top/bottom) ── */
 .hero-gradient {
   background: linear-gradient(

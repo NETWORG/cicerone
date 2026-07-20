@@ -2,6 +2,7 @@ import { MapPin } from 'lucide-react';
 import { CREWS, type Crew } from '../../data/crews';
 import type { CrewPosition } from '../../hooks/useCrewPositions';
 import { BRAND_LOGOS } from './brandLogos';
+import { scrollToMap } from './scrollToMap';
 
 function formatRelativeTime(iso: string): string {
   const diffMin = Math.round((Date.now() - new Date(iso).getTime()) / 60_000);
@@ -10,6 +11,18 @@ function formatRelativeTime(iso: string): string {
   if (diffMin < 60) return `${diffMin} min ago`;
   const diffH = Math.round(diffMin / 60);
   return diffH === 1 ? '1 hour ago' : `${diffH} hours ago`;
+}
+
+function ShowButton({ disabled, onClick }: { disabled: boolean; onClick: () => void }) {
+  return (
+    <button
+      disabled={disabled}
+      onClick={onClick}
+      className="flex-shrink-0 inline-flex items-center gap-1 text-xs font-semibold px-2.5 py-1.5 rounded-full border border-rally-500/40 text-rally-600 hover:bg-rally-500 hover:text-white hover:border-rally-500 disabled:opacity-40 disabled:hover:bg-transparent disabled:hover:text-rally-600 disabled:cursor-not-allowed transition-colors"
+    >
+      <MapPin size={13} /> Show
+    </button>
+  );
 }
 
 interface TrackerTableProps {
@@ -26,8 +39,13 @@ export default function TrackerTable({ positions, selectedCrewId, onSelectCrew }
     position: positions.find((p) => p.crewId === crew.id) ?? null,
   }));
 
+  function handleShow(crewId: string) {
+    onSelectCrew(crewId);
+    scrollToMap();
+  }
+
   return (
-    <div className="bg-asphalt-900 border border-asphalt-700 rounded p-4">
+    <div className="flex-none bg-white border border-asphalt-700 shadow-sm rounded p-4">
       <h3 className="text-sm font-semibold uppercase tracking-wide text-asphalt-300 mb-3">
         Live tracker
       </h3>
@@ -40,7 +58,7 @@ export default function TrackerTable({ positions, selectedCrewId, onSelectCrew }
             crew={crew}
             position={position}
             selected={selectedCrewId === crew.id}
-            onSelectCrew={onSelectCrew}
+            onShow={() => handleShow(crew.id)}
           />
         ))}
       </div>
@@ -51,14 +69,14 @@ export default function TrackerTable({ positions, selectedCrewId, onSelectCrew }
           <tr className="text-left text-asphalt-500 text-xs uppercase">
             <th className="pb-2 font-medium">Crew</th>
             <th className="pb-2 font-medium">Updated</th>
-            <th className="pb-2 font-medium text-right">Map</th>
+            <th className="pb-2 font-medium text-right"></th>
           </tr>
         </thead>
         <tbody>
           {rows.map(({ crew, position }) => (
             <tr
               key={crew.id}
-              className={`border-t border-asphalt-800 ${selectedCrewId === crew.id ? 'bg-asphalt-800/50' : ''}`}
+              className={`border-t border-asphalt-800 ${selectedCrewId === crew.id ? 'bg-asphalt-900' : ''}`}
             >
               <td className="py-2">
                 <div className="flex items-center gap-2">
@@ -78,13 +96,7 @@ export default function TrackerTable({ positions, selectedCrewId, onSelectCrew }
                 )}
               </td>
               <td className="py-2 text-right">
-                <button
-                  disabled={!position}
-                  onClick={() => onSelectCrew(crew.id)}
-                  className="inline-flex items-center gap-1 text-xs font-semibold text-rally-500 hover:text-rally-400 disabled:text-asphalt-700 disabled:cursor-not-allowed"
-                >
-                  <MapPin size={14} /> Show
-                </button>
+                <ShowButton disabled={!position} onClick={() => handleShow(crew.id)} />
               </td>
             </tr>
           ))}
@@ -98,12 +110,12 @@ function TrackerCard({
   crew,
   position,
   selected,
-  onSelectCrew,
+  onShow,
 }: {
   crew: Crew;
   position: CrewPosition | null;
   selected: boolean;
-  onSelectCrew: (id: string | null) => void;
+  onShow: () => void;
 }) {
   return (
     <div
@@ -122,13 +134,7 @@ function TrackerCard({
           </p>
         </div>
       </div>
-      <button
-        disabled={!position}
-        onClick={() => onSelectCrew(crew.id)}
-        className="flex-shrink-0 inline-flex items-center gap-1 text-xs font-semibold text-rally-500 disabled:text-asphalt-700 disabled:cursor-not-allowed"
-      >
-        <MapPin size={14} /> Show
-      </button>
+      <ShowButton disabled={!position} onClick={onShow} />
     </div>
   );
 }
