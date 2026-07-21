@@ -70,14 +70,14 @@ function renderPage(mapsApiKey: string | undefined): string {
     This link is missing an upload token - ask whoever shared it with you for the full link.
   </div>
 
-  <div id="locateModal" class="modalOverlay" style="display:none">
+  <div id="locateModal" class="modalOverlay" style="display:none" role="dialog" aria-modal="true" aria-labelledby="modalTitle" aria-describedby="modalSub">
     <div class="modalCard">
-      <p class="modalTitle">Where was this taken?</p>
-      <p class="modalSub">This one didn't have a location saved in it. Tap the map (or drag the pin) to place it, or skip it.</p>
-      <div id="pickerMap" class="pickerMap"></div>
+      <p id="modalTitle" class="modalTitle">Where was this taken?</p>
+      <p id="modalSub" class="modalSub">This one didn't have a location saved in it. Tap the map (or drag the pin) to place it, or skip it.</p>
+      <div id="pickerMap" class="pickerMap" role="application" aria-label="Map for choosing the photo's location"></div>
       <div class="modalActions">
         <button id="useCurrentBtn" type="button">Use my current location</button>
-        <button id="confirmLocationBtn" type="button" class="primary">Use this location</button>
+        <button id="confirmLocationBtn" type="button" class="primary" disabled aria-disabled="true">Use this location</button>
         <button id="skipLocationBtn" type="button" class="ghost">Skip - no location</button>
       </div>
     </div>
@@ -114,7 +114,13 @@ function renderPage(mapsApiKey: string | undefined): string {
   // since EXIF always lives near the start. ---
   function readExifGps(file) {
     return new Promise((resolve) => {
-      if (file.type !== 'image/jpeg' && file.type !== 'image/jpg') return resolve(null);
+      // Skip outright only for types we know can't be JPEG (video, HEIC,
+      // PNG, etc). Some browsers/flows (iOS shares, some camera/gallery
+      // picks) leave file.type empty even for real JPEGs, so an empty type
+      // is deliberately let through here - parseExifGps() itself checks the
+      // JPEG magic bytes (SOI marker) and returns null fast for anything
+      // that isn't actually a JPEG.
+      if (file.type && file.type !== 'image/jpeg' && file.type !== 'image/jpg') return resolve(null);
       const reader = new FileReader();
       reader.onload = () => {
         try {
@@ -251,6 +257,17 @@ function renderPage(mapsApiKey: string | undefined): string {
     }
 
     const center = DEFAULT_CENTER;
+    const confirmBtn = document.getElementById('confirmLocationBtn');
+    // Require an explicit pin placement before "Use this location" is
+    // enabled, so accepting the modal's default center (Prague) can never
+    // happen by accident.
+    const markMoved = () => {
+      confirmBtn.disabled = false;
+      confirmBtn.removeAttribute('aria-disabled');
+    };
+    confirmBtn.disabled = true;
+    confirmBtn.setAttribute('aria-disabled', 'true');
+
     if (!pickerMap) {
       pickerMap = new google.maps.Map(document.getElementById('pickerMap'), {
         center: center,
@@ -259,7 +276,11 @@ function renderPage(mapsApiKey: string | undefined): string {
         mapTypeControl: false,
       });
       pickerMarker = new google.maps.Marker({ position: center, map: pickerMap, draggable: true });
-      pickerMap.addListener('click', (e) => pickerMarker.setPosition(e.latLng));
+      pickerMap.addListener('click', (e) => {
+        pickerMarker.setPosition(e.latLng);
+        markMoved();
+      });
+      pickerMarker.addListener('dragend', markMoved);
     } else {
       pickerMap.setCenter(center);
       pickerMap.setZoom(6);
@@ -269,7 +290,6 @@ function renderPage(mapsApiKey: string | undefined): string {
 
     return new Promise((resolve) => {
       const useCurrentBtn = document.getElementById('useCurrentBtn');
-      const confirmBtn = document.getElementById('confirmLocationBtn');
       const skipBtn = document.getElementById('skipLocationBtn');
 
       const cleanup = (result) => {
@@ -286,8 +306,10 @@ function renderPage(mapsApiKey: string | undefined): string {
         pickerMap.setCenter(pos);
         pickerMap.setZoom(14);
         pickerMarker.setPosition(pos);
+        markMoved();
       };
       const onConfirm = () => {
+        if (confirmBtn.disabled) return;
         const pos = pickerMarker.getPosition();
         cleanup({ lat: pos.lat(), lon: pos.lng() });
       };
