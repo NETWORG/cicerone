@@ -16,9 +16,15 @@ function formatDuration(min: number): string {
 }
 
 /** A day with no recorded drive legs (e.g. a stay-put day) reads better as
- *  "Rest day" than a confusing "0 km · 0 min". */
-function formatDayStats(distanceKm: number, durationMin: number, estimated: boolean): string {
-  if (distanceKm < 1 && durationMin < 1) return 'Rest day';
+ *  "Rest day" than a confusing "0 km · 0 min" - unless the stop data
+ *  supplies a more specific label (e.g. a spectating day). */
+function formatDayStats(
+  distanceKm: number,
+  durationMin: number,
+  estimated: boolean,
+  restDayLabel?: string
+): string {
+  if (distanceKm < 1 && durationMin < 1) return restDayLabel ?? 'Rest day';
   const suffix = estimated ? ' (est.)' : '';
   return `${formatDistance(distanceKm)} \u00b7 ${formatDuration(durationMin)}${suffix}`;
 }
@@ -62,7 +68,7 @@ export default function DayStatsTable() {
                 <p className="text-asphalt-200 text-sm">Day {day.dayIndex + 1}</p>
                 <p className="text-asphalt-500 text-xs truncate">{day.date}</p>
                 <p className="text-asphalt-400 text-xs mt-1">
-                  {formatDayStats(day.distanceKm, day.durationMin, day.estimated)}
+                  {formatDayStats(day.distanceKm, day.durationMin, day.estimated, day.restDayLabel)}
                 </p>
               </div>
               <ShowButton onClick={() => handleShow(day.date)} />
@@ -87,7 +93,7 @@ export default function DayStatsTable() {
                   <span className="block text-asphalt-500 text-xs">{day.date}</span>
                 </td>
                 <td className="py-2 text-asphalt-400">
-                  {formatDayStats(day.distanceKm, day.durationMin, day.estimated)}
+                  {formatDayStats(day.distanceKm, day.durationMin, day.estimated, day.restDayLabel)}
                 </td>
                 <td className="py-2 text-right">
                   <ShowButton onClick={() => handleShow(day.date)} />
