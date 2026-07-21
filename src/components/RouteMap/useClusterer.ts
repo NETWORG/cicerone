@@ -17,8 +17,18 @@ import { MarkerClusterer, type Marker, type Renderer } from '@googlemaps/markerc
  * An optional custom `renderer` controls what a cluster bubble looks like
  * (e.g. the crew clusterer uses a red car-badge instead of the default
  * blue/red dot, so it stays visually distinct from waypoint clusters).
+ *
+ * An optional `recomputeKey` forces the clusterer to recompute cluster
+ * groupings/positions on demand. This matters for markers that move (e.g.
+ * crew cars updating every poll): `MarkerClusterer.render()` only re-runs
+ * automatically on the map's `idle` event (zoom/pan) or when markers are
+ * added/removed, so an existing marker's `position` prop changing in place
+ * doesn't otherwise trigger a re-cluster - the cluster bubble would keep
+ * showing the marker's old position until the next zoom/pan. Pass a value
+ * that changes whenever the underlying data does (e.g. the positions array
+ * itself) to keep clusters in sync.
  */
-export function useClusterer(map: google.maps.Map | null, renderer?: Renderer) {
+export function useClusterer(map: google.maps.Map | null, renderer?: Renderer, recomputeKey?: unknown) {
   const [markers, setMarkers] = useState<Record<string, Marker>>({});
   const clusterer = useRef<MarkerClusterer | null>(null);
   const refCallbacks = useRef<Record<string, (marker: Marker | null) => void>>({});
@@ -34,6 +44,11 @@ export function useClusterer(map: google.maps.Map | null, renderer?: Renderer) {
     clusterer.current?.clearMarkers();
     clusterer.current?.addMarkers(Object.values(markers));
   }, [markers]);
+
+  useEffect(() => {
+    if (recomputeKey === undefined) return;
+    clusterer.current?.render();
+  }, [recomputeKey]);
 
   return function getMarkerRef(key: string) {
     if (!refCallbacks.current[key]) {

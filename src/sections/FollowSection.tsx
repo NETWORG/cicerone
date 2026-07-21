@@ -1,4 +1,5 @@
-import { Radio } from 'lucide-react';
+import { Radio, Camera } from 'lucide-react';
+import PhotoStream from '../components/PhotoStream';
 
 export default function FollowSection() {
   return (
@@ -11,17 +12,23 @@ export default function FollowSection() {
           WATCH THE TRIP
         </h2>
 
-        <div className="card p-10 border-dashed border-asphalt-600">
+        <div className="card p-8 sm:p-10 border-dashed border-asphalt-600">
           <Radio size={40} strokeWidth={1} className="text-asphalt-500 mx-auto mb-6" />
-          <p className="text-asphalt-100 text-lg font-medium mb-3">
-            Live map and stories - coming July 2026
+          <p className="text-asphalt-100 text-lg font-medium mb-3">Live now</p>
+          <p className="text-asphalt-400 text-sm leading-relaxed max-w-md mx-auto mb-6">
+            Scroll up for the live map. Below is the live photo/video stream, straight from the
+            crews' phones. Also check our Instagram Stories for daily highlights.
           </p>
-          <p className="text-asphalt-400 text-sm leading-relaxed max-w-md mx-auto">
-            We'll share live location during the trip. Photos and updates as things happen. Check back in July.
-          </p>
+          <a href="/photos" className="btn-primary inline-flex items-center gap-2 mb-8">
+            <Camera size={16} strokeWidth={1.75} />
+            Share a photo from your phone
+          </a>
+
+          <PhotoStream />
         </div>
       </div>
     </section>
   );
 }
+
 

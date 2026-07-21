@@ -1,5 +1,6 @@
 {
   "routes": [
-    { "route": "/tracker", "rewrite": "/api/tracker" }
+    { "route": "/tracker", "rewrite": "/api/tracker" },
+    { "route": "/photos", "rewrite": "/api/photos" }
   ]
 }

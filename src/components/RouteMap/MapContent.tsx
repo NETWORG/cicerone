@@ -10,6 +10,7 @@ import MarkerPin from './MarkerPin';
 import StopInfoWindow from './StopInfoWindow';
 import MapLegend from './MapLegend';
 import CrewMarkers from './CrewMarkers';
+import MediaMarkers from './MediaMarkers';
 import { useClusterer } from './useClusterer';
 import { waypointClusterRenderer } from './waypointClusterRenderer';
 import { focusOn } from './focusOn';
@@ -40,6 +41,7 @@ export default function MapContent({
       <MapResizeOnFullscreenChange isFullscreen={isFullscreen} />
       <FullscreenButton isFullscreen={isFullscreen} onToggle={onToggleFullscreen} />
       <CrewMarkers positions={positions} selectedCrewId={selectedCrewId} onSelectCrew={onSelectCrew} />
+      <MediaMarkers />
       {STOPS.map((stop, idx) => (
         <AdvancedMarker
           key={stop.id}

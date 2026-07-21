@@ -7,6 +7,7 @@ const NAV_ITEMS = [
   { href: '#route', label: 'Route' },
   { href: '#itinerary', label: 'Itinerary' },
   { href: '#crews', label: 'Crews' },
+  { href: '#follow', label: 'Follow' },
 ];
 
 export default function Nav() {
