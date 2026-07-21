@@ -39,6 +39,9 @@ export interface Stop {
   optional?: boolean;
   /** Drive distance/duration from the previous stop in the itinerary. */
   driveFromPrevious?: DriveLeg;
+  /** Overrides the "Rest day" label in the daily distance table for
+   *  zero-drive days that aren't actually a rest (e.g. a spectating day). */
+  restDayLabel?: string;
 }
 
 export const CATEGORIES: Record<
@@ -459,6 +462,7 @@ export const STOPS: Stop[] = [
     blurb:
       'No driving today. Gondolas up from Allemond for a morning hike in the high mountains, then over to Alpe d\'Huez to watch the actual Tour de France Stage 19 finish live, one of the legendary hairpin climbs. Gondolas back down to Allemond in the evening, cars parked the whole time.',
     driveFromPrevious: { distanceKm: 0, durationMin: 0 },
+    restDayLabel: 'Tour de France day',
   },
   {
     id: 'allemond-2',
