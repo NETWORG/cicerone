@@ -5,6 +5,7 @@
     "FUNCTIONS_WORKER_RUNTIME": "node",
     "AZURE_STORAGE_CONNECTION_STRING": "UseDevelopmentStorage=true",
     "TRACK_SHARED_SECRET": "dev-only-placeholder",
-    "MEDIA_UPLOAD_SHARED_SECRET": "dev-only-placeholder"
+    "MEDIA_UPLOAD_SHARED_SECRET": "dev-only-placeholder",
+    "GOOGLE_MAPS_API_KEY": "dev-only-placeholder"
   }
 }
