@@ -19,7 +19,7 @@ export default function MediaMarker({
       ref={markerRef}
       position={{ lat: post.lat!, lng: post.lon! }}
       onClick={onClick}
-      title="Trip photo"
+      title={post.mediaType === 'video' ? 'Trip video' : 'Trip photo'}
     >
       <div
         className="w-9 h-9 rounded-full flex items-center justify-center shadow-lg border-[3px] border-white"

@@ -19,12 +19,20 @@ export default function PhotoStream() {
         {posts.map((post) => (
           <button
             key={post.id}
+            type="button"
             onClick={() => setSelected(post)}
+            aria-label={post.mediaType === 'video' ? 'Open trip video' : 'Open trip photo'}
             className="relative aspect-square rounded-lg overflow-hidden group"
           >
             {post.mediaType === 'video' ? (
               <>
-                <video src={post.blobUrl} muted className="w-full h-full object-cover" />
+                <video
+                  src={post.blobUrl}
+                  muted
+                  preload="metadata"
+                  playsInline
+                  className="w-full h-full object-cover"
+                />
                 <span className="absolute bottom-1.5 right-1.5 w-5 h-5 rounded-full bg-black/60 flex items-center justify-center">
                   <Video size={11} strokeWidth={2} color="#fff" />
                 </span>

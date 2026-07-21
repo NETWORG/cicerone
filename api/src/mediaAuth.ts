@@ -11,8 +11,12 @@ export function checkMediaUploadToken(request: HttpRequest, context: InvocationC
   const expectedToken = process.env.MEDIA_UPLOAD_SHARED_SECRET;
 
   if (!expectedToken) {
-    context.warn('MEDIA_UPLOAD_SHARED_SECRET is not configured - accepting request without auth');
-    return true;
+    // Unlike track.ts (read/write of a low-value position ping), these are
+    // write endpoints that put arbitrary files in Blob Storage - fail
+    // closed if the secret isn't configured rather than leaving the
+    // endpoints publicly writable.
+    context.error('MEDIA_UPLOAD_SHARED_SECRET is not configured - rejecting request');
+    return false;
   }
 
   if (token !== expectedToken) {

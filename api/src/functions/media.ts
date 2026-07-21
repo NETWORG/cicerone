@@ -27,6 +27,11 @@ export async function media(request: HttpRequest, context: InvocationContext): P
 
   try {
     const table = await getMediaTable();
+    // RowKeys are generated with an inverted-timestamp prefix (see
+    // generateMediaRowKey in mediaTable.ts), so Table Storage already
+    // returns them newest-first within the partition. Stop as soon as we
+    // have `limit` posts instead of listing the whole partition and
+    // sorting in memory - keeps this cheap as uploads pile up.
     const entities = table.listEntities<MediaEntity>({
       queryOptions: { filter: `PartitionKey eq '${mediaPartitionKey()}'` },
     });
@@ -42,13 +47,12 @@ export async function media(request: HttpRequest, context: InvocationContext): P
         capturedAt: entity.capturedAt,
         uploadedAt: entity.uploadedAt,
       });
+      if (posts.length >= limit) break;
     }
-
-    posts.sort((a, b) => new Date(b.uploadedAt).getTime() - new Date(a.uploadedAt).getTime());
 
     return {
       status: 200,
-      jsonBody: posts.slice(0, limit),
+      jsonBody: posts,
       headers: { 'Cache-Control': 'no-store' },
     };
   } catch (error) {

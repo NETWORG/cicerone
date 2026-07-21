@@ -2,7 +2,7 @@ import { app, HttpRequest, HttpResponseInit, InvocationContext } from '@azure/fu
 import { checkMediaUploadToken } from '../mediaAuth';
 import { ALLOWED_CONTENT_TYPES } from '../mediaTypes';
 import { getMediaContainer } from '../mediaBlob';
-import { getMediaTable, mediaPartitionKey, type MediaEntity, type MediaType } from '../mediaTable';
+import { getMediaTable, mediaPartitionKey, generateMediaRowKey, type MediaEntity, type MediaType } from '../mediaTable';
 
 // Matches the shape produced by generateMediaBlobPath() in mediaBlob.ts,
 // e.g. "2026-07-20/photo-<uuid>.jpg". Rejecting anything else stops a
@@ -62,14 +62,19 @@ export async function mediaComplete(request: HttpRequest, context: InvocationCon
     }
 
     const now = new Date().toISOString();
+    // capturedAt comes from the client's clock and isn't validated on the
+    // way in - fall back to the server time if it's missing or doesn't
+    // parse as a real date, rather than storing/returning a value that
+    // could break date sorting/parsing downstream.
+    const capturedAtValid = capturedAt !== undefined && !Number.isNaN(new Date(capturedAt).getTime());
     const entity: MediaEntity = {
       partitionKey: mediaPartitionKey(),
-      rowKey: crypto.randomUUID(),
+      rowKey: generateMediaRowKey(),
       mediaType,
       blobPath,
       blobUrl: blockBlobClient.url,
       contentType,
-      capturedAt: capturedAt ?? now,
+      capturedAt: capturedAtValid ? capturedAt! : now,
       uploadedAt: now,
       ...(lat !== undefined && lon !== undefined ? { lat, lon } : {}),
     };

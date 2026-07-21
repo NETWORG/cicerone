@@ -13,9 +13,13 @@ export default function MediaLightbox({ post, onClose }: { post: MediaPost; onCl
       onClick={onClose}
       role="dialog"
       aria-modal="true"
+      aria-label={post.mediaType === 'video' ? 'Trip video viewer' : 'Trip photo viewer'}
     >
       <button
-        onClick={onClose}
+        onClick={(e) => {
+          e.stopPropagation();
+          onClose();
+        }}
         aria-label="Close"
         className="absolute top-4 right-4 z-10 w-9 h-9 flex items-center justify-center rounded-full bg-white/10 text-white hover:bg-white/20 transition-colors"
       >
