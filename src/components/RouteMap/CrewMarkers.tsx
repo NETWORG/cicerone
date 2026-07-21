@@ -16,7 +16,7 @@ interface CrewMarkersProps {
 /** Renders one live car marker per crew that has reported a Traccar position. */
 export default function CrewMarkers({ positions, selectedCrewId, onSelectCrew }: CrewMarkersProps) {
   const map = useMap();
-  const setCrewMarkerRef = useClusterer(map, crewClusterRenderer);
+  const setCrewMarkerRef = useClusterer(map, crewClusterRenderer, positions);
   // Read via a ref (not a dependency) so re-centering happens only when the
   // selection itself changes - not on every 10s position poll, which would
   // otherwise keep yanking the view back while someone is selected.
