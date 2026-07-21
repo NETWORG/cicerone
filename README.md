@@ -43,10 +43,11 @@ Crews can share photos/videos straight from their phones at
 direct-to-blob via a short-lived SAS URL (`POST /api/media/sas`), so file
 bytes never pass through Function compute - only a small metadata call
 (`POST /api/media/complete`) touches the API per upload. Geotagging tries
-the photo's embedded EXIF GPS first (parsed client-side, JPEG only); if a
-photo has no EXIF GPS (HEIC, screenshots, videos, or gallery picks with
-location stripped), the page shows a Google Maps picker so the crew can
-drop a pin manually, or skip location entirely. Posts publish immediately
+the photo's embedded EXIF GPS first (parsed client-side - supports both
+JPEG and HEIC/HEIF, so it works for Android and iPhone camera photos
+alike); if a photo has no EXIF GPS (screenshots, videos, or gallery picks
+with location stripped), the page shows a Google Maps picker so the crew
+can drop a pin manually, or skip location entirely. Posts publish immediately
 with no moderation step; see `api/src/functions/photos.ts`, `mediaSas.ts`,
 `mediaComplete.ts`, and `media.ts`. Requires the `MEDIA_UPLOAD_SHARED_SECRET`
 app setting (see `api/local.settings.json.example`) and, for the map picker,

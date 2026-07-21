@@ -8,11 +8,11 @@ import { app, HttpRequest, HttpResponseInit, InvocationContext } from '@azure/fu
  * mirrors trackerRedirect.ts.
  *
  * Upload flow performed entirely in the browser:
- *   1. Try to read a geotag straight out of the file's EXIF data (works
- *      for JPEGs - covers most photos picked from the library, since
- *      those weren't necessarily just taken here). If that's missing
- *      (HEIC/video/no geotag), show a Google Maps picker so the uploader
- *      can drop a pin themselves, or skip it entirely.
+ *   1. Try to read a geotag straight out of the file's EXIF data (JPEG and
+ *      HEIC/HEIF - covers Android and iPhone camera photos, plus most
+ *      library picks). If that's missing (video/screenshot/no geotag),
+ *      show a Google Maps picker so the uploader can drop a pin
+ *      themselves, or skip it entirely.
  *   2. POST /api/media/sas        -> get a short-lived write-only SAS URL
  *   3. PUT <file> to that SAS URL -> direct to Blob Storage, no compute
  *   4. POST /api/media/complete   -> record metadata (incl. location)
@@ -108,30 +108,198 @@ function renderPage(mapsApiKey: string | undefined): string {
     });
   }
 
-  // --- EXIF GPS extraction (JPEG only - covers most gallery photos; HEIC
-  // and video don't carry parseable EXIF here, so those fall through to
-  // the manual map picker below). Reads only the first slice of the file,
-  // since EXIF always lives near the start. ---
-  function readExifGps(file) {
+  // --- EXIF GPS extraction. Supports JPEG (covers Android camera photos
+  // and most gallery picks) and HEIC/HEIF (the default iPhone camera
+  // format). Video never carries parseable EXIF here, so it always falls
+  // through to the manual map picker below. ---
+  function readFileSlice(file, start, end) {
     return new Promise((resolve) => {
-      // Skip outright only for types we know can't be JPEG (video, HEIC,
-      // PNG, etc). Some browsers/flows (iOS shares, some camera/gallery
-      // picks) leave file.type empty even for real JPEGs, so an empty type
-      // is deliberately let through here - parseExifGps() itself checks the
-      // JPEG magic bytes (SOI marker) and returns null fast for anything
-      // that isn't actually a JPEG.
-      if (file.type && file.type !== 'image/jpeg' && file.type !== 'image/jpg') return resolve(null);
       const reader = new FileReader();
-      reader.onload = () => {
-        try {
-          resolve(parseExifGps(reader.result));
-        } catch {
-          resolve(null);
-        }
-      };
+      reader.onload = () => resolve(reader.result);
       reader.onerror = () => resolve(null);
-      reader.readAsArrayBuffer(file.slice(0, 262144));
+      reader.readAsArrayBuffer(file.slice(start, end));
     });
+  }
+
+  async function readExifGps(file) {
+    // Skip outright only for types we know can't be JPEG/HEIC (video,
+    // audio, etc). Some browsers/flows (iOS shares, some camera/gallery
+    // picks) leave file.type empty even for real photos, so an empty type
+    // is deliberately let through - the header-sniffing below checks the
+    // actual magic bytes and bails fast for anything that isn't a photo.
+    if (file.type && (file.type.indexOf('video/') === 0 || file.type.indexOf('audio/') === 0)) return null;
+
+    // EXIF (JPEG) and the HEIC 'meta' box both live near the start of the
+    // file, so a small head read is enough to find them.
+    const head = await readFileSlice(file, 0, 262144);
+    if (!head) return null;
+    const headView = new DataView(head);
+
+    if (headView.byteLength >= 4 && headView.getUint16(0, false) === 0xffd8) {
+      try {
+        return parseExifGps(head);
+      } catch {
+        return null;
+      }
+    }
+
+    if (headView.byteLength >= 8 && readFourCc(headView, 4) === 'ftyp') {
+      try {
+        const extent = locateHeicExifExtent(headView);
+        if (!extent) return null;
+        // The Exif item's bytes can live anywhere in the file (typically
+        // inside 'mdat', after the image data), so fetch just that small,
+        // precisely-located range rather than reading the whole photo.
+        const exifBuffer = await readFileSlice(file, extent.offset, extent.offset + extent.length);
+        if (!exifBuffer) return null;
+        return parseHeicExifPayload(new DataView(exifBuffer));
+      } catch {
+        return null;
+      }
+    }
+
+    return null;
+  }
+
+  function readFourCc(view, offset) {
+    return String.fromCharCode(view.getUint8(offset), view.getUint8(offset + 1), view.getUint8(offset + 2), view.getUint8(offset + 3));
+  }
+
+  // --- Minimal ISOBMFF box walker, just enough to locate the 'Exif' item
+  // inside a HEIC/HEIF container's 'meta' box (via its 'iinf'/'iloc'
+  // sub-boxes) and hand back the file byte range holding that item's data. ---
+  function readIsoBoxes(view, start, end) {
+    const boxes = [];
+    let offset = start;
+    while (offset + 8 <= end) {
+      const size = view.getUint32(offset, false);
+      if (size === 1) break; // 64-bit box size - not needed for phone photos
+      const boxEnd = size === 0 ? end : offset + size;
+      if (boxEnd <= offset || boxEnd > end) break;
+      boxes.push({ type: readFourCc(view, offset + 4), start: offset, end: boxEnd, dataStart: offset + 8 });
+      offset = boxEnd;
+    }
+    return boxes;
+  }
+
+  function findIsoBox(boxes, type) {
+    for (let i = 0; i < boxes.length; i++) {
+      if (boxes[i].type === type) return boxes[i];
+    }
+    return null;
+  }
+
+  function findHeicExifItemId(view, iinfBox) {
+    const version = view.getUint8(iinfBox.dataStart);
+    const offset = iinfBox.dataStart + 4 + (version === 0 ? 2 : 4); // skip version+flags, entry_count
+    const infeBoxes = readIsoBoxes(view, offset, iinfBox.end);
+    for (let i = 0; i < infeBoxes.length; i++) {
+      const infe = infeBoxes[i];
+      if (infe.type !== 'infe') continue;
+      const infeVersion = view.getUint8(infe.dataStart);
+      let p = infe.dataStart + 4; // skip version+flags
+      let itemId;
+      if (infeVersion >= 3) {
+        itemId = view.getUint32(p, false);
+        p += 4;
+      } else {
+        itemId = view.getUint16(p, false);
+        p += 2;
+      }
+      p += 2; // item_protection_index
+      if (p + 4 > infe.end) continue;
+      if (readFourCc(view, p) === 'Exif') return itemId;
+    }
+    return null;
+  }
+
+  function findHeicItemExtent(view, ilocBox, targetItemId) {
+    let offset = ilocBox.dataStart;
+    const version = view.getUint8(offset);
+    offset += 4; // skip version+flags
+    const sizesByte1 = view.getUint8(offset);
+    offset += 1;
+    const offsetSize = sizesByte1 >> 4;
+    const lengthSize = sizesByte1 & 0x0f;
+    const sizesByte2 = view.getUint8(offset);
+    offset += 1;
+    const baseOffsetSize = sizesByte2 >> 4;
+    const indexSize = sizesByte2 & 0x0f;
+    let itemCount;
+    if (version < 2) {
+      itemCount = view.getUint16(offset, false);
+      offset += 2;
+    } else {
+      itemCount = view.getUint32(offset, false);
+      offset += 4;
+    }
+
+    const readUint = (size) => {
+      let value = 0;
+      for (let i = 0; i < size; i++) {
+        value = value * 256 + view.getUint8(offset);
+        offset += 1;
+      }
+      return value;
+    };
+
+    for (let i = 0; i < itemCount; i++) {
+      let itemId;
+      if (version < 2) {
+        itemId = view.getUint16(offset, false);
+        offset += 2;
+      } else {
+        itemId = view.getUint32(offset, false);
+        offset += 4;
+      }
+      let constructionMethod = 0;
+      if (version === 1 || version === 2) {
+        constructionMethod = view.getUint16(offset, false) & 0x0f;
+        offset += 2;
+      }
+      offset += 2; // data_reference_index
+      const baseOffset = readUint(baseOffsetSize);
+      const extentCount = view.getUint16(offset, false);
+      offset += 2;
+      let firstExtent = null;
+      for (let e = 0; e < extentCount; e++) {
+        if ((version === 1 || version === 2) && indexSize > 0) readUint(indexSize);
+        const extentOffset = readUint(offsetSize);
+        const extentLength = readUint(lengthSize);
+        if (!firstExtent) firstExtent = { offset: baseOffset + extentOffset, length: extentLength, constructionMethod: constructionMethod };
+      }
+      if (itemId === targetItemId) return firstExtent;
+    }
+    return null;
+  }
+
+  function locateHeicExifExtent(view) {
+    const topBoxes = readIsoBoxes(view, 0, view.byteLength);
+    const metaBox = findIsoBox(topBoxes, 'meta');
+    if (!metaBox) return null;
+    const metaChildren = readIsoBoxes(view, metaBox.dataStart + 4, metaBox.end); // +4 skips meta's own version+flags
+    const iinfBox = findIsoBox(metaChildren, 'iinf');
+    const ilocBox = findIsoBox(metaChildren, 'iloc');
+    if (!iinfBox || !ilocBox) return null;
+    const exifItemId = findHeicExifItemId(view, iinfBox);
+    if (exifItemId == null) return null;
+    const extent = findHeicItemExtent(view, ilocBox, exifItemId);
+    // construction_method 1 ("idat", data embedded inside meta itself) is
+    // rare for Exif items in practice - bail rather than risk reading the
+    // wrong bytes. Falls through to the manual picker like any other miss.
+    if (!extent || extent.constructionMethod !== 0) return null;
+    return extent;
+  }
+
+  function parseHeicExifPayload(view) {
+    if (view.byteLength < 8) return null;
+    // Per the HEIF spec, an 'Exif' item's data starts with a 4-byte
+    // big-endian offset to the actual TIFF header (accounting for the
+    // "Exif\0\0" signature that usually precedes it, offset 6).
+    const tiffHeaderOffset = view.getUint32(0, false);
+    const tiffStart = 4 + tiffHeaderOffset;
+    if (tiffStart + 8 > view.byteLength) return null;
+    return parseTiff(view, tiffStart);
   }
 
   function readIfd(view, tiffStart, ifdOffset, little) {
