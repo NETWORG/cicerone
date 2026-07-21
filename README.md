@@ -42,8 +42,13 @@ Crews can share photos/videos straight from their phones at
 `cicerallye.com/photos?token=<MEDIA_UPLOAD_SHARED_SECRET>`. Uploads go
 direct-to-blob via a short-lived SAS URL (`POST /api/media/sas`), so file
 bytes never pass through Function compute - only a small metadata call
-(`POST /api/media/complete`) touches the API per upload. Geotagging comes
-from the browser's Geolocation API at upload time, not EXIF. Posts publish
-immediately with no moderation step; see `api/src/functions/photos.ts`,
-`mediaSas.ts`, `mediaComplete.ts`, and `media.ts`. Requires the
-`MEDIA_UPLOAD_SHARED_SECRET` app setting (see `api/local.settings.json.example`).
+(`POST /api/media/complete`) touches the API per upload. Geotagging tries
+the photo's embedded EXIF GPS first (parsed client-side, JPEG only); if a
+photo has no EXIF GPS (HEIC, screenshots, videos, or gallery picks with
+location stripped), the page shows a Google Maps picker so the crew can
+drop a pin manually, or skip location entirely. Posts publish immediately
+with no moderation step; see `api/src/functions/photos.ts`, `mediaSas.ts`,
+`mediaComplete.ts`, and `media.ts`. Requires the `MEDIA_UPLOAD_SHARED_SECRET`
+app setting (see `api/local.settings.json.example`) and, for the map picker,
+a `GOOGLE_MAPS_API_KEY` app setting (same key already used by the frontend
+bundle, HTTP-referrer restricted).
