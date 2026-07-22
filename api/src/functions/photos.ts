@@ -46,11 +46,17 @@ function renderPage(mapsApiKey: string | undefined): string {
   .thumbs div { position: relative; aspect-ratio: 1; border-radius: 8px; overflow: hidden; background: #14171a; font-size: .7rem; color: #a6adb4; display: flex; align-items: center; justify-content: center; }
   .thumbs img, .thumbs video { width: 100%; height: 100%; object-fit: cover; }
   .warn { color: #e0313a; font-size: .8rem; margin-top: 10px; }
+  .srOnly { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; }
   .modalOverlay { position: fixed; inset: 0; background: rgba(0,0,0,.75); display: flex; align-items: center; justify-content: center; padding: 16px; z-index: 1000; }
   .modalCard { background: #1b1f23; border: 1px solid #2a2f34; border-radius: 12px; padding: 18px; max-width: 420px; width: 100%; text-align: left; }
   .modalTitle { margin: 0 0 4px; font-weight: 600; }
   .modalSub { margin: 0 0 12px; font-size: .8rem; color: #a6adb4; line-height: 1.4; }
   .pickerMap { width: 100%; height: 220px; border-radius: 8px; margin-bottom: 12px; background: #14171a; }
+  .placeSearch { width: 100%; padding: 10px; margin-bottom: 10px; border-radius: 8px; border: 1px solid #3a4046; background: #14171a; color: #e6e8ea; font-size: .9rem; box-sizing: border-box; }
+  .placeSearch::placeholder { color: #75808a; }
+  /* Google's Autocomplete dropdown is appended to <body>, not the modal -
+     force it above the modal overlay so results are actually visible. */
+  .pac-container { z-index: 1001; }
   .modalActions { display: flex; flex-direction: column; gap: 8px; }
   .modalActions button { padding: 10px; border-radius: 8px; border: 1px solid #3a4046; background: #14171a; color: #e6e8ea; font-weight: 600; font-size: .9rem; cursor: pointer; }
   .modalActions button.primary { background: #e0313a; border-color: #e0313a; color: #fff; }
@@ -73,7 +79,9 @@ function renderPage(mapsApiKey: string | undefined): string {
   <div id="locateModal" class="modalOverlay" style="display:none" role="dialog" aria-modal="true" aria-labelledby="modalTitle" aria-describedby="modalSub">
     <div class="modalCard">
       <p id="modalTitle" class="modalTitle">Where was this taken?</p>
-      <p id="modalSub" class="modalSub">This one didn't have a location saved in it. Tap the map (or drag the pin) to place it, or skip it.</p>
+      <p id="modalSub" class="modalSub">This one didn't have a location saved in it. Search for a place, tap the map, or drag the pin - or skip it. Tip: picking from your iPhone's gallery? Tap "Options" at the top before choosing the photo and turn on "Location" to keep the geotag next time.</p>
+      <label for="placeSearchInput" class="srOnly">Search for a place</label>
+      <input id="placeSearchInput" type="text" class="placeSearch" placeholder="Search for a place or address..." autocomplete="off" />
       <div id="pickerMap" class="pickerMap" role="application" aria-label="Map for choosing the photo's location"></div>
       <div class="modalActions">
         <button id="useCurrentBtn" type="button">Use my current location</button>
@@ -400,7 +408,7 @@ function renderPage(mapsApiKey: string | undefined): string {
     mapsLoadPromise = new Promise((resolve, reject) => {
       if (window.google && window.google.maps) return resolve();
       const script = document.createElement('script');
-      script.src = 'https://maps.googleapis.com/maps/api/js?key=' + encodeURIComponent(MAPS_API_KEY);
+      script.src = 'https://maps.googleapis.com/maps/api/js?key=' + encodeURIComponent(MAPS_API_KEY) + '&libraries=places';
       script.onload = () => resolve();
       script.onerror = () => reject(new Error('Failed to load Google Maps'));
       document.head.appendChild(script);
@@ -410,6 +418,7 @@ function renderPage(mapsApiKey: string | undefined): string {
 
   let pickerMap = null;
   let pickerMarker = null;
+  let placeAutocomplete = null;
 
   async function openLocationPicker() {
     if (!MAPS_API_KEY) return null;
@@ -426,6 +435,7 @@ function renderPage(mapsApiKey: string | undefined): string {
 
     const center = DEFAULT_CENTER;
     const confirmBtn = document.getElementById('confirmLocationBtn');
+    const searchInput = document.getElementById('placeSearchInput');
     // Require an explicit pin placement before "Use this location" is
     // enabled, so accepting the modal's default center (Prague) can never
     // happen by accident.
@@ -435,6 +445,7 @@ function renderPage(mapsApiKey: string | undefined): string {
     };
     confirmBtn.disabled = true;
     confirmBtn.setAttribute('aria-disabled', 'true');
+    searchInput.value = '';
 
     if (!pickerMap) {
       pickerMap = new google.maps.Map(document.getElementById('pickerMap'), {
@@ -449,6 +460,22 @@ function renderPage(mapsApiKey: string | undefined): string {
         markMoved();
       });
       pickerMarker.addListener('dragend', markMoved);
+
+      // Lets the crew type a place name/address instead of hunting for it
+      // on a tiny phone map - the most reliable way to set a location when
+      // iOS has already stripped the photo's own GPS data.
+      placeAutocomplete = new google.maps.places.Autocomplete(searchInput, {
+        fields: ['geometry'],
+      });
+      placeAutocomplete.addListener('place_changed', () => {
+        const place = placeAutocomplete.getPlace();
+        const location = place && place.geometry && place.geometry.location;
+        if (!location) return;
+        pickerMap.setCenter(location);
+        pickerMap.setZoom(15);
+        pickerMarker.setPosition(location);
+        markMoved();
+      });
     } else {
       pickerMap.setCenter(center);
       pickerMap.setZoom(6);
