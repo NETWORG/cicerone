@@ -213,19 +213,6 @@ export const STOPS: Stop[] = [
     driveFromPrevious: { distanceKm: 22.3, durationMin: 31 },
   },
   {
-    id: 'lunch',
-    name: 'Ristorante Cavallino',
-    location: 'Maranello, Modena, Italy',
-    country: 'IT',
-    category: 'food',
-    coords: { lat: 44.5325578, lng: 10.8637456 },
-    date: 'Mon, 20 Jul 2026',
-    time: '12:00',
-    blurb:
-      "Lunch right across from the Ferrari factory gate - the historic canteen where Enzo Ferrari and his drivers used to eat. Then it's off to San Cesario for a hypercar detour before Sant'Agata.",
-    driveFromPrevious: { distanceKm: 0.4, durationMin: 2 },
-  },
-  {
     id: 'pagani',
     name: 'Museo Horacio Pagani',
     location: 'San Cesario sul Panaro, Modena, Italy',
@@ -237,7 +224,7 @@ export const STOPS: Stop[] = [
     blurb:
       "Museum and atelier at the Pagani factory - Zonda and Huayra hypercars up close, plus the story of Horacio Pagani's carbon-fibre obsession. A quick detour on the way to Sant'Agata.",
     link: 'https://www.pagani.com/pagani-museo-e-atelier/',
-    driveFromPrevious: { distanceKm: 23.4, durationMin: 28 },
+    driveFromPrevious: { distanceKm: 23.7, durationMin: 30 },
   },
   {
     id: 'lamborghini',
