@@ -295,31 +295,18 @@ export const STOPS: Stop[] = [
     driveFromPrevious: { distanceKm: 60.3, durationMin: 50 },
   },
   {
-    id: 'parmigiano',
-    name: 'Museo del Parmigiano-Reggiano',
-    location: 'Soragna, Parma, Italy',
+    id: 'agrinascente',
+    name: 'Silvano Romani | Agrinascente',
+    location: 'Via Federico Fellini, 22/b, 43036 Fidenza PR, Italy',
     country: 'IT',
     category: 'food',
-    coords: { lat: 44.927383, lng: 10.119963 },
+    coords: { lat: 44.8845354, lng: 10.0861353 },
     date: 'Tue, 21 Jul 2026',
-    time: '12:45',
+    time: '15:00',
     blurb:
-      "The king of cheeses in its homeland. This museum tracks 800 years of Parmigiano-Reggiano - how it's made, aged, and why the wheels are still cracked open by hand.",
-    link: 'https://www.museidelfood.it/',
-    driveFromPrevious: { distanceKm: 83.7, durationMin: 62 },
-  },
-  {
-    id: 'prosciutto',
-    name: 'Museo del Prosciutto e dei Salumi di Parma',
-    location: 'Langhirano, Parma, Italy',
-    country: 'IT',
-    category: 'food',
-    coords: { lat: 44.61197, lng: 10.268382 },
-    date: 'Tue, 21 Jul 2026',
-    time: '14:45',
-    blurb:
-      'Deep in prosciutto country. The museum walks through centuries of curing tradition in the hills above Parma - then lets us taste the results.',
-    driveFromPrevious: { distanceKm: 59.9, durationMin: 61 },
+      "Skipped the Parmigiano and prosciutto museums and went straight for the good stuff instead - a proper deli right off the A1 at Fidenza, stocked with Parmigiano-Reggiano, Prosciutto di Parma, Culatello di Zibello and more. Stocked up on both.",
+    link: 'https://agrinascente.it/',
+    driveFromPrevious: { distanceKm: 72.0, durationMin: 48 },
   },
   {
     id: 'trackday',
@@ -333,7 +320,7 @@ export const STOPS: Stop[] = [
     blurb:
       'Our cars get a proper race circuit for an afternoon. No timekeeping, no pressure - just seat time on real asphalt.',
     optional: true,
-    driveFromPrevious: { distanceKm: 146.0, durationMin: 118 },
+    driveFromPrevious: { distanceKm: 99.7, durationMin: 75 },
   },
   {
     id: 'overnight-genoa',
