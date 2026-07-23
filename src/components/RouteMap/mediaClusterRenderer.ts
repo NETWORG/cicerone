@@ -7,12 +7,16 @@ type TaggedMarker = Marker & { __mediaPost?: MediaPost };
 function pickThumbnailPost(markers: readonly Marker[]): MediaPost | undefined {
   const posts = markers.map((m) => (m as TaggedMarker).__mediaPost).filter((p): p is MediaPost => !!p);
   if (posts.length === 0) return undefined;
-  // Apple Photos-style: prefer a random photo so the cluster bubble feels
-  // like "one of your photos", falling back to a random video only if the
-  // cluster has no photos at all.
+  // Apple Photos-style: prefer a photo so the cluster bubble feels like
+  // "one of your photos", falling back to a video only if the cluster has
+  // no photos at all. Pick deterministically (newest first, by `id` -
+  // rowKeys are generated with an inverted timestamp prefix so they sort
+  // newest-first ascending) rather than randomly, so the same cluster
+  // doesn't flicker between different thumbnails on every pan/zoom
+  // re-render.
   const photos = posts.filter((p) => p.mediaType === 'photo');
   const pool = photos.length > 0 ? photos : posts;
-  return pool[Math.floor(Math.random() * pool.length)];
+  return [...pool].sort((a, b) => (a.id < b.id ? -1 : a.id > b.id ? 1 : 0))[0];
 }
 
 /**
@@ -34,7 +38,11 @@ export const mediaClusterRenderer: Renderer = {
     div.title = `${count} photos/videos nearby`;
 
     const post = pickThumbnailPost(markers ?? []);
-    const thumbSrc = post ? post.thumbUrl ?? post.blobUrl : undefined;
+    // thumbUrl is always a JPEG. For photos it's safe to fall back to the
+    // full-size blobUrl (still an image); for videos without a generated
+    // thumbnail, blobUrl points at a video file, which would break an
+    // <img> - fall through to the generic badge instead.
+    const thumbSrc = post ? post.thumbUrl ?? (post.mediaType === 'photo' ? post.blobUrl : undefined) : undefined;
     if (thumbSrc) {
       const img = document.createElement('img');
       img.src = thumbSrc;

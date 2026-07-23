@@ -782,9 +782,15 @@ function renderPage(mapsApiKey: string | undefined, mediaUploadToken: string | u
 
     const thumb = document.createElement('div');
     thumb.className = 'mineThumb';
-    thumb.innerHTML = post.mediaType === 'video'
-      ? '<video src="' + post.blobUrl + '" muted></video>'
-      : '<img src="' + post.blobUrl + '" />';
+    // Prefer the small generated thumbnail - no reason to pull a
+    // multi-MB original just to render a 64px preview here. Videos
+    // without a generated thumbnail (older posts) still need the
+    // <video> element since thumbUrl would be undefined for them.
+    thumb.innerHTML = post.thumbUrl
+      ? '<img src="' + post.thumbUrl + '" />'
+      : post.mediaType === 'video'
+        ? '<video src="' + post.blobUrl + '" muted></video>'
+        : '<img src="' + post.blobUrl + '" />';
 
     const body = document.createElement('div');
     body.className = 'mineBody';

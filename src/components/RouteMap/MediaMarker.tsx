@@ -15,7 +15,11 @@ export default function MediaMarker({
   // Prefer the small client-generated thumbnail (see photos.ts) so map
   // pins never have to download a multi-MB original just to show a
   // ~36px circle. Older posts (or the rare failed-generation post) fall
-  // back to the full-size blobUrl - heavier, but still renders.
+  // back to the full-size blobUrl - heavier, but still renders. For
+  // videos, thumbUrl is always a JPEG frame, so only fall back to a
+  // <video> element (playing blobUrl) when no thumbnail was generated -
+  // never render a video URL through an <img>, or vice versa.
+  const hasThumb = !!post.thumbUrl;
   const thumbSrc = post.thumbUrl ?? post.blobUrl;
 
   return (
@@ -26,7 +30,7 @@ export default function MediaMarker({
       title={post.mediaType === 'video' ? 'Trip video' : 'Trip photo'}
     >
       <div className="relative w-9 h-9 rounded-full shadow-lg border-[3px] border-white overflow-hidden bg-gray-300">
-        {post.mediaType === 'video' ? (
+        {post.mediaType === 'video' && !hasThumb ? (
           <video src={thumbSrc} muted preload="metadata" playsInline className="w-full h-full object-cover" />
         ) : (
           <img src={thumbSrc} alt="" className="w-full h-full object-cover" />

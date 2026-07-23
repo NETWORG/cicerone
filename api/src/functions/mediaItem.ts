@@ -68,6 +68,9 @@ export async function mediaItemDelete(request: HttpRequest, context: InvocationC
   try {
     const container = await getMediaContainer();
     await container.getBlockBlobClient(entity.blobPath).deleteIfExists();
+    if (entity.thumbBlobPath) {
+      await container.getBlockBlobClient(entity.thumbBlobPath).deleteIfExists();
+    }
     await table.deleteEntity(mediaPartitionKey(), id);
     return { status: 204 };
   } catch (error) {
