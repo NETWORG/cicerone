@@ -5,7 +5,7 @@ import MediaLightbox from '../MediaLightbox';
 
 /**
  * Compact preview of the live photo stream, shown next to the map so
- * visitors don't have to scroll all the way down to `/photos` /the
+ * visitors don't have to scroll all the way down to `/photos` / the
  * `FollowSection` grid to see what's just been uploaded. Shows the most
  * recent thumbnails; tapping one opens the same shared `MediaLightbox`
  * used everywhere else, seeded with the *full* posts list (not just this
@@ -42,13 +42,14 @@ export default function PhotoStreamTile() {
           >
             {post.mediaType === 'video' ? (
               <>
-                <video
-                  src={post.thumbUrl ?? post.blobUrl}
-                  muted
-                  preload="metadata"
-                  playsInline
-                  className="w-full h-full object-cover"
-                />
+                {post.thumbUrl ? (
+                  // thumbUrl is always a generated JPEG frame - render as an
+                  // <img>, not a <video src>, which would fail to load/play
+                  // for most posts (see MediaMarker.tsx for the same rule).
+                  <img src={post.thumbUrl} alt="Trip video thumbnail" loading="lazy" className="w-full h-full object-cover" />
+                ) : (
+                  <video src={post.blobUrl} muted preload="metadata" playsInline className="w-full h-full object-cover" />
+                )}
                 <span className="absolute bottom-1 right-1 w-4 h-4 rounded-full bg-black/60 flex items-center justify-center">
                   <Video size={9} strokeWidth={2} color="#fff" />
                 </span>

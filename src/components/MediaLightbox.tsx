@@ -22,15 +22,21 @@ export default function MediaLightbox({
   onClose: () => void;
 }) {
   const [index, setIndex] = useState(initialIndex);
-  const post = posts[index];
+  // `index` is only set from `initialIndex` on mount; if a caller swaps
+  // `posts` while this stays open (e.g. `PhotoStreamTile` re-fetching) and
+  // the previous index is now out of range, clamp instead of indexing past
+  // the end - otherwise `post` becomes undefined and the whole overlay
+  // silently disappears (see the early return below).
+  const safeIndex = posts.length === 0 ? 0 : Math.min(index, posts.length - 1);
+  const post = posts[safeIndex];
   const canNavigate = posts.length > 1;
 
   function goPrev() {
-    setIndex((i) => (i - 1 + posts.length) % posts.length);
+    setIndex((i) => (Math.min(i, posts.length - 1) - 1 + posts.length) % posts.length);
   }
 
   function goNext() {
-    setIndex((i) => (i + 1) % posts.length);
+    setIndex((i) => (Math.min(i, posts.length - 1) + 1) % posts.length);
   }
 
   useEffect(() => {
@@ -129,7 +135,7 @@ export default function MediaLightbox({
 
       {canNavigate && (
         <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-10 text-white/80 text-xs font-medium bg-black/60 rounded-full px-3 py-1">
-          {index + 1} / {posts.length}
+          {safeIndex + 1} / {posts.length}
         </div>
       )}
     </div>,

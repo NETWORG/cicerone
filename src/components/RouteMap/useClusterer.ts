@@ -53,10 +53,16 @@ export function useClusterer(
   }, [map, renderer]);
 
   useEffect(() => {
+    // Also depend on `map`: if the map instance is initially null, the
+    // clusterer above isn't created until `map` becomes available, but this
+    // effect previously only re-ran on `onClusterClick` changes - so on a
+    // handler-provided-before-map-ready render order, `clusterer.current`
+    // would still be null here and the assignment would silently never
+    // happen, leaving cluster clicks on the default zoom-to-split behavior.
     if (clusterer.current && onClusterClick) {
       clusterer.current.onClusterClick = onClusterClick;
     }
-  }, [onClusterClick]);
+  }, [map, onClusterClick]);
 
   useEffect(() => {
     clusterer.current?.clearMarkers();
