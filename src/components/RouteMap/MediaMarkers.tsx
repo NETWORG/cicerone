@@ -21,7 +21,13 @@ export default function MediaMarkers() {
           key={post.id}
           post={post}
           onClick={() => setSelected(post)}
-          markerRef={setMediaMarkerRef(post.id)}
+          markerRef={(marker) => {
+            // Tag the raw marker instance with its post so the cluster
+            // renderer (which only receives marker instances, not our
+            // React props) can pick a thumbnail to show on the bubble.
+            if (marker) Object.assign(marker, { __mediaPost: post });
+            setMediaMarkerRef(post.id)(marker);
+          }}
         />
       ))}
       {selected && <MediaLightbox post={selected} onClose={() => setSelected(null)} />}

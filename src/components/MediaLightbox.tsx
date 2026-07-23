@@ -21,7 +21,7 @@ export default function MediaLightbox({ post, onClose }: { post: MediaPost; onCl
           onClose();
         }}
         aria-label="Close"
-        className="absolute top-4 right-4 z-10 w-9 h-9 flex items-center justify-center rounded-full bg-white/10 text-white hover:bg-white/20 transition-colors"
+        className="absolute top-4 right-4 z-10 w-11 h-11 flex items-center justify-center rounded-full bg-black/70 text-white ring-1 ring-white/30 hover:bg-black/90 transition-colors"
       >
         <X size={22} strokeWidth={1.5} />
       </button>
