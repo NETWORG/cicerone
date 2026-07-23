@@ -17,16 +17,20 @@ import { app, HttpRequest, HttpResponseInit, InvocationContext } from '@azure/fu
  *   3. PUT <file> to that SAS URL -> direct to Blob Storage, no compute
  *   4. POST /api/media/complete   -> record metadata (incl. location)
  *
- * The shared upload token is read from this page's own `?token=` query
- * param and forwarded to the two API calls above - it is not looked up or
- * embedded server-side here.
+ * The shared upload token is embedded server-side (same pattern as the
+ * Maps API key below) rather than read from a `?token=` query param - so
+ * the shareable link is just a plain `cicerallye.com/photos`, nothing to
+ * copy wrong or lose. This is the same protection level as before (the
+ * secret was already visible in any shared link); it just isn't part of
+ * the URL anymore.
  */
-function renderPage(mapsApiKey: string | undefined): string {
+function renderPage(mapsApiKey: string | undefined, mediaUploadToken: string | undefined): string {
   // The Maps JS API key is already public (same one baked into the main
   // site's bundle, restricted by HTTP referrer) - safe to inline here too.
   // It's only used to lazy-load the picker when a photo has no geotag, so
   // most uploads (which have EXIF GPS) never trigger a Maps load at all.
   const mapsKeyLiteral = JSON.stringify(mapsApiKey ?? '');
+  const mediaTokenLiteral = JSON.stringify(mediaUploadToken ?? '');
 
   return `<!DOCTYPE html>
 <html lang="en">
@@ -72,14 +76,10 @@ function renderPage(mapsApiKey: string | undefined): string {
     <div id="status" class="status"></div>
     <div id="thumbs" class="thumbs"></div>
   </div>
-  <div id="tokenWarning" class="warn" style="display:none">
-    This link is missing an upload token - ask whoever shared it with you for the full link.
-  </div>
-
   <div id="locateModal" class="modalOverlay" style="display:none" role="dialog" aria-modal="true" aria-labelledby="modalTitle" aria-describedby="modalSub">
     <div class="modalCard">
       <p id="modalTitle" class="modalTitle">Where was this taken?</p>
-      <p id="modalSub" class="modalSub">This one didn't have a location saved in it. Search for a place, tap the map, or drag the pin - or skip it. Tip: picking from your iPhone's gallery? Tap "Options" at the top before choosing the photo and turn on "Location" to keep the geotag next time.</p>
+      <p id="modalSub" class="modalSub">This one didn't have a location saved in it. Search for a place, tap the map, or drag the pin - or skip it. Tip: picking from your iPhone's gallery? Tap "Options" at the top before choosing the photo and turn on "Location" - though iPhones can still drop it for HEIC photos even with that on. For the most reliable geotagging, switch Settings &gt; Camera &gt; Formats to "Most Compatible" (JPEG).</p>
       <label for="placeSearchInput" class="srOnly">Search for a place</label>
       <input id="placeSearchInput" type="text" class="placeSearch" placeholder="Search for a place or address..." autocomplete="off" />
       <div id="pickerMap" class="pickerMap" role="application" aria-label="Map for choosing the photo's location"></div>
@@ -92,9 +92,7 @@ function renderPage(mapsApiKey: string | undefined): string {
   </div>
 
 <script>
-  const params = new URLSearchParams(location.search);
-  const token = params.get('token') || '';
-  if (!token) document.getElementById('tokenWarning').style.display = 'block';
+  const MEDIA_UPLOAD_TOKEN = ${mediaTokenLiteral};
 
   const statusEl = document.getElementById('status');
   const thumbsEl = document.getElementById('thumbs');
@@ -522,38 +520,76 @@ function renderPage(mapsApiKey: string | undefined): string {
     return await openLocationPicker();
   }
 
+  // Plain fetch() never times out on its own - on a flaky mobile
+  // connection (likely, live on a road trip) a stalled request just left
+  // the upload stuck on "Preparing upload..." forever with no way to
+  // recover except reloading. This bounds every network step and retries
+  // once after a transient hiccup before surfacing a clear failure.
+  async function fetchWithRetry(url, options, timeoutMs, label) {
+    let lastError;
+    for (let attempt = 1; attempt <= 2; attempt++) {
+      const controller = new AbortController();
+      const timer = setTimeout(() => controller.abort(), timeoutMs);
+      try {
+        return await fetch(url, Object.assign({}, options, { signal: controller.signal }));
+      } catch (err) {
+        lastError = err && err.name === 'AbortError' ? new Error(label + ' timed out') : err;
+        if (attempt === 1) setStatus(label + ' - network hiccup, retrying...');
+      } finally {
+        clearTimeout(timer);
+      }
+    }
+    throw lastError;
+  }
+
   async function uploadOne(file, coords) {
     setStatus('Preparing upload for ' + file.name + '...');
-    const sasRes = await fetch('/api/media/sas?token=' + encodeURIComponent(token), {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ contentType: file.type }),
-    });
+    const sasRes = await fetchWithRetry(
+      '/api/media/sas?token=' + encodeURIComponent(MEDIA_UPLOAD_TOKEN),
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ contentType: file.type }),
+      },
+      25000,
+      'Preparing upload for ' + file.name,
+    );
     if (!sasRes.ok) throw new Error(await sasRes.text());
     const { uploadUrl, blobPath, maxUploadBytes } = await sasRes.json();
 
     if (file.size > maxUploadBytes) throw new Error(file.name + ' is too large');
 
     setStatus('Uploading ' + file.name + '...');
-    const putRes = await fetch(uploadUrl, {
-      method: 'PUT',
-      headers: { 'x-ms-blob-type': 'BlockBlob', 'Content-Type': file.type },
-      body: file,
-    });
+    const putRes = await fetchWithRetry(
+      uploadUrl,
+      {
+        method: 'PUT',
+        headers: { 'x-ms-blob-type': 'BlockBlob', 'Content-Type': file.type },
+        body: file,
+      },
+      // Actual file bytes, so give video more room than the small JSON calls.
+      60000,
+      'Uploading ' + file.name,
+    );
     if (!putRes.ok) throw new Error('Upload failed for ' + file.name);
 
     setStatus('Saving ' + file.name + '...');
-    const completeRes = await fetch('/api/media/complete?token=' + encodeURIComponent(token), {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        blobPath,
-        contentType: file.type,
-        lat: coords ? coords.lat : undefined,
-        lon: coords ? coords.lon : undefined,
-        capturedAt: new Date().toISOString(),
-      }),
-    });
+    const completeRes = await fetchWithRetry(
+      '/api/media/complete?token=' + encodeURIComponent(MEDIA_UPLOAD_TOKEN),
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          blobPath,
+          contentType: file.type,
+          lat: coords ? coords.lat : undefined,
+          lon: coords ? coords.lon : undefined,
+          capturedAt: new Date().toISOString(),
+        }),
+      },
+      25000,
+      'Saving ' + file.name,
+    );
     if (!completeRes.ok) throw new Error(await completeRes.text());
 
     const thumb = document.createElement('div');
@@ -590,7 +626,7 @@ export async function photos(_request: HttpRequest, _context: InvocationContext)
   return {
     status: 200,
     headers: { 'Content-Type': 'text/html; charset=utf-8' },
-    body: renderPage(process.env.GOOGLE_MAPS_API_KEY),
+    body: renderPage(process.env.GOOGLE_MAPS_API_KEY, process.env.MEDIA_UPLOAD_SHARED_SECRET),
   };
 }
 
