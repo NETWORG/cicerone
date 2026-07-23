@@ -5,6 +5,7 @@ import MapContent from './MapContent';
 import MapLegendBelow from './MapLegendBelow';
 import TrackerTable from './TrackerTable';
 import DayStatsTable from './DayStatsTable';
+import PhotoStreamTile from './PhotoStreamTile';
 import { useFullscreenToggle } from './useFullscreenToggle';
 import { useCrewPositions } from '../../hooks/useCrewPositions';
 
@@ -64,6 +65,7 @@ export default function RouteMap() {
               onSelectCrew={setSelectedCrewId}
             />
             <DayStatsTable />
+            <PhotoStreamTile />
           </div>
         )}
       </div>

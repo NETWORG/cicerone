@@ -1,12 +1,50 @@
-import { X } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { X, ChevronLeft, ChevronRight, Download } from 'lucide-react';
 import type { MediaPost } from '../hooks/useMediaPosts';
 
 /**
- * Fullscreen overlay for viewing a single uploaded photo/video at full
- * size. Shared between the live photo stream (FollowSection) and the
- * geotagged map pins (RouteMap) so both open the same viewer.
+ * Fullscreen overlay for browsing one or more uploaded photos/videos at
+ * full size. This is the *single shared viewer* for every place photos can
+ * be opened from - the live photo stream, the map-side photo tile, the
+ * per-day "photos" button, and the geotagged map pins/clusters. Callers
+ * only differ in what `posts`/`initialIndex` they pass in; left/right
+ * navigation (buttons, arrow keys, wrap-around) and the download button
+ * are handled once, here.
  */
-export default function MediaLightbox({ post, onClose }: { post: MediaPost; onClose: () => void }) {
+export default function MediaLightbox({
+  posts,
+  initialIndex,
+  onClose,
+}: {
+  posts: MediaPost[];
+  initialIndex: number;
+  onClose: () => void;
+}) {
+  const [index, setIndex] = useState(initialIndex);
+  const post = posts[index];
+  const canNavigate = posts.length > 1;
+
+  function goPrev() {
+    setIndex((i) => (i - 1 + posts.length) % posts.length);
+  }
+
+  function goNext() {
+    setIndex((i) => (i + 1) % posts.length);
+  }
+
+  useEffect(() => {
+    function handleKey(e: KeyboardEvent) {
+      if (e.key === 'Escape') onClose();
+      else if (canNavigate && e.key === 'ArrowLeft') goPrev();
+      else if (canNavigate && e.key === 'ArrowRight') goNext();
+    }
+    window.addEventListener('keydown', handleKey);
+    return () => window.removeEventListener('keydown', handleKey);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [canNavigate, posts.length, onClose]);
+
+  if (!post) return null;
+
   return (
     <div
       className="fixed inset-0 z-[1000] bg-black/90 flex items-center justify-center p-4"
@@ -25,8 +63,33 @@ export default function MediaLightbox({ post, onClose }: { post: MediaPost; onCl
       >
         <X size={22} strokeWidth={1.5} />
       </button>
+
+      <a
+        href={post.blobUrl}
+        download
+        onClick={(e) => e.stopPropagation()}
+        aria-label="Download original"
+        className="absolute top-4 right-[68px] z-10 w-11 h-11 flex items-center justify-center rounded-full bg-black/70 text-white ring-1 ring-white/30 hover:bg-black/90 transition-colors"
+      >
+        <Download size={20} strokeWidth={1.5} />
+      </a>
+
+      {canNavigate && (
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            goPrev();
+          }}
+          aria-label="Previous photo"
+          className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 z-10 w-11 h-11 flex items-center justify-center rounded-full bg-black/70 text-white ring-1 ring-white/30 hover:bg-black/90 transition-colors"
+        >
+          <ChevronLeft size={24} strokeWidth={1.75} />
+        </button>
+      )}
+
       {post.mediaType === 'video' ? (
         <video
+          key={post.id}
           src={post.blobUrl}
           controls
           autoPlay
@@ -36,11 +99,31 @@ export default function MediaLightbox({ post, onClose }: { post: MediaPost; onCl
         />
       ) : (
         <img
+          key={post.id}
           src={post.blobUrl}
           alt="Trip photo"
           className="max-w-full max-h-full rounded-lg object-contain"
           onClick={(e) => e.stopPropagation()}
         />
+      )}
+
+      {canNavigate && (
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            goNext();
+          }}
+          aria-label="Next photo"
+          className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 z-10 w-11 h-11 flex items-center justify-center rounded-full bg-black/70 text-white ring-1 ring-white/30 hover:bg-black/90 transition-colors"
+        >
+          <ChevronRight size={24} strokeWidth={1.75} />
+        </button>
+      )}
+
+      {canNavigate && (
+        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-10 text-white/80 text-xs font-medium bg-black/60 rounded-full px-3 py-1">
+          {index + 1} / {posts.length}
+        </div>
       )}
     </div>
   );

@@ -2,10 +2,16 @@ import type { Cluster, Marker, Renderer } from '@googlemaps/markerclusterer';
 import type { MediaPost } from '../../hooks/useMediaPosts';
 
 /** Markers tagged with their post data by `MediaMarkers.tsx` on ref-set. */
-type TaggedMarker = Marker & { __mediaPost?: MediaPost };
+export type TaggedMediaMarker = Marker & { __mediaPost?: MediaPost };
+
+/** Extracts the tagged posts from a cluster's underlying markers, in no
+ *  particular order - callers sort as needed for their own use case. */
+export function postsInCluster(markers: readonly Marker[]): MediaPost[] {
+  return markers.map((m) => (m as TaggedMediaMarker).__mediaPost).filter((p): p is MediaPost => !!p);
+}
 
 function pickThumbnailPost(markers: readonly Marker[]): MediaPost | undefined {
-  const posts = markers.map((m) => (m as TaggedMarker).__mediaPost).filter((p): p is MediaPost => !!p);
+  const posts = postsInCluster(markers);
   if (posts.length === 0) return undefined;
   // Apple Photos-style: prefer a photo so the cluster bubble feels like
   // "one of your photos", falling back to a video only if the cluster has
@@ -20,17 +26,28 @@ function pickThumbnailPost(markers: readonly Marker[]): MediaPost | undefined {
 }
 
 /**
- * Cluster bubble for geotagged trip photos/videos - shows a random photo
- * from the cluster (Apple Photos map-view style) with a count badge,
- * falling back to the amber camera badge if no thumbnail is available.
+ * Cluster bubble for geotagged trip photos/videos - shows a photo from the
+ * cluster (Apple Photos map-view style, deterministically newest-first) with
+ * a count badge, falling back to the amber camera badge if no thumbnail is
+ * available. Square (not round) and sized to match the bigger individual
+ * `MediaMarker` pins. Offset a few pixels from its anchor point so it
+ * doesn't sit exactly on top of a waypoint cluster/marker sharing the same
+ * coordinate (e.g. a photo taken right at a trip stop) - see
+ * `MediaMarker.tsx` for the matching offset on individual pins. Clicking the
+ * bubble is handled by a custom `onClusterClick` in `MediaMarkers.tsx`
+ * (opens the lightbox with this cluster's posts instead of the default
+ * zoom-to-split).
  */
 export const mediaClusterRenderer: Renderer = {
   render({ count, position, markers }: Cluster) {
+    const wrapper = document.createElement('div');
+    wrapper.style.transform = 'translate(8px, -8px)';
+
     const div = document.createElement('div');
     div.style.position = 'relative';
-    div.style.width = '40px';
-    div.style.height = '40px';
-    div.style.borderRadius = '50%';
+    div.style.width = '56px';
+    div.style.height = '56px';
+    div.style.borderRadius = '14px';
     div.style.border = '3px solid #fff';
     div.style.boxShadow = '0 4px 10px rgba(0,0,0,.4)';
     div.style.cursor = 'pointer';
@@ -56,20 +73,20 @@ export const mediaClusterRenderer: Renderer = {
       div.style.display = 'flex';
       div.style.alignItems = 'center';
       div.style.justifyContent = 'center';
-      div.style.fontSize = '18px';
+      div.style.fontSize = '22px';
       div.textContent = '📷';
     }
 
     const badge = document.createElement('span');
     badge.style.position = 'absolute';
-    badge.style.top = '-4px';
-    badge.style.right = '-4px';
-    badge.style.minWidth = '18px';
-    badge.style.height = '18px';
-    badge.style.padding = '0 4px';
+    badge.style.top = '-6px';
+    badge.style.right = '-6px';
+    badge.style.minWidth = '22px';
+    badge.style.height = '22px';
+    badge.style.padding = '0 5px';
     badge.style.background = '#1b1f23';
     badge.style.color = '#fff';
-    badge.style.fontSize = '10px';
+    badge.style.fontSize = '12px';
     badge.style.fontWeight = '700';
     badge.style.fontFamily = 'sans-serif';
     badge.style.borderRadius = '9999px';
@@ -78,13 +95,17 @@ export const mediaClusterRenderer: Renderer = {
     badge.style.justifyContent = 'center';
     badge.style.border = '2px solid #fff';
     badge.style.lineHeight = '1';
+    badge.style.boxShadow = '0 1px 3px rgba(0,0,0,.35)';
     badge.textContent = String(count);
     div.appendChild(badge);
 
+    wrapper.appendChild(div);
+
     return new google.maps.marker.AdvancedMarkerElement({
       position,
-      content: div,
+      content: wrapper,
       zIndex: 900 + count,
     });
   },
 };
+

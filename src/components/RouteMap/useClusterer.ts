@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { MarkerClusterer, type Marker, type Renderer } from '@googlemaps/markerclusterer';
+import { MarkerClusterer, type Marker, type Renderer, type onClusterClickHandler } from '@googlemaps/markerclusterer';
 
 /**
  * Groups AdvancedMarker instances that overlap at the current zoom level into
@@ -27,8 +27,20 @@ import { MarkerClusterer, type Marker, type Renderer } from '@googlemaps/markerc
  * showing the marker's old position until the next zoom/pan. Pass a value
  * that changes whenever the underlying data does (e.g. the positions array
  * itself) to keep clusters in sync.
+ *
+ * An optional `onClusterClick` replaces the default zoom-to-split behavior
+ * for cluster bubble clicks (e.g. media clusters open a lightbox instead of
+ * zooming in). Unlike the marker ref callbacks above, this is just a plain
+ * mutable property on the clusterer instance (not tied to React's ref
+ * reconciliation), so passing a new function identity each render is safe -
+ * it doesn't retrigger `setMarkers` or cause a render loop.
  */
-export function useClusterer(map: google.maps.Map | null, renderer?: Renderer, recomputeKey?: unknown) {
+export function useClusterer(
+  map: google.maps.Map | null,
+  renderer?: Renderer,
+  recomputeKey?: unknown,
+  onClusterClick?: onClusterClickHandler
+) {
   const [markers, setMarkers] = useState<Record<string, Marker>>({});
   const clusterer = useRef<MarkerClusterer | null>(null);
   const refCallbacks = useRef<Record<string, (marker: Marker | null) => void>>({});
@@ -39,6 +51,12 @@ export function useClusterer(map: google.maps.Map | null, renderer?: Renderer, r
       clusterer.current = new MarkerClusterer({ map, renderer });
     }
   }, [map, renderer]);
+
+  useEffect(() => {
+    if (clusterer.current && onClusterClick) {
+      clusterer.current.onClusterClick = onClusterClick;
+    }
+  }, [onClusterClick]);
 
   useEffect(() => {
     clusterer.current?.clearMarkers();
