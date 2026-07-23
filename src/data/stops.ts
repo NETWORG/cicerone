@@ -377,15 +377,15 @@ export const STOPS: Stop[] = [
   },
   {
     id: 'saint-tropez-overnight',
-    name: 'Saint-Tropez - Overnight',
-    location: 'Saint-Tropez area, Var, France',
+    name: 'Overnight - hills above Sainte-Maxime',
+    location: 'Sainte-Maxime, Var, France',
     country: 'FR',
     category: 'sleep',
-    coords: { lat: 43.270873, lng: 6.636532 },
+    coords: { lat: 43.373052763962875, lng: 6.613382969121435 },
     date: 'Wed, 22 Jul 2026',
     time: '21:30',
-    blurb: 'First night on the Côte d\'Azur. Camp/hotel details still being finalized for this stretch.',
-    driveFromPrevious: { distanceKm: 119.0, durationMin: 118 },
+    blurb: 'First night on the Côte d\'Azur, camped in the hills overlooking Sainte-Maxime and the Gulf of Saint-Tropez.',
+    driveFromPrevious: { distanceKm: 100.0, durationMin: 92 },
   },
   {
     id: 'saint-tropez',
@@ -395,10 +395,23 @@ export const STOPS: Stop[] = [
     category: 'culture',
     coords: { lat: 43.2694, lng: 6.6356 },
     date: 'Thu, 23 Jul 2026',
-    time: '09:30',
+    time: '10:30',
     blurb:
       "Housed in the old gendarmerie made famous by Louis de Funès' Gendarme de Saint-Tropez films, this quirky museum blends real police history with movie memorabilia - a fun, offbeat stop before the coastal roads pull us back inland.",
-    driveFromPrevious: { distanceKm: 0, durationMin: 0 },
+    driveFromPrevious: { distanceKm: 27.0, durationMin: 43 },
+  },
+  {
+    id: 'tahiti-beach',
+    name: 'Tahiti Beach',
+    location: 'Pampelonne, Ramatuelle, Var, France',
+    country: 'FR',
+    category: 'sea',
+    coords: { lat: 43.2444044960845, lng: 6.666286110939493 },
+    date: 'Thu, 23 Jul 2026',
+    time: '12:45',
+    blurb:
+      "The legendary northern tip of Pampelonne beach, made famous by Louis de Funès' Gendarme de Saint-Tropez films - a proper swim stop before the long haul to the Alps.",
+    driveFromPrevious: { distanceKm: 4.5, durationMin: 12 },
   },
   {
     id: 'allemond-1',
@@ -411,7 +424,7 @@ export const STOPS: Stop[] = [
     time: '22:00',
     blurb:
       'Base camp in the French Alps, at the foot of the legendary Alpe d\'Huez climb, for two nights.',
-    driveFromPrevious: { distanceKm: 376.0, durationMin: 314 },
+    driveFromPrevious: { distanceKm: 459.0, durationMin: 305 },
   },
   {
     id: 'alpe-dhuez-tdf',
