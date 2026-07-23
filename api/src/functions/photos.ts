@@ -50,6 +50,20 @@ function renderPage(mapsApiKey: string | undefined, mediaUploadToken: string | u
   .thumbs div { position: relative; aspect-ratio: 1; border-radius: 8px; overflow: hidden; background: #14171a; font-size: .7rem; color: #a6adb4; display: flex; align-items: center; justify-content: center; }
   .thumbs img, .thumbs video { width: 100%; height: 100%; object-fit: cover; }
   .warn { color: #e0313a; font-size: .8rem; margin-top: 10px; }
+  .emailLabel { display: block; text-align: left; font-size: .85rem; font-weight: 600; margin-bottom: 6px; }
+  .emailInput { width: 100%; padding: 10px; margin-bottom: 6px; border-radius: 8px; border: 1px solid #3a4046; background: #14171a; color: #e6e8ea; font-size: .9rem; box-sizing: border-box; }
+  .emailHint { text-align: left; font-size: .75rem; color: #75808a; margin-bottom: 16px; line-height: 1.35; }
+  .mineTitle { font-size: 1rem; margin: 0 0 10px; text-align: left; }
+  .mineList { display: flex; flex-direction: column; gap: 12px; }
+  .mineItem { display: flex; gap: 10px; text-align: left; border: 1px solid #2a2f34; border-radius: 8px; padding: 10px; }
+  .mineItem .mineThumb { width: 64px; height: 64px; border-radius: 6px; overflow: hidden; flex: none; background: #14171a; }
+  .mineItem .mineThumb img, .mineItem .mineThumb video { width: 100%; height: 100%; object-fit: cover; }
+  .mineItem .mineBody { flex: 1; min-width: 0; }
+  .mineItem .mineLoc { font-size: .8rem; color: #a6adb4; margin-bottom: 6px; }
+  .mineItem .mineDate { width: 100%; padding: 6px; border-radius: 6px; border: 1px solid #3a4046; background: #14171a; color: #e6e8ea; font-size: .8rem; box-sizing: border-box; margin-bottom: 6px; }
+  .mineItem .mineActions { display: flex; gap: 8px; }
+  .mineItem .mineActions button { flex: 1; padding: 6px; border-radius: 6px; border: 1px solid #3a4046; background: #14171a; color: #e6e8ea; font-size: .78rem; cursor: pointer; }
+  .mineItem .mineActions button.danger { border-color: #e0313a; color: #e0313a; }
   .srOnly { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; }
   .modalOverlay { position: fixed; inset: 0; background: rgba(0,0,0,.75); display: flex; align-items: center; justify-content: center; padding: 16px; z-index: 1000; }
   .modalCard { background: #1b1f23; border: 1px solid #2a2f34; border-radius: 12px; padding: 18px; max-width: 420px; width: 100%; text-align: left; }
@@ -71,10 +85,17 @@ function renderPage(mapsApiKey: string | undefined, mediaUploadToken: string | u
   <h1>Share a photo or video 📸</h1>
   <p class="intro">Straight from your phone to the live map on cicerallye.com. No account needed - just pick a file below.</p>
   <div class="card">
+    <label for="emailInput" class="emailLabel">Your email (so you can manage your own uploads)</label>
+    <input id="emailInput" type="email" class="emailInput" placeholder="you@example.com" autocomplete="email" />
+    <div id="emailHint" class="emailHint">We don't use this for anything else - just so we know whose photo is whose, and it'll carry over once accounts arrive.</div>
     <label class="pick" for="file">Tap to choose photo/video</label>
     <input id="file" type="file" accept="image/*,video/*" multiple />
     <div id="status" class="status"></div>
     <div id="thumbs" class="thumbs"></div>
+  </div>
+  <div id="mineCard" class="card" style="display:none">
+    <h2 class="mineTitle">Your uploads</h2>
+    <div id="mineList" class="mineList"></div>
   </div>
   <div id="locateModal" class="modalOverlay" style="display:none" role="dialog" aria-modal="true" aria-labelledby="modalTitle" aria-describedby="modalSub">
     <div class="modalCard">
@@ -97,6 +118,31 @@ function renderPage(mapsApiKey: string | undefined, mediaUploadToken: string | u
   const statusEl = document.getElementById('status');
   const thumbsEl = document.getElementById('thumbs');
   const setStatus = (msg) => { statusEl.textContent = msg; };
+
+  // Self-reported email, not a real account - just enough to know whose
+  // upload is whose so people can manage their own posts. Remembered in
+  // localStorage so it only has to be typed once per device/browser.
+  const EMAIL_STORAGE_KEY = 'cicerallyeEmail';
+  const EMAIL_PATTERN = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/;
+  const emailInput = document.getElementById('emailInput');
+  const getStoredEmail = () => {
+    const value = localStorage.getItem(EMAIL_STORAGE_KEY) || '';
+    return EMAIL_PATTERN.test(value) ? value : '';
+  };
+  let currentEmail = getStoredEmail();
+  if (currentEmail) emailInput.value = currentEmail;
+
+  emailInput.addEventListener('change', () => {
+    const value = emailInput.value.trim().toLowerCase();
+    if (EMAIL_PATTERN.test(value)) {
+      currentEmail = value;
+      localStorage.setItem(EMAIL_STORAGE_KEY, value);
+      loadMine();
+    } else {
+      currentEmail = '';
+      localStorage.removeItem(EMAIL_STORAGE_KEY);
+    }
+  });
 
   const MAPS_API_KEY = ${mapsKeyLiteral};
   // Rally start (Prague) - just a sane default center for the picker map
@@ -520,6 +566,69 @@ function renderPage(mapsApiKey: string | undefined, mediaUploadToken: string | u
     return await openLocationPicker();
   }
 
+  // --- Thumbnail generation. Map pins/clusters render tiny (~40px) - no
+  // reason to make them download a multi-MB original just to show a small
+  // circle. Instead of server-side image processing (which would mean
+  // Function compute in the upload path, the exact cost this whole
+  // feature avoids), generate a small JPEG right here in the browser and
+  // upload it as a second, tiny blob alongside the original. ---
+
+  function loadImageElement(file) {
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      const url = URL.createObjectURL(file);
+      img.onload = () => { URL.revokeObjectURL(url); resolve(img); };
+      img.onerror = () => { URL.revokeObjectURL(url); reject(new Error('Could not decode image')); };
+      img.src = url;
+    });
+  }
+
+  function grabVideoFrameElement(file) {
+    return new Promise((resolve, reject) => {
+      const video = document.createElement('video');
+      video.muted = true;
+      video.playsInline = true;
+      video.preload = 'auto';
+      const url = URL.createObjectURL(file);
+      const cleanup = () => URL.revokeObjectURL(url);
+      video.addEventListener('loadeddata', () => {
+        try {
+          video.currentTime = Math.min(1, (video.duration || 1) / 2);
+        } catch {
+          resolve(video);
+        }
+      }, { once: true });
+      video.addEventListener('seeked', () => resolve(video), { once: true });
+      video.addEventListener('error', () => { cleanup(); reject(new Error('Could not decode video')); }, { once: true });
+      video.src = url;
+    });
+  }
+
+  // Best-effort: on any failure (e.g. a HEIC file a given browser can't
+  // decode into a drawable element) this resolves to null. The caller
+  // just skips the thumbnail for that post - never blocks or fails the
+  // upload itself, and the map falls back to the full-size blobUrl for it.
+  async function generateThumbnail(file) {
+    const MAX_EDGE = 200;
+    try {
+      const source = file.type.startsWith('video/') ? await grabVideoFrameElement(file) : await loadImageElement(file);
+      const sourceWidth = source.videoWidth || source.naturalWidth || source.width;
+      const sourceHeight = source.videoHeight || source.naturalHeight || source.height;
+      if (!sourceWidth || !sourceHeight) return null;
+      const scale = Math.min(1, MAX_EDGE / Math.max(sourceWidth, sourceHeight));
+      const width = Math.max(1, Math.round(sourceWidth * scale));
+      const height = Math.max(1, Math.round(sourceHeight * scale));
+      const canvas = document.createElement('canvas');
+      canvas.width = width;
+      canvas.height = height;
+      canvas.getContext('2d').drawImage(source, 0, 0, width, height);
+      return await new Promise((resolve) => canvas.toBlob((blob) => resolve(blob), 'image/jpeg', 0.7));
+    } catch (err) {
+      console.warn('Thumbnail generation skipped for ' + file.name, err);
+      return null;
+    }
+  }
+
   // Plain fetch() never times out on its own - on a flaky mobile
   // connection (likely, live on a road trip) a stalled request just left
   // the upload stuck on "Preparing upload..." forever with no way to
@@ -544,6 +653,9 @@ function renderPage(mapsApiKey: string | undefined, mediaUploadToken: string | u
 
   async function uploadOne(file, coords) {
     setStatus('Preparing upload for ' + file.name + '...');
+    // Kick off thumbnail generation in parallel with requesting the SAS
+    // URLs - independent work, no reason to serialize it.
+    const thumbnailPromise = generateThumbnail(file);
     const sasRes = await fetchWithRetry(
       '/api/media/sas?token=' + encodeURIComponent(MEDIA_UPLOAD_TOKEN),
       {
@@ -555,7 +667,7 @@ function renderPage(mapsApiKey: string | undefined, mediaUploadToken: string | u
       'Preparing upload for ' + file.name,
     );
     if (!sasRes.ok) throw new Error(await sasRes.text());
-    const { uploadUrl, blobPath, maxUploadBytes } = await sasRes.json();
+    const { uploadUrl, blobPath, maxUploadBytes, thumbUploadUrl, thumbBlobPath } = await sasRes.json();
 
     if (file.size > maxUploadBytes) throw new Error(file.name + ' is too large');
 
@@ -573,6 +685,30 @@ function renderPage(mapsApiKey: string | undefined, mediaUploadToken: string | u
     );
     if (!putRes.ok) throw new Error('Upload failed for ' + file.name);
 
+    // Thumbnail upload is best-effort - if generation failed, or the PUT
+    // itself fails, just skip it. Never fail the whole upload over the
+    // tiny thumbnail; the map will fall back to the full-size blobUrl.
+    let uploadedThumbBlobPath;
+    const thumbnailBlob = await thumbnailPromise;
+    if (thumbnailBlob && thumbUploadUrl && thumbBlobPath) {
+      try {
+        setStatus('Uploading thumbnail for ' + file.name + '...');
+        const thumbPutRes = await fetchWithRetry(
+          thumbUploadUrl,
+          {
+            method: 'PUT',
+            headers: { 'x-ms-blob-type': 'BlockBlob', 'Content-Type': 'image/jpeg' },
+            body: thumbnailBlob,
+          },
+          20000,
+          'Uploading thumbnail for ' + file.name,
+        );
+        if (thumbPutRes.ok) uploadedThumbBlobPath = thumbBlobPath;
+      } catch (err) {
+        console.warn('Thumbnail upload skipped for ' + file.name, err);
+      }
+    }
+
     setStatus('Saving ' + file.name + '...');
     const completeRes = await fetchWithRetry(
       '/api/media/complete?token=' + encodeURIComponent(MEDIA_UPLOAD_TOKEN),
@@ -585,6 +721,8 @@ function renderPage(mapsApiKey: string | undefined, mediaUploadToken: string | u
           lat: coords ? coords.lat : undefined,
           lon: coords ? coords.lon : undefined,
           capturedAt: new Date().toISOString(),
+          uploadedBy: currentEmail,
+          thumbBlobPath: uploadedThumbBlobPath,
         }),
       },
       25000,
@@ -605,6 +743,13 @@ function renderPage(mapsApiKey: string | undefined, mediaUploadToken: string | u
     const files = Array.from(event.target.files || []);
     if (!files.length) return;
 
+    if (!currentEmail) {
+      setStatus('Please enter your email above first, so you can manage your uploads later.');
+      event.target.value = '';
+      emailInput.focus();
+      return;
+    }
+
     for (const file of files) {
       try {
         const coords = await resolveLocation(file);
@@ -616,7 +761,148 @@ function renderPage(mapsApiKey: string | undefined, mediaUploadToken: string | u
     }
     setStatus('All done - it should show up on the live map shortly \u{1F389}');
     event.target.value = '';
+    loadMine();
   });
+
+  // --- "Your uploads": list/edit/delete posts owned by the stored email ---
+  const mineCard = document.getElementById('mineCard');
+  const mineList = document.getElementById('mineList');
+
+  function formatForDateInput(iso) {
+    const date = new Date(iso);
+    if (Number.isNaN(date.getTime())) return '';
+    const pad = (n) => String(n).padStart(2, '0');
+    return date.getFullYear() + '-' + pad(date.getMonth() + 1) + '-' + pad(date.getDate()) +
+      'T' + pad(date.getHours()) + ':' + pad(date.getMinutes());
+  }
+
+  function renderMineItem(post) {
+    const item = document.createElement('div');
+    item.className = 'mineItem';
+
+    const thumb = document.createElement('div');
+    thumb.className = 'mineThumb';
+    // Prefer the small generated thumbnail - no reason to pull a
+    // multi-MB original just to render a 64px preview here. Videos
+    // without a generated thumbnail (older posts) still need the
+    // <video> element since thumbUrl would be undefined for them.
+    thumb.innerHTML = post.thumbUrl
+      ? '<img src="' + post.thumbUrl + '" />'
+      : post.mediaType === 'video'
+        ? '<video src="' + post.blobUrl + '" muted></video>'
+        : '<img src="' + post.blobUrl + '" />';
+
+    const body = document.createElement('div');
+    body.className = 'mineBody';
+
+    const loc = document.createElement('div');
+    loc.className = 'mineLoc';
+    loc.textContent = (post.lat !== undefined && post.lon !== undefined)
+      ? post.lat.toFixed(4) + ', ' + post.lon.toFixed(4)
+      : 'No location saved';
+
+    const dateInput = document.createElement('input');
+    dateInput.type = 'datetime-local';
+    dateInput.className = 'mineDate';
+    dateInput.value = formatForDateInput(post.capturedAt);
+    dateInput.addEventListener('change', async () => {
+      if (!dateInput.value) return;
+      const iso = new Date(dateInput.value).toISOString();
+      await patchMine(post.id, { capturedAt: iso });
+    });
+
+    const actions = document.createElement('div');
+    actions.className = 'mineActions';
+
+    const editBtn = document.createElement('button');
+    editBtn.type = 'button';
+    editBtn.textContent = 'Edit location';
+    editBtn.addEventListener('click', async () => {
+      const coords = await openLocationPicker();
+      if (!coords) return;
+      const ok = await patchMine(post.id, { lat: coords.lat, lon: coords.lon });
+      if (ok) loc.textContent = coords.lat.toFixed(4) + ', ' + coords.lon.toFixed(4);
+    });
+
+    const deleteBtn = document.createElement('button');
+    deleteBtn.type = 'button';
+    deleteBtn.className = 'danger';
+    deleteBtn.textContent = 'Delete';
+    deleteBtn.addEventListener('click', async () => {
+      if (!confirm('Delete this upload? This cannot be undone.')) return;
+      const ok = await deleteMine(post.id);
+      if (ok) item.remove();
+    });
+
+    actions.appendChild(editBtn);
+    actions.appendChild(deleteBtn);
+    body.appendChild(loc);
+    body.appendChild(dateInput);
+    body.appendChild(actions);
+    item.appendChild(thumb);
+    item.appendChild(body);
+    return item;
+  }
+
+  async function patchMine(id, fields) {
+    try {
+      const res = await fetch(
+        '/api/media/' + encodeURIComponent(id) +
+          '?token=' + encodeURIComponent(MEDIA_UPLOAD_TOKEN) +
+          '&email=' + encodeURIComponent(currentEmail),
+        {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(fields),
+        },
+      );
+      if (!res.ok) throw new Error(await res.text());
+      return true;
+    } catch (error) {
+      setStatus('Could not update: ' + (error && error.message ? error.message : error));
+      return false;
+    }
+  }
+
+  async function deleteMine(id) {
+    try {
+      const res = await fetch(
+        '/api/media/' + encodeURIComponent(id) +
+          '?token=' + encodeURIComponent(MEDIA_UPLOAD_TOKEN) +
+          '&email=' + encodeURIComponent(currentEmail),
+        { method: 'DELETE' },
+      );
+      if (!res.ok) throw new Error(await res.text());
+      return true;
+    } catch (error) {
+      setStatus('Could not delete: ' + (error && error.message ? error.message : error));
+      return false;
+    }
+  }
+
+  async function loadMine() {
+    if (!currentEmail) {
+      mineCard.style.display = 'none';
+      return;
+    }
+    try {
+      const res = await fetch('/api/media/mine?email=' + encodeURIComponent(currentEmail));
+      if (!res.ok) throw new Error(await res.text());
+      const posts = await res.json();
+      mineList.innerHTML = '';
+      if (!posts.length) {
+        mineCard.style.display = 'none';
+        return;
+      }
+      posts.forEach((post) => mineList.appendChild(renderMineItem(post)));
+      mineCard.style.display = 'block';
+    } catch (error) {
+      // Non-fatal - the upload flow above still works even if this fails.
+      console.error('Failed to load your uploads', error);
+    }
+  }
+
+  loadMine();
 </script>
 </body>
 </html>`;

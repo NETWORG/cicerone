@@ -1,5 +1,6 @@
 import { BlobServiceClient, ContainerClient, BlobSASPermissions } from '@azure/storage-blob';
 import type { MediaType } from './mediaTable';
+import { getCurrentTripId } from './tripId';
 
 const CONTAINER_NAME = 'media';
 
@@ -48,7 +49,19 @@ export async function getMediaContainer(): Promise<ContainerClient> {
 export function generateMediaBlobPath(mediaType: MediaType, extension: string): string {
   const day = new Date().toISOString().slice(0, 10);
   const id = crypto.randomUUID();
-  return `${day}/${mediaType}-${id}.${extension}`;
+  return `${getCurrentTripId()}/${day}/${mediaType}-${id}.${extension}`;
+}
+
+/**
+ * Thumbnail blobs are generated client-side (see photos.ts) and always
+ * end up as small JPEGs, independent of the original file's type/
+ * extension - keeps the path shape (and its regex in mediaComplete.ts)
+ * simple and independent of the original media type.
+ */
+export function generateThumbBlobPath(): string {
+  const day = new Date().toISOString().slice(0, 10);
+  const id = crypto.randomUUID();
+  return `${getCurrentTripId()}/${day}/thumb-${id}.jpg`;
 }
 
 /**

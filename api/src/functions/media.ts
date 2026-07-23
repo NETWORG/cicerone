@@ -8,6 +8,7 @@ export interface MediaPost {
   id: string;
   mediaType: MediaEntity['mediaType'];
   blobUrl: string;
+  thumbUrl?: string;
   lat?: number;
   lon?: number;
   capturedAt: string;
@@ -42,6 +43,7 @@ export async function media(request: HttpRequest, context: InvocationContext): P
         id: entity.rowKey,
         mediaType: entity.mediaType,
         blobUrl: entity.blobUrl,
+        thumbUrl: entity.thumbUrl,
         lat: entity.lat,
         lon: entity.lon,
         capturedAt: entity.capturedAt,

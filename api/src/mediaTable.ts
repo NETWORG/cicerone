@@ -1,7 +1,7 @@
 import { TableClient, RestError } from '@azure/data-tables';
+import { getCurrentTripId } from './tripId';
 
 const TABLE_NAME = 'mediaPosts';
-const PARTITION_KEY = 'post';
 
 let cachedClient: TableClient | undefined;
 
@@ -47,10 +47,25 @@ export interface MediaEntity {
   lon?: number;
   capturedAt: string;
   uploadedAt: string;
+  // Self-reported (not verified) for now - the uploader types an email
+  // into /photos once and it's remembered in localStorage. Deliberately
+  // the same field name/shape we'd want once real sign-in exists, so that
+  // migration only has to change *where* this value comes from, not the
+  // schema.
+  uploadedBy?: string;
+  // Small client-generated JPEG (see photos.ts) so map pins/clusters don't
+  // have to download the full-size original just to show a ~40px pin.
+  // Optional because generation is best-effort (e.g. HEIC decode failure
+  // in some browsers) - falls back to blobUrl on the frontend when absent.
+  thumbBlobPath?: string;
+  thumbUrl?: string;
 }
 
 export function mediaPartitionKey(): string {
-  return PARTITION_KEY;
+  // Scopes every read/write to the current trip - see tripId.ts. Table
+  // Storage partitions data by this key, so different trips' posts never
+  // mix and per-trip listing stays cheap (single-partition queries).
+  return getCurrentTripId();
 }
 
 // RowKeys within a partition are returned by Table Storage in ascending
