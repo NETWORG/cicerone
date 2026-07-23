@@ -30,3 +30,10 @@ export const DAY_STATS: DayStat[] = DAYS.map((date) => {
     restDayLabel: dayStops.find((stop) => stop.restDayLabel)?.restDayLabel,
   };
 });
+
+/** Trip-wide distance/time, summed across every day. */
+export const TOTAL_STATS = {
+  distanceKm: DAY_STATS.reduce((sum, day) => sum + day.distanceKm, 0),
+  durationMin: DAY_STATS.reduce((sum, day) => sum + day.durationMin, 0),
+  estimated: DAY_STATS.some((day) => day.estimated),
+};

@@ -1,6 +1,6 @@
 import { MapPin } from 'lucide-react';
 import { useMap } from '@vis.gl/react-google-maps';
-import { DAY_STATS } from '../../data/day-stats';
+import { DAY_STATS, TOTAL_STATS } from '../../data/day-stats';
 import { fitToDay } from './fitToDay';
 import { scrollToMap } from './scrollToMap';
 
@@ -56,7 +56,7 @@ export default function DayStatsTable() {
         Daily distance
       </h3>
 
-      <div className="flex-1 lg:min-h-0 lg:overflow-y-auto px-4 pb-4">
+      <div className="flex-1 lg:min-h-0 lg:overflow-y-auto px-4">
         {/* Mobile: stacked cards. */}
         <div className="flex flex-col gap-2 sm:hidden">
           {DAY_STATS.map((day) => (
@@ -102,6 +102,16 @@ export default function DayStatsTable() {
             ))}
           </tbody>
         </table>
+      </div>
+
+      {/* Trip-wide total - pinned outside the scroll region so it stays
+       *  visible even while scrolling through the day list on desktop. */}
+      <div className="flex-none flex items-center justify-between gap-2 px-4 py-3 border-t border-asphalt-700">
+        <span className="text-sm font-semibold text-asphalt-100">Total</span>
+        <span className="text-sm font-semibold text-asphalt-200">
+          {formatDistance(TOTAL_STATS.distanceKm)} &middot; {formatDuration(TOTAL_STATS.durationMin)}
+          {TOTAL_STATS.estimated ? ' (est.)' : ''}
+        </span>
       </div>
     </div>
   );
