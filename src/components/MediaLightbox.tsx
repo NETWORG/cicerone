@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { X, ChevronLeft, ChevronRight, Download } from 'lucide-react';
 import type { MediaPost } from '../hooks/useMediaPosts';
 
@@ -45,7 +46,13 @@ export default function MediaLightbox({
 
   if (!post) return null;
 
-  return (
+  // Portal to document.body: when opened from a map pin/cluster, this
+  // component is a DOM descendant of Google Maps' own container, which
+  // creates its own CSS stacking context (for GPU compositing). A nested
+  // z-[1000] can never escape that context to sit above the site header
+  // (z-50) - the whole map subtree is compared to the header as one unit.
+  // Rendering at the body level sidesteps that entirely.
+  return createPortal(
     <div
       className="fixed inset-0 z-[1000] bg-black/90 flex items-center justify-center p-4"
       onClick={onClose}
@@ -125,6 +132,7 @@ export default function MediaLightbox({
           {index + 1} / {posts.length}
         </div>
       )}
-    </div>
+    </div>,
+    document.body,
   );
 }

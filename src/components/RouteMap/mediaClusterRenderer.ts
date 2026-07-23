@@ -41,6 +41,7 @@ function pickThumbnailPost(markers: readonly Marker[]): MediaPost | undefined {
 export const mediaClusterRenderer: Renderer = {
   render({ count, position, markers }: Cluster) {
     const wrapper = document.createElement('div');
+    wrapper.style.position = 'relative';
     wrapper.style.transform = 'translate(8px, -8px)';
 
     const div = document.createElement('div');
@@ -77,6 +78,10 @@ export const mediaClusterRenderer: Renderer = {
       div.textContent = '📷';
     }
 
+    // Appended to `wrapper`, not `div` - `div` has overflow:hidden to clip
+    // the square thumbnail to rounded corners, which would also clip this
+    // badge since it intentionally overhangs the div's edge (negative
+    // top/right) to read as a corner badge rather than an inset one.
     const badge = document.createElement('span');
     badge.style.position = 'absolute';
     badge.style.top = '-6px';
@@ -97,9 +102,9 @@ export const mediaClusterRenderer: Renderer = {
     badge.style.lineHeight = '1';
     badge.style.boxShadow = '0 1px 3px rgba(0,0,0,.35)';
     badge.textContent = String(count);
-    div.appendChild(badge);
 
     wrapper.appendChild(div);
+    wrapper.appendChild(badge);
 
     return new google.maps.marker.AdvancedMarkerElement({
       position,
