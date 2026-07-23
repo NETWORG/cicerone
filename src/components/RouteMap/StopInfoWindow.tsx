@@ -15,7 +15,7 @@ export default function StopInfoWindow({ stop, index, onClose }: StopInfoWindowP
   const categoryColor = CATEGORIES[stop.category].color;
 
   return (
-    <div className="bg-white rounded border border-asphalt-700 max-w-xs relative shadow-lg overflow-hidden text-asphalt-300">
+    <div className="bg-white rounded border border-asphalt-700 max-w-xs relative shadow-lg text-asphalt-300 flex flex-col">
       <button
         onClick={onClose}
         className="absolute top-2 right-2 z-10 w-6 h-6 flex items-center justify-center rounded-full bg-white/90 text-asphalt-500 hover:text-asphalt-100 transition-colors"
@@ -24,8 +24,8 @@ export default function StopInfoWindow({ stop, index, onClose }: StopInfoWindowP
         <X size={16} strokeWidth={1.5} />
       </button>
       {photo && (
-        <div className="relative">
-          <img src={photo} alt={stop.name} className="w-full h-32 object-cover" />
+        <div className="relative flex-none rounded-t overflow-hidden">
+          <img src={photo} alt={stop.name} className="w-full h-20 sm:h-32 object-cover" />
           {/* Category color is data-driven, so it stays a scoped inline style. */}
           <span
             className="absolute -bottom-3 left-3 w-8 h-8 rounded-full text-white text-sm font-bold leading-none flex items-center justify-center border-2 border-white shadow z-10"
@@ -35,7 +35,10 @@ export default function StopInfoWindow({ stop, index, onClose }: StopInfoWindowP
           </span>
         </div>
       )}
-      <div className={`p-4 ${photo ? 'pt-5' : ''}`}>
+      {/* Header: always fully visible (never scrolls), so the title,
+       *  date/time and "Open in Maps" link are never hidden by the
+       *  Google-computed InfoWindow height clamp on small mobile maps. */}
+      <div className={`flex-none px-4 ${photo ? 'pt-5' : 'pt-4'}`}>
         <div className="mb-2 flex items-center gap-2">
           <CategoryBadge category={stop.category} />
           {!photo && (
@@ -68,6 +71,14 @@ export default function StopInfoWindow({ stop, index, onClose }: StopInfoWindowP
             {stop.driveFromPrevious.estimated && ' (estimated)'}
           </p>
         )}
+      </div>
+      {/* Body: the blurb/link/optional-tag can be longer than the space
+       *  Google leaves for the InfoWindow on a small mobile map, so on
+       *  mobile this region is capped and scrolls internally rather than
+       *  relying on Google's own (non-scrolling) height clamp, which would
+       *  otherwise silently cut off "Learn more". Desktop's taller map
+       *  already gives Google enough room, so it stays uncapped there. */}
+      <div className="max-h-28 sm:max-h-none overflow-y-auto sm:overflow-visible px-4 pb-4">
         <p className="text-sm leading-relaxed text-asphalt-300">{stop.blurb}</p>
         {stop.link && (
           <a
