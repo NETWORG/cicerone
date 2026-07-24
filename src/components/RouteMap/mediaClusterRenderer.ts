@@ -15,14 +15,13 @@ function pickThumbnailPost(markers: readonly Marker[]): MediaPost | undefined {
   if (posts.length === 0) return undefined;
   // Apple Photos-style: prefer a photo so the cluster bubble feels like
   // "one of your photos", falling back to a video only if the cluster has
-  // no photos at all. Pick deterministically (newest first, by `id` -
-  // rowKeys are generated with an inverted timestamp prefix so they sort
-  // newest-first ascending) rather than randomly, so the same cluster
-  // doesn't flicker between different thumbnails on every pan/zoom
-  // re-render.
+  // no photos at all. Pick deterministically (newest *captured* first, by
+  // `capturedAt` - an ISO string, sorts correctly lexicographically)
+  // rather than randomly, so the same cluster doesn't flicker between
+  // different thumbnails on every pan/zoom re-render.
   const photos = posts.filter((p) => p.mediaType === 'photo');
   const pool = photos.length > 0 ? photos : posts;
-  return [...pool].sort((a, b) => (a.id < b.id ? -1 : a.id > b.id ? 1 : 0))[0];
+  return [...pool].sort((a, b) => (a.capturedAt < b.capturedAt ? 1 : a.capturedAt > b.capturedAt ? -1 : 0))[0];
 }
 
 /**

@@ -10,12 +10,12 @@ import { postsWithinRadius } from './mediaProximity';
 
 type GeotaggedPost = MediaPost & { lat: number; lon: number };
 
-/** Newest-first, matching how `useMediaPosts`/`PhotoStream` already order
- *  posts - rowKeys are generated with an inverted timestamp prefix, so
- *  ascending `id` sort is newest-first. Keeps lightbox ordering consistent
- *  everywhere it's opened from. */
+/** Newest-*captured*-first (not newest-uploaded) - matches how
+ *  `useMediaPosts` sorts. Crews upload with a time lag, so sorting by
+ *  `capturedAt` (an ISO string, sorts correctly lexicographically) keeps
+ *  lightbox ordering on trip-timeline order everywhere it's opened from. */
 function sortNewestFirst(posts: readonly MediaPost[]): MediaPost[] {
-  return [...posts].sort((a, b) => (a.id < b.id ? -1 : a.id > b.id ? 1 : 0));
+  return [...posts].sort((a, b) => (a.capturedAt < b.capturedAt ? 1 : a.capturedAt > b.capturedAt ? -1 : 0));
 }
 
 const NEARBY_RADIUS_METERS = 500;

@@ -11,12 +11,11 @@ export default function Footer() {
         {/* Nav links */}
         <nav className="flex flex-wrap justify-center gap-x-6 gap-y-2">
           {[
-            ['#last-year', 'Last Year'],
-            ['#concept', 'The Idea'],
             ['#route', 'Route'],
+            ['#follow', 'Follow'],
             ['#itinerary', 'Itinerary'],
             ['#crews', 'Crews'],
-            ['#join', 'Join'],
+            ['#last-year', 'Last Year'],
           ].map(([href, label]) => (
             <a
               key={href}

@@ -14,6 +14,17 @@ export interface MediaPost {
 const POLL_INTERVAL_MS = 30_000;
 
 /**
+ * Sorts posts newest-*captured*-first (not newest-uploaded). Crews upload
+ * with a time lag, but followers should see photos in the trip's actual
+ * timeline order regardless of when they landed in Blob/Table Storage.
+ * `capturedAt` is an ISO date string, so lexicographic comparison sorts
+ * correctly without parsing.
+ */
+function sortByCapturedAtDesc(posts: MediaPost[]): MediaPost[] {
+  return [...posts].sort((a, b) => (a.capturedAt < b.capturedAt ? 1 : a.capturedAt > b.capturedAt ? -1 : 0));
+}
+
+/**
  * Polls the `/api/media` Azure Function (backed by Table Storage, blob
  * bytes served directly from Blob Storage via `blobUrl`) for recently
  * uploaded photos/videos. Same polling approach as `useCrewPositions` -
@@ -32,7 +43,11 @@ export function useMediaPosts(): MediaPost[] {
         const res = await fetch('/api/media', { cache: 'no-store' });
         if (!res.ok) return;
         const data: MediaPost[] = await res.json();
-        if (isMounted.current) setPosts(data);
+        // The API returns newest-*uploaded*-first (cheap Table Storage
+        // pagination via an inverted-timestamp rowKey) - re-sort here by
+        // when the photo was actually taken so every consumer of this
+        // hook gets trip-timeline order "for free".
+        if (isMounted.current) setPosts(sortByCapturedAtDesc(data));
       } catch {
         // Network hiccup or offline - keep showing the last known posts
         // and try again on the next tick.
