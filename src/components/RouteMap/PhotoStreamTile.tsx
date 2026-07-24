@@ -6,11 +6,12 @@ import MediaLightbox from '../MediaLightbox';
 /**
  * Compact preview of the live photo stream, shown next to the map so
  * visitors don't have to scroll all the way down to the `FollowSection`
- * grid to see what's just been uploaded. Shows the most recent
- * thumbnails; tapping one opens the same shared `MediaLightbox` used
- * everywhere else, seeded with the *full* posts list (not just this
- * tile's truncated subset) so browsing from here isn't more limited than
- * browsing from the main stream.
+ * grid to see the most recently *captured* photos/videos. Shows the
+ * newest-captured thumbnails (see `useMediaPosts`, sorted by
+ * `capturedAt` rather than upload time); tapping one opens the same
+ * shared `MediaLightbox` used everywhere else, seeded with the *full*
+ * posts list (not just this tile's truncated subset) so browsing from
+ * here isn't more limited than browsing from the main stream.
  */
 const TILE_COUNT = 6;
 

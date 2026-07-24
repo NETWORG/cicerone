@@ -14,14 +14,25 @@ export interface MediaPost {
 const POLL_INTERVAL_MS = 30_000;
 
 /**
- * Sorts posts newest-*captured*-first (not newest-uploaded). Crews upload
+ * Numeric compare of two posts by `capturedAt`, newest first. Crews upload
  * with a time lag, but followers should see photos in the trip's actual
  * timeline order regardless of when they landed in Blob/Table Storage.
- * `capturedAt` is an ISO date string, so lexicographic comparison sorts
- * correctly without parsing.
+ * Parses to epoch ms rather than comparing the raw strings - `capturedAt`
+ * is client-supplied (see `mediaComplete` in the API) so its precision/
+ * offset can vary, and lexicographic string comparison can mis-order
+ * those. Falls back to `id` as a deterministic tie-breaker when
+ * timestamps are equal (or both fail to parse), so results stay stable
+ * across re-renders instead of depending on array/marker iteration order.
  */
+export function compareCapturedAtDesc(a: MediaPost, b: MediaPost): number {
+  const at = Date.parse(a.capturedAt) || 0;
+  const bt = Date.parse(b.capturedAt) || 0;
+  if (at !== bt) return bt - at;
+  return a.id < b.id ? 1 : a.id > b.id ? -1 : 0;
+}
+
 function sortByCapturedAtDesc(posts: MediaPost[]): MediaPost[] {
-  return [...posts].sort((a, b) => (a.capturedAt < b.capturedAt ? 1 : a.capturedAt > b.capturedAt ? -1 : 0));
+  return [...posts].sort(compareCapturedAtDesc);
 }
 
 /**
