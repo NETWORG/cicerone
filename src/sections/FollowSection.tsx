@@ -1,4 +1,4 @@
-import { Radio, Camera } from 'lucide-react';
+import { Radio } from 'lucide-react';
 import PhotoStream from '../components/PhotoStream';
 
 export default function FollowSection() {
@@ -19,11 +19,6 @@ export default function FollowSection() {
             Scroll up for the live map. Below is the live photo/video stream, straight from the
             crews' phones. Also check our Instagram Stories for daily highlights.
           </p>
-          <a href="/photos" className="btn-primary inline-flex items-center gap-2 mb-8">
-            <Camera size={16} strokeWidth={1.75} />
-            Share a photo from your phone
-          </a>
-
           <PhotoStream />
         </div>
       </div>

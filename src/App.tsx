@@ -1,12 +1,10 @@
 import Nav from './components/Nav';
 import Hero from './sections/Hero';
-import ConceptSection from './sections/ConceptSection';
 import RouteSection from './sections/RouteSection';
-import ItinerarySection from './sections/ItinerarySection';
-import LastYearSection from './sections/LastYearSection';
-import CrewsSection from './sections/CrewsSection';
 import FollowSection from './sections/FollowSection';
-import SignupSection from './sections/SignupSection';
+import ItinerarySection from './sections/ItinerarySection';
+import CrewsSection from './sections/CrewsSection';
+import LastYearSection from './sections/LastYearSection';
 import Footer from './sections/Footer';
 
 export default function App() {
@@ -16,12 +14,10 @@ export default function App() {
       <main>
         <Hero />
         <RouteSection />
-        <ItinerarySection />
-        <LastYearSection />
-        <ConceptSection />
-        <CrewsSection />
         <FollowSection />
-        <SignupSection />
+        <ItinerarySection />
+        <CrewsSection />
+        <LastYearSection />
       </main>
       <Footer />
     </div>

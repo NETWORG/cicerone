@@ -2,12 +2,11 @@ import { useState, useEffect } from 'react';
 import { Menu, X } from 'lucide-react';
 
 const NAV_ITEMS = [
-  { href: '#last-year', label: 'Last Year' },
-  { href: '#concept', label: 'The Idea' },
   { href: '#route', label: 'Route' },
+  { href: '#follow', label: 'Follow' },
   { href: '#itinerary', label: 'Itinerary' },
   { href: '#crews', label: 'Crews' },
-  { href: '#follow', label: 'Follow' },
+  { href: '#last-year', label: 'Last Year' },
 ];
 
 export default function Nav() {
@@ -52,11 +51,6 @@ export default function Nav() {
                 </a>
               </li>
             ))}
-            <li className="ml-2">
-              <a href="#join" className="btn-primary text-sm px-4 py-2">
-                Join →
-              </a>
-            </li>
           </ul>
 
           {/* Mobile hamburger */}
@@ -85,11 +79,6 @@ export default function Nav() {
                 </a>
               </li>
             ))}
-            <li className="pt-3">
-              <a href="#join" onClick={close} className="btn-primary w-full justify-center">
-                Join the Rallye →
-              </a>
-            </li>
           </ul>
         </div>
       )}

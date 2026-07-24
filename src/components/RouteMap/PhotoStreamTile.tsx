@@ -1,16 +1,17 @@
 import { useState } from 'react';
-import { Video, Camera } from 'lucide-react';
+import { Video } from 'lucide-react';
 import { useMediaPosts } from '../../hooks/useMediaPosts';
 import MediaLightbox from '../MediaLightbox';
 
 /**
  * Compact preview of the live photo stream, shown next to the map so
- * visitors don't have to scroll all the way down to `/photos` / the
- * `FollowSection` grid to see what's just been uploaded. Shows the most
- * recent thumbnails; tapping one opens the same shared `MediaLightbox`
- * used everywhere else, seeded with the *full* posts list (not just this
- * tile's truncated subset) so browsing from here isn't more limited than
- * browsing from the main stream.
+ * visitors don't have to scroll all the way down to the `FollowSection`
+ * grid to see the most recently *captured* photos/videos. Shows the
+ * newest-captured thumbnails (see `useMediaPosts`, sorted by
+ * `capturedAt` rather than upload time); tapping one opens the same
+ * shared `MediaLightbox` used everywhere else, seeded with the *full*
+ * posts list (not just this tile's truncated subset) so browsing from
+ * here isn't more limited than browsing from the main stream.
  */
 const TILE_COUNT = 6;
 
@@ -26,7 +27,7 @@ export default function PhotoStreamTile() {
     <div className="bg-white border border-asphalt-700 shadow-sm rounded flex flex-col">
       <div className="flex items-center justify-between px-4 pt-4 pb-3">
         <h3 className="text-sm font-semibold uppercase tracking-wide text-asphalt-300">Latest photos</h3>
-        <a href="/photos" className="text-xs font-semibold text-rally-600 hover:text-rally-700">
+        <a href="#follow" className="text-xs font-semibold text-rally-600 hover:text-rally-700">
           View all
         </a>
       </div>
@@ -66,13 +67,6 @@ export default function PhotoStreamTile() {
           </button>
         ))}
       </div>
-
-      <a
-        href="/photos"
-        className="flex-none flex items-center justify-center gap-1.5 text-xs font-semibold text-rally-600 border-t border-asphalt-700 py-2.5 hover:bg-asphalt-900/5 transition-colors"
-      >
-        <Camera size={13} /> Share a photo
-      </a>
 
       {selectedIndex !== null && (
         <MediaLightbox posts={posts} initialIndex={selectedIndex} onClose={() => setSelectedIndex(null)} />

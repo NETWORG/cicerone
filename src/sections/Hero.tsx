@@ -42,12 +42,9 @@ export default function Hero() {
           18–26 July 2026 · Fun cars. Great places. Breakdowns welcome.
         </p>
 
-        {/* CTAs */}
+        {/* CTA */}
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <a href="#join" className="btn-primary text-base px-8 py-4">
-            Join the Rallye
-          </a>
-          <a href="#route" className="inline-flex items-center gap-2 rounded font-semibold transition-all duration-150 cursor-pointer select-none border-2 border-white text-white px-8 py-4 text-base hover:bg-white hover:text-asphalt-100 active:scale-95">
+          <a href="#route" className="btn-primary text-base px-8 py-4">
             See the Route
           </a>
         </div>

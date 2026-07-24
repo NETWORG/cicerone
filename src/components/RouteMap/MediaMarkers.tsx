@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useMap } from '@vis.gl/react-google-maps';
 import type { Marker } from '@googlemaps/markerclusterer';
-import { useMediaPosts, type MediaPost } from '../../hooks/useMediaPosts';
+import { useMediaPosts, type MediaPost, compareCapturedAtDesc } from '../../hooks/useMediaPosts';
 import MediaMarker from './MediaMarker';
 import MediaLightbox from '../MediaLightbox';
 import { useClusterer } from './useClusterer';
@@ -10,12 +10,12 @@ import { postsWithinRadius } from './mediaProximity';
 
 type GeotaggedPost = MediaPost & { lat: number; lon: number };
 
-/** Newest-first, matching how `useMediaPosts`/`PhotoStream` already order
- *  posts - rowKeys are generated with an inverted timestamp prefix, so
- *  ascending `id` sort is newest-first. Keeps lightbox ordering consistent
- *  everywhere it's opened from. */
+/** Newest-*captured*-first (not newest-uploaded) - matches how
+ *  `useMediaPosts` sorts. Crews upload with a time lag, so sorting by
+ *  `capturedAt` keeps lightbox ordering on trip-timeline order everywhere
+ *  it's opened from. */
 function sortNewestFirst(posts: readonly MediaPost[]): MediaPost[] {
-  return [...posts].sort((a, b) => (a.id < b.id ? -1 : a.id > b.id ? 1 : 0));
+  return [...posts].sort(compareCapturedAtDesc);
 }
 
 const NEARBY_RADIUS_METERS = 500;

@@ -1,5 +1,5 @@
 import type { Cluster, Marker, Renderer } from '@googlemaps/markerclusterer';
-import type { MediaPost } from '../../hooks/useMediaPosts';
+import { type MediaPost, compareCapturedAtDesc } from '../../hooks/useMediaPosts';
 
 /** Markers tagged with their post data by `MediaMarkers.tsx` on ref-set. */
 export type TaggedMediaMarker = Marker & { __mediaPost?: MediaPost };
@@ -15,14 +15,13 @@ function pickThumbnailPost(markers: readonly Marker[]): MediaPost | undefined {
   if (posts.length === 0) return undefined;
   // Apple Photos-style: prefer a photo so the cluster bubble feels like
   // "one of your photos", falling back to a video only if the cluster has
-  // no photos at all. Pick deterministically (newest first, by `id` -
-  // rowKeys are generated with an inverted timestamp prefix so they sort
-  // newest-first ascending) rather than randomly, so the same cluster
-  // doesn't flicker between different thumbnails on every pan/zoom
-  // re-render.
+  // no photos at all. Pick deterministically (newest *captured* first,
+  // with an `id` tie-breaker baked into `compareCapturedAtDesc`) rather
+  // than randomly, so the same cluster doesn't flicker between different
+  // thumbnails on every pan/zoom re-render.
   const photos = posts.filter((p) => p.mediaType === 'photo');
   const pool = photos.length > 0 ? photos : posts;
-  return [...pool].sort((a, b) => (a.id < b.id ? -1 : a.id > b.id ? 1 : 0))[0];
+  return [...pool].sort(compareCapturedAtDesc)[0];
 }
 
 /**
