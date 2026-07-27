@@ -97,6 +97,20 @@ export async function mediaDisplay(request: HttpRequest, context: InvocationCont
     // e.g. a HEIC original that this sharp build can't decode. Never fail
     // the view over it, just fall back to the full-size original.
     context.warn('Falling back to blobUrl - display generation failed for ' + id, error);
+
+    // Persist the fallback too (aliasing displayUrl to blobUrl), same as
+    // the "already small enough" path above. Without this, a permanently
+    // unsupported original (e.g. HEIC) would retry the expensive resize -
+    // and lose to a full sharp() decode attempt - on every single view.
+    try {
+      await table.updateEntity<Partial<MediaEntity>>(
+        { partitionKey: entity.partitionKey, rowKey: entity.rowKey, displayUrl: entity.blobUrl },
+        'Merge',
+      );
+    } catch (persistError) {
+      context.warn('Failed to persist blobUrl fallback for ' + id, persistError);
+    }
+
     return { status: 200, jsonBody: { displayUrl: entity.blobUrl }, headers: { 'Cache-Control': 'no-store' } };
   }
 }
