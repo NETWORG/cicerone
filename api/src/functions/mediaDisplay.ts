@@ -30,6 +30,14 @@ const JPEG_QUALITY = 82;
  *
  * Public/anonymous, same exposure level as GET /api/media - this only
  * reads/derives from data that's already publicly viewable via blobUrl.
+ *
+ * Note on data flow: this endpoint's HTTP response is always just a small
+ * JSON `{ displayUrl }` payload, never image bytes - the browser's <img>
+ * tag then fetches those bytes directly from Blob Storage, same as
+ * blobUrl/thumbUrl. Only the one-time resize (below) reads the original
+ * and writes the resized copy through this Function's own memory - that's
+ * unavoidable since `sharp` needs the pixels to resize them - but it never
+ * touches the requesting client's connection either way.
  */
 export async function mediaDisplay(request: HttpRequest, context: InvocationContext): Promise<HttpResponseInit> {
   const id = request.params.id;
