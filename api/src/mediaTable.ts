@@ -59,6 +59,14 @@ export interface MediaEntity {
   // in some browsers) - falls back to blobUrl on the frontend when absent.
   thumbBlobPath?: string;
   thumbUrl?: string;
+  // Mid-size JPEG generated lazily, server-side, the first time anyone
+  // opens the post in the full-size viewer (see mediaDisplay.ts). Keeps
+  // the original full-resolution upload untouched in storage while
+  // avoiding a multi-MB download every time someone just wants to *look*
+  // at the photo. Optional/lazy for the same reasons as thumbBlobPath -
+  // frontend falls back to blobUrl until/unless this exists.
+  displayBlobPath?: string;
+  displayUrl?: string;
 }
 
 export function mediaPartitionKey(): string {

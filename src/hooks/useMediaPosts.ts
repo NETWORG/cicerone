@@ -5,6 +5,7 @@ export interface MediaPost {
   mediaType: 'photo' | 'video';
   blobUrl: string;
   thumbUrl?: string;
+  displayUrl?: string;
   lat?: number;
   lon?: number;
   capturedAt: string;
@@ -54,10 +55,10 @@ export function useMediaPosts(): MediaPost[] {
         const res = await fetch('/api/media', { cache: 'no-store' });
         if (!res.ok) return;
         const data: MediaPost[] = await res.json();
-        // The API returns newest-*uploaded*-first (cheap Table Storage
-        // pagination via an inverted-timestamp rowKey) - re-sort here by
-        // when the photo was actually taken so every consumer of this
-        // hook gets trip-timeline order "for free".
+        // The API (media.ts) already sorts by capturedAt server-side, but
+        // re-sort here too - cheap for "hundreds" of posts, and keeps
+        // every consumer of this hook guaranteed trip-timeline order even
+        // if that ever changes API-side.
         if (isMounted.current) setPosts(sortByCapturedAtDesc(data));
       } catch {
         // Network hiccup or offline - keep showing the last known posts

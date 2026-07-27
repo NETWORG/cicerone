@@ -65,6 +65,19 @@ export function generateThumbBlobPath(): string {
 }
 
 /**
+ * "Display" blobs are the mid-size viewer copy generated lazily,
+ * server-side, on first view (see mediaDisplay.ts) - unlike the thumbnail
+ * they're not created up-front at upload time, but the path shape
+ * (always a JPEG, same day-bucketing) mirrors generateThumbBlobPath() for
+ * consistency.
+ */
+export function generateDisplayBlobPath(): string {
+  const day = new Date().toISOString().slice(0, 10);
+  const id = crypto.randomUUID();
+  return `${getCurrentTripId()}/${day}/display-${id}.jpg`;
+}
+
+/**
  * Issues a short-lived, single-blob, write-only SAS URL. The caller (a
  * phone in the field) PUTs the file bytes directly to Blob Storage using
  * this URL - the file never passes through Function compute, which is

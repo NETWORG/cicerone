@@ -4,11 +4,17 @@ import { getMediaTable, mediaPartitionKey, type MediaEntity } from '../mediaTabl
 const DEFAULT_LIMIT = 100;
 const MAX_LIMIT = 500;
 
+// Upper bound on how many rows we'll ever pull from the partition to sort
+// in memory (see below) - just a sanity ceiling so a single trip's archive
+// growing far beyond "hundreds" of posts can't make this scan unbounded.
+const SCAN_CAP = 5000;
+
 export interface MediaPost {
   id: string;
   mediaType: MediaEntity['mediaType'];
   blobUrl: string;
   thumbUrl?: string;
+  displayUrl?: string;
   lat?: number;
   lon?: number;
   capturedAt: string;
@@ -29,10 +35,14 @@ export async function media(request: HttpRequest, context: InvocationContext): P
   try {
     const table = await getMediaTable();
     // RowKeys are generated with an inverted-timestamp prefix (see
-    // generateMediaRowKey in mediaTable.ts), so Table Storage already
-    // returns them newest-first within the partition. Stop as soon as we
-    // have `limit` posts instead of listing the whole partition and
-    // sorting in memory - keeps this cheap as uploads pile up.
+    // generateMediaRowKey in mediaTable.ts), so Table Storage returns them
+    // *upload*-time-newest-first within the partition - but that's not
+    // necessarily the same order as `capturedAt` (e.g. someone uploads an
+    // older photo later), and posts should read back in the order they
+    // were taken, not the order they were uploaded. So we list the whole
+    // partition (still cheap - a single trip's partition, bounded by
+    // SCAN_CAP) and sort by capturedAt ourselves instead of relying on
+    // RowKey order + stopping early.
     const entities = table.listEntities<MediaEntity>({
       queryOptions: { filter: `PartitionKey eq '${mediaPartitionKey()}'` },
     });
@@ -44,17 +54,23 @@ export async function media(request: HttpRequest, context: InvocationContext): P
         mediaType: entity.mediaType,
         blobUrl: entity.blobUrl,
         thumbUrl: entity.thumbUrl,
+        displayUrl: entity.displayUrl,
         lat: entity.lat,
         lon: entity.lon,
         capturedAt: entity.capturedAt,
         uploadedAt: entity.uploadedAt,
       });
-      if (posts.length >= limit) break;
+      if (posts.length >= SCAN_CAP) break;
     }
+
+    // capturedAt is self-reported/client-clock (see mediaComplete.ts) but
+    // always falls back to a valid uploadedAt server timestamp when
+    // missing/unparseable, so this sort is always well-defined.
+    posts.sort((a, b) => new Date(b.capturedAt).getTime() - new Date(a.capturedAt).getTime());
 
     return {
       status: 200,
-      jsonBody: posts,
+      jsonBody: posts.slice(0, limit),
       headers: { 'Cache-Control': 'no-store' },
     };
   } catch (error) {

@@ -71,6 +71,9 @@ export async function mediaItemDelete(request: HttpRequest, context: InvocationC
     if (entity.thumbBlobPath) {
       await container.getBlockBlobClient(entity.thumbBlobPath).deleteIfExists();
     }
+    if (entity.displayBlobPath) {
+      await container.getBlockBlobClient(entity.displayBlobPath).deleteIfExists();
+    }
     await table.deleteEntity(mediaPartitionKey(), id);
     return { status: 204 };
   } catch (error) {
