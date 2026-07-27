@@ -54,12 +54,16 @@ export function useMediaPosts(): MediaPost[] {
       try {
         const res = await fetch('/api/media', { cache: 'no-store' });
         if (!res.ok) return;
-        const data: MediaPost[] = await res.json();
+        // media.ts now returns { posts, hasMore } (see MediaLightbox's
+        // enablePagination) instead of a bare array - this hook only ever
+        // polls the first/newest page as a seed list for the grid/map, so
+        // `hasMore` itself isn't needed here.
+        const data: { posts: MediaPost[] } = await res.json();
         // The API (media.ts) already sorts by capturedAt server-side, but
         // re-sort here too - cheap for "hundreds" of posts, and keeps
         // every consumer of this hook guaranteed trip-timeline order even
         // if that ever changes API-side.
-        if (isMounted.current) setPosts(sortByCapturedAtDesc(data));
+        if (isMounted.current) setPosts(sortByCapturedAtDesc(data.posts));
       } catch {
         // Network hiccup or offline - keep showing the last known posts
         // and try again on the next tick.

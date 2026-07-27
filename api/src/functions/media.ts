@@ -31,10 +31,23 @@ export interface MediaPost {
  * meant to be read by every site visitor. Only reads Table Storage
  * metadata; blob bytes are served directly from Blob Storage via
  * `blobUrl`, never through this Function.
+ *
+ * Supports cursor pagination via `?before=<ISO capturedAt>` so callers
+ * (see MediaLightbox.tsx's `enablePagination`) can page through an
+ * arbitrarily large archive of older posts without ever fetching more
+ * than one page's worth of (small, metadata-only) JSON at a time. Omit
+ * `before` for the first/newest page.
  */
 export async function media(request: HttpRequest, context: InvocationContext): Promise<HttpResponseInit> {
   const limitRaw = Number(request.query.get('limit'));
   const limit = Number.isFinite(limitRaw) && limitRaw > 0 ? Math.min(limitRaw, SCAN_CAP) : SCAN_CAP;
+
+  // Cursor for "load older posts" pagination (see MediaLightbox.tsx) - the
+  // capturedAt of the last post the caller already has, so we only return
+  // posts strictly older than that. Absent on the first page.
+  const beforeRaw = request.query.get('before');
+  const beforeMs = beforeRaw ? new Date(beforeRaw).getTime() : NaN;
+  const before = Number.isFinite(beforeMs) ? beforeMs : undefined;
 
   try {
     const table = await getMediaTable();
@@ -72,9 +85,14 @@ export async function media(request: HttpRequest, context: InvocationContext): P
     // missing/unparseable, so this sort is always well-defined.
     posts.sort((a, b) => new Date(b.capturedAt).getTime() - new Date(a.capturedAt).getTime());
 
+    // Apply the pagination cursor *after* sorting the full set, so paging
+    // deep into an archive of "hundreds" of photos still reads back in
+    // true capture-date order, not just upload order.
+    const windowed = before === undefined ? posts : posts.filter((p) => new Date(p.capturedAt).getTime() < before);
+
     return {
       status: 200,
-      jsonBody: posts.slice(0, limit),
+      jsonBody: { posts: windowed.slice(0, limit), hasMore: windowed.length > limit },
       headers: { 'Cache-Control': 'no-store' },
     };
   } catch (error) {
