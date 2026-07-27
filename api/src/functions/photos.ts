@@ -410,6 +410,12 @@ function renderPage(mapsApiKey: string | undefined, mediaUploadToken: string | u
     if (readAscii(view, tiffStart, latRefEntry, little) === 'S') lat = -lat;
     if (readAscii(view, tiffStart, lonRefEntry, little) === 'W') lon = -lon;
     if (!isFinite(lat) || !isFinite(lon)) return null;
+    // Some phones write a placeholder all-zero GPS IFD when location
+    // services were off at capture time (0/1 is finite, so the isFinite
+    // check above doesn't catch it) - (0, 0) is Null Island, nowhere near
+    // this trip's route, so treat it the same as "no GPS data" rather
+    // than plotting a bogus pin in the Gulf of Guinea.
+    if (lat === 0 && lon === 0) return null;
     return { lat: lat, lon: lon };
   }
 
