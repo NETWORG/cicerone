@@ -87,12 +87,18 @@ export async function mediaComplete(request: HttpRequest, context: InvocationCon
       return { status: 409, body: 'Blob has not finished uploading yet' };
     }
 
-    const now = new Date().toISOString();
     // capturedAt comes from the client's clock and isn't validated on the
     // way in - fall back to the server time if it's missing or doesn't
     // parse as a real date, rather than storing/returning a value that
     // could break date sorting/parsing downstream.
+    const now = new Date().toISOString();
     const capturedAtValid = capturedAt !== undefined && !Number.isNaN(new Date(capturedAt).getTime());
+    // (0, 0) is Null Island - some phones write a placeholder all-zero
+    // GPS tag when location was off at capture time (see readExifGps in
+    // photos.ts), and it passes the range check above like any other
+    // coordinate. Treat it as "no location supplied" here too, as
+    // defense-in-depth for any client that isn't the one guard above.
+    const hasLocation = lat !== undefined && lon !== undefined && !(lat === 0 && lon === 0);
     // Thumbnail is best-effort (see photos.ts) - no exists() check here
     // (unlike the main blob above) since a missing/failed thumbnail just
     // means the frontend falls back to blobUrl, not a broken post.
@@ -107,7 +113,7 @@ export async function mediaComplete(request: HttpRequest, context: InvocationCon
       capturedAt: capturedAtValid ? capturedAt! : now,
       uploadedAt: now,
       uploadedBy: normalizedUploadedBy,
-      ...(lat !== undefined && lon !== undefined ? { lat, lon } : {}),
+      ...(hasLocation ? { lat, lon } : {}),
       ...(thumbBlobClient ? { thumbBlobPath, thumbUrl: thumbBlobClient.url } : {}),
     };
 

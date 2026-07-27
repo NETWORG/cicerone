@@ -1,12 +1,16 @@
 import { app, HttpRequest, HttpResponseInit, InvocationContext } from '@azure/functions';
 import { getMediaTable, mediaPartitionKey, type MediaEntity } from '../mediaTable';
 
-const DEFAULT_LIMIT = 100;
-const MAX_LIMIT = 500;
-
 // Upper bound on how many rows we'll ever pull from the partition to sort
 // in memory (see below) - just a sanity ceiling so a single trip's archive
 // growing far beyond "hundreds" of posts can't make this scan unbounded.
+// There is deliberately no separate, lower "default" cap below this: an
+// earlier version of this endpoint defaulted to returning only the 100
+// newest-*uploaded* rows, which meant older uploads silently vanished
+// from the whole site (map pins, photo grid, sidebar tile) once total
+// uploads passed 100 - exactly the "map only shows a few of the hundreds
+// of photos" bug. Callers can still opt into a smaller page via `?limit=`
+// (e.g. for testing), but by default every scanned post is returned.
 const SCAN_CAP = 5000;
 
 export interface MediaPost {
@@ -22,15 +26,15 @@ export interface MediaPost {
 }
 
 /**
- * Returns the most recent media posts (photos/videos) for the public
- * site's live stream and map pins. Public/anonymous like `positions.ts` -
- * this is meant to be read by every site visitor. Only reads Table
- * Storage metadata; blob bytes are served directly from Blob Storage via
+ * Returns the media posts (photos/videos) for the public site's live
+ * stream and map pins. Public/anonymous like `positions.ts` - this is
+ * meant to be read by every site visitor. Only reads Table Storage
+ * metadata; blob bytes are served directly from Blob Storage via
  * `blobUrl`, never through this Function.
  */
 export async function media(request: HttpRequest, context: InvocationContext): Promise<HttpResponseInit> {
   const limitRaw = Number(request.query.get('limit'));
-  const limit = Number.isFinite(limitRaw) && limitRaw > 0 ? Math.min(limitRaw, MAX_LIMIT) : DEFAULT_LIMIT;
+  const limit = Number.isFinite(limitRaw) && limitRaw > 0 ? Math.min(limitRaw, SCAN_CAP) : SCAN_CAP;
 
   try {
     const table = await getMediaTable();
