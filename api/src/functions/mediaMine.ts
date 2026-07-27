@@ -33,6 +33,7 @@ export async function mediaMine(request: HttpRequest, context: InvocationContext
         mediaType: entity.mediaType,
         blobUrl: entity.blobUrl,
         thumbUrl: entity.thumbUrl,
+        displayUrl: entity.displayUrl,
         lat: entity.lat,
         lon: entity.lon,
         capturedAt: entity.capturedAt,
@@ -40,6 +41,10 @@ export async function mediaMine(request: HttpRequest, context: InvocationContext
       });
       if (posts.length >= MAX_LIMIT) break;
     }
+
+    // Same reasoning as media.ts - sort by capturedAt, not RowKey/upload
+    // order, so a late-uploaded old photo still lands where it belongs.
+    posts.sort((a, b) => new Date(b.capturedAt).getTime() - new Date(a.capturedAt).getTime());
 
     return {
       status: 200,

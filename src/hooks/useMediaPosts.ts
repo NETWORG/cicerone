@@ -5,6 +5,7 @@ export interface MediaPost {
   mediaType: 'photo' | 'video';
   blobUrl: string;
   thumbUrl?: string;
+  displayUrl?: string;
   lat?: number;
   lon?: number;
   capturedAt: string;
