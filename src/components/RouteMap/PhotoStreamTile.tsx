@@ -69,7 +69,12 @@ export default function PhotoStreamTile() {
       </div>
 
       {selectedIndex !== null && (
-        <MediaLightbox posts={posts} initialIndex={selectedIndex} onClose={() => setSelectedIndex(null)} />
+        <MediaLightbox
+          posts={posts}
+          initialIndex={selectedIndex}
+          onClose={() => setSelectedIndex(null)}
+          enablePagination
+        />
       )}
     </div>
   );

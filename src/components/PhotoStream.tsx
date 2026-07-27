@@ -14,7 +14,13 @@ import MediaLightbox from './MediaLightbox';
 const PREVIEW_COUNT = 12;
 
 export default function PhotoStream() {
-  const posts = useMediaPosts().slice(0, PREVIEW_COUNT);
+  // Full (unsliced) result passed to the lightbox so browsing isn't
+  // trapped inside the grid's small preview - only the tiles themselves
+  // are capped. Combined with `enablePagination` below, this scales to
+  // any number of photos: the lightbox fetches older pages on-demand as
+  // someone navigates past whatever's loaded here.
+  const allPosts = useMediaPosts();
+  const posts = allPosts.slice(0, PREVIEW_COUNT);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
 
   if (posts.length === 0) return null;
@@ -66,7 +72,12 @@ export default function PhotoStream() {
       </div>
 
       {selectedIndex !== null && (
-        <MediaLightbox posts={posts} initialIndex={selectedIndex} onClose={() => setSelectedIndex(null)} />
+        <MediaLightbox
+          posts={allPosts}
+          initialIndex={selectedIndex}
+          onClose={() => setSelectedIndex(null)}
+          enablePagination
+        />
       )}
     </>
   );
