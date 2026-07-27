@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Video } from 'lucide-react';
-import { useMediaPosts, type MediaPost } from '../hooks/useMediaPosts';
+import { useMediaPosts } from '../hooks/useMediaPosts';
 import MediaLightbox from './MediaLightbox';
 
 /**
@@ -15,18 +15,18 @@ const PREVIEW_COUNT = 12;
 
 export default function PhotoStream() {
   const posts = useMediaPosts().slice(0, PREVIEW_COUNT);
-  const [selected, setSelected] = useState<MediaPost | null>(null);
+  const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
 
   if (posts.length === 0) return null;
 
   return (
     <>
       <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
-        {posts.map((post) => (
+        {posts.map((post, i) => (
           <button
             key={post.id}
             type="button"
-            onClick={() => setSelected(post)}
+            onClick={() => setSelectedIndex(i)}
             aria-label={post.mediaType === 'video' ? 'Open trip video' : 'Open trip photo'}
             className="relative aspect-square rounded-lg overflow-hidden group"
           >
@@ -65,7 +65,9 @@ export default function PhotoStream() {
         ))}
       </div>
 
-      {selected && <MediaLightbox post={selected} onClose={() => setSelected(null)} />}
+      {selectedIndex !== null && (
+        <MediaLightbox posts={posts} initialIndex={selectedIndex} onClose={() => setSelectedIndex(null)} />
+      )}
     </>
   );
 }

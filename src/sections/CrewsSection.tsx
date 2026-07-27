@@ -7,17 +7,11 @@ export default function CrewsSection() {
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-12">
           <p className="text-rally-500 text-sm font-semibold uppercase tracking-widest mb-3">
-            Who's Coming
+            On The Road
           </p>
           <h2 className="font-display text-5xl md:text-6xl text-asphalt-100 tracking-wide">
-            SIGNED UP CREWS
+            THE CREWS
           </h2>
-          <p className="text-asphalt-400 text-sm mt-4">
-            List updates as confirmations come in. Want to see your name here?{' '}
-            <a href="#join" className="text-rally-400 hover:text-rally-300 underline underline-offset-2">
-              Sign up below →
-            </a>
-          </p>
         </div>
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">

@@ -1,8 +1,12 @@
-import { MapPin } from 'lucide-react';
+import { MapPin, Camera } from 'lucide-react';
 import { useMap } from '@vis.gl/react-google-maps';
 import { DAY_STATS, TOTAL_STATS } from '../../data/day-stats';
 import { fitToDay } from './fitToDay';
 import { scrollToMap } from './scrollToMap';
+import { useMediaPosts } from '../../hooks/useMediaPosts';
+import { postsForDay } from './mediaByDay';
+import MediaLightbox from '../MediaLightbox';
+import { useState } from 'react';
 
 function formatDistance(km: number): string {
   return `${Math.round(km)} km`;
@@ -40,14 +44,38 @@ function ShowButton({ onClick }: { onClick: () => void }) {
   );
 }
 
+/** Small icon-only button next to `ShowButton`, only rendered for days that
+ *  actually have a geotagged post - opens the shared lightbox scoped to
+ *  that day's photos/videos. */
+function PhotosButton({ onClick }: { onClick: () => void }) {
+  return (
+    <button
+      onClick={onClick}
+      aria-label="See photos from this day"
+      title="See photos from this day"
+      className="flex-shrink-0 inline-flex items-center justify-center w-7 h-7 rounded-full border border-rally-500/40 text-rally-600 hover:bg-rally-500 hover:text-white hover:border-rally-500 transition-colors"
+    >
+      <Camera size={13} />
+    </button>
+  );
+}
+
 /** Per-day distance/drive-time table next to the map, with a "show on map"
  *  button that fits the map bounds to that day's route. */
 export default function DayStatsTable() {
   const map = useMap();
+  const mediaPosts = useMediaPosts();
+  const [dayLightbox, setDayLightbox] = useState<{ posts: typeof mediaPosts; index: number } | null>(null);
 
   function handleShow(date: string) {
     fitToDay(map, date);
     scrollToMap();
+  }
+
+  function handlePhotos(date: string) {
+    const dayPosts = postsForDay(mediaPosts, date);
+    if (dayPosts.length === 0) return;
+    setDayLightbox({ posts: dayPosts, index: 0 });
   }
 
   return (
@@ -59,21 +87,27 @@ export default function DayStatsTable() {
       <div className="flex-1 lg:min-h-0 lg:overflow-y-auto px-4">
         {/* Mobile: stacked cards. */}
         <div className="flex flex-col gap-2 sm:hidden">
-          {DAY_STATS.map((day) => (
-            <div
-              key={day.date}
-              className="flex items-center justify-between gap-2 rounded border border-asphalt-800 p-2"
-            >
-              <div className="min-w-0">
-                <p className="text-asphalt-200 text-sm">Day {day.dayIndex + 1}</p>
-                <p className="text-asphalt-500 text-xs truncate">{day.date}</p>
-                <p className="text-asphalt-400 text-xs mt-1">
-                  {formatDayStats(day.distanceKm, day.durationMin, day.estimated, day.restDayLabel)}
-                </p>
+          {DAY_STATS.map((day) => {
+            const dayPostCount = postsForDay(mediaPosts, day.date).length;
+            return (
+              <div
+                key={day.date}
+                className="flex items-center justify-between gap-2 rounded border border-asphalt-800 p-2"
+              >
+                <div className="min-w-0">
+                  <p className="text-asphalt-200 text-sm">Day {day.dayIndex + 1}</p>
+                  <p className="text-asphalt-500 text-xs truncate">{day.date}</p>
+                  <p className="text-asphalt-400 text-xs mt-1">
+                    {formatDayStats(day.distanceKm, day.durationMin, day.estimated, day.restDayLabel)}
+                  </p>
+                </div>
+                <div className="flex-shrink-0 flex items-center gap-1.5">
+                  {dayPostCount > 0 && <PhotosButton onClick={() => handlePhotos(day.date)} />}
+                  <ShowButton onClick={() => handleShow(day.date)} />
+                </div>
               </div>
-              <ShowButton onClick={() => handleShow(day.date)} />
-            </div>
-          ))}
+            );
+          })}
         </div>
 
         {/* Desktop: compact table. */}
@@ -86,20 +120,26 @@ export default function DayStatsTable() {
             </tr>
           </thead>
           <tbody>
-            {DAY_STATS.map((day) => (
-              <tr key={day.date} className="border-t border-asphalt-800">
-                <td className="py-2">
-                  <span className="text-asphalt-200">Day {day.dayIndex + 1}</span>
-                  <span className="block text-asphalt-500 text-xs">{day.date}</span>
-                </td>
-                <td className="py-2 text-asphalt-400">
-                  {formatDayStats(day.distanceKm, day.durationMin, day.estimated, day.restDayLabel)}
-                </td>
-                <td className="py-2 text-right">
-                  <ShowButton onClick={() => handleShow(day.date)} />
-                </td>
-              </tr>
-            ))}
+            {DAY_STATS.map((day) => {
+              const dayPostCount = postsForDay(mediaPosts, day.date).length;
+              return (
+                <tr key={day.date} className="border-t border-asphalt-800">
+                  <td className="py-2">
+                    <span className="text-asphalt-200">Day {day.dayIndex + 1}</span>
+                    <span className="block text-asphalt-500 text-xs">{day.date}</span>
+                  </td>
+                  <td className="py-2 text-asphalt-400">
+                    {formatDayStats(day.distanceKm, day.durationMin, day.estimated, day.restDayLabel)}
+                  </td>
+                  <td className="py-2 text-right">
+                    <div className="inline-flex items-center gap-1.5">
+                      {dayPostCount > 0 && <PhotosButton onClick={() => handlePhotos(day.date)} />}
+                      <ShowButton onClick={() => handleShow(day.date)} />
+                    </div>
+                  </td>
+                </tr>
+              );
+            })}
           </tbody>
         </table>
       </div>
@@ -113,6 +153,14 @@ export default function DayStatsTable() {
           {TOTAL_STATS.estimated ? ' (est.)' : ''}
         </span>
       </div>
+
+      {dayLightbox && (
+        <MediaLightbox
+          posts={dayLightbox.posts}
+          initialIndex={dayLightbox.index}
+          onClose={() => setDayLightbox(null)}
+        />
+      )}
     </div>
   );
 }
